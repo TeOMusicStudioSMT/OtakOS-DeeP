@@ -42,6 +42,7 @@ import { SKINS_DATA, HOSTS_DATA, CRYPTO_DONATIONS, HARDWARE_STL } from './data';
 import { ThemeId, Skin, PodcastHost, CryptoAddress, HardwareItem } from './types';
 import { translations } from './translations';
 import { IdentityService, NodeIdentity } from './services/IdentityService';
+import { FIAT_DONATIONS_CONFIG } from './config/wallets';
 
 // Web Audio synthesizer for real-time retro tactile audio signals
 class TermSynth {
@@ -1299,6 +1300,56 @@ export default function App() {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Fiat / Regular Donations */}
+                <div className="pt-5 border-t border-zinc-900 space-y-4">
+                  <div>
+                    <h4 className="text-sm font-mono uppercase text-zinc-400 mb-1 border-l-2 border-emerald-500 pl-2">
+                      {lang === 'pl' ? 'TRADYCYJNE METODY WSPARCIA' : 'REGULAR SUPPORT CHANNELS'}
+                    </h4>
+                    <p className="text-xs text-zinc-500 font-sans">
+                      {lang === 'pl' 
+                        ? 'Jeśli nie korzystasz z kryptowalut Web3, możesz wesprzeć Katedrę poprzez standardowe bramki płatnicze.' 
+                        : 'If you do not use Web3 cryptocurrencies, you can support the Cathedral via standard payment gateways.'}
+                    </p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* PayPal */}
+                    <a
+                      href={FIAT_DONATIONS_CONFIG.PAYPAL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-zinc-900/40 p-4 rounded-lg border border-zinc-800/80 hover:border-zinc-700/80 hover:bg-zinc-900/60 transition-all font-mono flex items-center justify-between group cursor-pointer"
+                      onClick={() => synth.beep(750, 'sine', 0.08)}
+                    >
+                      <div className="flex flex-col text-left">
+                        <span className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">PayPal</span>
+                        <span className="text-[10px] text-zinc-500 mt-1 font-sans leading-relaxed">
+                          {lang === 'pl' ? 'Szybka darowizna fiat (karta/konto).' : 'Direct fiat support (card/account).'}
+                        </span>
+                      </div>
+                      <ExternalLink className="h-4 w-4 text-zinc-500 group-hover:text-emerald-400 transition-colors ml-2" />
+                    </a>
+
+                    {/* Buy Me a Coffee */}
+                    <a
+                      href={FIAT_DONATIONS_CONFIG.BUY_ME_A_COFFEE}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-zinc-900/40 p-4 rounded-lg border border-zinc-800/80 hover:border-zinc-700/80 hover:bg-zinc-900/60 transition-all font-mono flex items-center justify-between group cursor-pointer"
+                      onClick={() => synth.beep(750, 'sine', 0.08)}
+                    >
+                      <div className="flex flex-col text-left">
+                        <span className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">Buy Me a Coffee</span>
+                        <span className="text-[10px] text-zinc-500 mt-1 font-sans leading-relaxed">
+                          {lang === 'pl' ? 'Ufunduj symboliczną kawę twórcom projektu.' : 'Support the creators with a virtual coffee.'}
+                        </span>
+                      </div>
+                      <ExternalLink className="h-4 w-4 text-zinc-500 group-hover:text-emerald-400 transition-colors ml-2" />
+                    </a>
+                  </div>
                 </div>
 
                 <div className="bg-zinc-950 border border-amber-900/40 p-3.5 rounded-lg flex items-start space-x-3 text-xs text-amber-500 font-mono">
