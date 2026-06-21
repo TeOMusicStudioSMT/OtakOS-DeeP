@@ -34,6 +34,6 @@ export const CRYPTO_DONATIONS_CONFIG: CryptoAddress[] = [
  */
 export const FIAT_DONATIONS_CONFIG = {
   PAYPAL: import.meta.env.VITE_DONATE_PAYPAL ?? 'https://paypal.me/TeOMusicStudio',
-  BUY_ME_A_COFFEE: import.meta.env.VITE_DONATE_COFFEE ?? 'https://buymeacoffee.com/TeOMusicStudio',
+  BUY_ME_A_COFFEE: import.meta.env.VITE_DONATE_COFFEE ?? 'https://buymeacoffee.com/teoc4',
 } as const;
 

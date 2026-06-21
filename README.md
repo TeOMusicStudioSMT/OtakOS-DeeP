@@ -74,6 +74,22 @@ Umożliwia uruchomienie lokalnego API mostu (port `3001`) bezpośrednio na proce
    ```
 Twój telefon stanie się autonomicznym, lokalnym węzłem Katedry z aktywnym API!
 
+## ⚙️ Automatyzacja Uruchamiania (Autostart z USB)
+
+Windows domyślnie blokuje automatyczne uruchamianie plików z pendrive'ów z przyczyn bezpieczeństwa. W pakiecie Live-USB przygotowaliśmy dwa sposoby automatyzacji uruchamiania Katedry:
+
+### Sposób 1: Uruchomienie przy fizycznym włożeniu pendrive'a (Harmonogram Zadań - zalecane)
+Ten sposób wykorzystuje systemowy dziennik zdarzeń Windows do natychmiastowego startu Katedry po wykryciu urządzenia USB:
+1. Wejdź do folderu `TeO_Genesis_V_ZERO` na pendrive.
+2. Kliknij prawym przyciskiem myszy na plik `INSTALL_AUTOSTART.bat` i wybierz **Uruchom jako administrator**.
+3. Skrypt włączy rejestrowanie zdarzeń podłączania sterowników i utworzy zadanie harmonogramu (`Autostart_Katedra.xml`), które automatycznie przeskanuje litery dysków i uruchomi `START_KATEDRA.bat` po włożeniu nośnika.
+
+### Sposób 2: Autostart podczas logowania do systemu Windows (Folder Autostart)
+Ten sposób uruchamia Katedrę przy każdym starcie systemu (o ile pendrive jest wpięty):
+1. Naciśnij skrót `Win + R`, wpisz `shell:startup` i kliknij **Enter** (otworzy to systemowy folder autostartu użytkownika).
+2. Kliknij prawym przyciskiem myszy na plik `START_KATEDRA.bat` na pendrive i przeciągnij go do otwartego folderu, wybierając **Utwórz skróty tutaj**.
+3. Gotowe. Przy każdym starcie komputera Windows sam odnajdzie właściwy napęd USB i uruchomi Katedrę.
+
 ---
 
 ## 🧠 Pobieranie Lokalnego Mózgu (gemma4)
@@ -81,4 +97,4 @@ Aby pobrać model do pracy lokalnej na komputerze, użyj dostarczonego skryptu P
 ```powershell
 .\fetch-local-brain.ps1
 ```
-Skrypt automatycznie pobierze zoptymalizowany model `gemma4.gguf` do folderu `/public/models/`. Możesz go załadować bezpośrednio w swojej lokalnej instalacji Ollama.
+Skrypt automatycznie pobierze zoptymalizowany model `gemma4.gguf` (bazowany na `gemma2:2b-it-Q4_K_M`) do folderu `/public/models/`. Możesz go załadować bezpośrednio w lokalnej instalacji Ollama lub użyć wbudowanego mostu Wiesio-Bridge do automatycznej integracji.
