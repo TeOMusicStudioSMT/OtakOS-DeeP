@@ -1,0 +1,6 @@
+{
+  "name": "Katedra OtakOS: V_ZERO",
+  "description": "A high-end, cyberpunk sovereign command terminal landing page for V_ZERO: Your entire sovereign AI & Cyber-Schron ecosystem compressed into a 27MB Live-USB.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
