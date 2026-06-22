@@ -23,6 +23,7 @@ interface SphereNode { id: string; label: string; emoji: string; color: string; 
 export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> = ({ lang = 'pl', onClose }) => {
   const [angle, setAngle] = useState(0);
   const [live, setLive] = useState<LiveState | null>(null);
+  const [cath, setCath] = useState<{ self: { name: string }; count: number; collectedAt: number } | null>(null);
   const [sel, setSel] = useState<string | null>(null);
   const [name, setName] = useState(() => localStorage.getItem(NAME_KEY) || (lang === 'pl' ? 'TWÓJ-WĘZEŁ' : 'YOUR-NODE'));
   const [pairs, setPairs] = useState<Set<string>>(() => {
@@ -40,7 +41,12 @@ export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> =
         const c = new AbortController(); const t = setTimeout(() => c.abort(), 1500);
         const r = await fetch(`${BRIDGE}/api/agi/state`, { signal: c.signal }); clearTimeout(t);
         const d = await r.json(); if (on) setLive(d?.success ? d.nodes : null);
-      } catch { if (on) setLive(null); }
+        // Automat Katedr — rejestr live (self + sparowani)
+        try {
+          const cr = await fetch(`${BRIDGE}/api/cathedrals`);
+          const cd = await cr.json(); if (on) setCath(cd?.success ? cd : null);
+        } catch { if (on) setCath(null); }
+      } catch { if (on) { setLive(null); setCath(null); } }
     };
     probe(); const iv = setInterval(probe, 4000); return () => { on = false; clearInterval(iv); };
   }, []);
@@ -206,6 +212,19 @@ export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> =
                   : 'Pairing = your Cathedral’s trusted-peer list. Each bridge adds power to the shared pool (VRAM/inference) — the p2p foundation, no cloud.'}
               </div>
             </div>
+
+            {/* Automat Katedr — rejestr live (z mostu) */}
+            {cath && (
+              <div className="rounded-lg border border-emerald-500/20 bg-black/40 p-3 text-[11px]">
+                <div className="text-emerald-400 font-bold mb-1">🖨️ {lang === 'pl' ? 'AUTOMAT KATEDR' : 'CATHEDRAL COLLECTOR'}</div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span>{lang === 'pl' ? 'ta katedra' : 'this cathedral'}</span><span className="text-emerald-300">{cath.self.name}</span>
+                  <span>{lang === 'pl' ? 'katedr w sieci' : 'cathedrals'}</span><span className="text-emerald-300">{cath.count}</span>
+                  <span>{lang === 'pl' ? 'zebrano' : 'collected'}</span><span className="text-emerald-300">{new Date(cath.collectedAt).toLocaleTimeString()}</span>
+                </div>
+                <div className="text-[9px] text-zinc-500 mt-1">{lang === 'pl' ? 'Drukarka odświeża co 10 min — live, lokalnie, bez chmury.' : 'Printer refreshes every 10 min — live, local, no cloud.'}</div>
+              </div>
+            )}
           </div>
         </div>
 
