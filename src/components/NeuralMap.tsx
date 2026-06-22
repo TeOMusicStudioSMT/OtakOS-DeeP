@@ -24,10 +24,35 @@ const LAYER_COLOR: Record<AgiLayer, string> = {
 };
 
 const W = 1000, H = 540, PAD_X = 120, PAD_Y = 70;
+const BRIDGE = 'http://127.0.0.1:3001';
+
+type LiveState = Record<string, { status: string; load: number }>;
 
 export const NeuralMap: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
   const [hovered, setHovered] = useState<string | null>(null);
   const [pulse, setPulse] = useState(0);
+  const [live, setLive] = useState<LiveState | null>(null);
+  const mode: 'LIVE' | 'STATIC' = live ? 'LIVE' : 'STATIC';
+
+  // MOST: pytamy uruchomioną Katedrę (Wiesio-Bridge) o żywy stan węzłów.
+  // Online → mapa = lustro realnej AGI. Offline → statyczny manifest.
+  useEffect(() => {
+    let alive = true;
+    const probe = async () => {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 1500);
+        const r = await fetch(`${BRIDGE}/api/agi/state`, { signal: ctrl.signal });
+        clearTimeout(t);
+        const d = await r.json();
+        if (alive && d?.success && d.nodes) setLive(d.nodes);
+        else if (alive) setLive(null);
+      } catch { if (alive) setLive(null); }
+    };
+    probe();
+    const iv = setInterval(probe, 4000);
+    return () => { alive = false; clearInterval(iv); };
+  }, []);
 
   // Pozycje węzłów: kolumny = warstwy, pionowo rozłożone.
   const pos = useMemo(() => {
@@ -80,6 +105,11 @@ export const NeuralMap: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => 
           </p>
         </div>
         <div className="text-right font-mono">
+          <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border mb-1 ${
+            mode === 'LIVE' ? 'border-emerald-500/50 text-emerald-300 bg-emerald-950/40' : 'border-zinc-700 text-zinc-500 bg-black/30'}`}>
+            <span className={`inline-block w-1.5 h-1.5 rounded-full ${mode === 'LIVE' ? 'bg-emerald-400 animate-ping' : 'bg-zinc-600'}`} />
+            {mode === 'LIVE' ? (lang === 'pl' ? 'ŻYWY MOST' : 'LIVE BRIDGE') : (lang === 'pl' ? 'MANIFEST' : 'STATIC')}
+          </div>
           <div className="text-[10px] text-zinc-500">agi.local · {AGI_LOCAL.origin}</div>
           <div className="text-xs text-emerald-400">{AGI_LOCAL.nodes.length} {lang === 'pl' ? 'neuronów' : 'neurons'}</div>
           <div className="text-[10px] text-zinc-500">{AGI_LOCAL.version} · {AGI_LOCAL.dimension}</div>
@@ -120,14 +150,19 @@ export const NeuralMap: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => 
         {AGI_LOCAL.nodes.map(n => {
           const p = pos[n.id]; if (!p) return null;
           const c = LAYER_COLOR[n.layer];
-          const lit = isLit(n.id);
+          const ls = live?.[n.id];
+          const online = ls?.status === 'online';
+          const offline = ls?.status === 'offline';
+          const load = ls?.load ?? 0;
+          const lit = isLit(n.id) || online;
           return (
             <g key={n.id} transform={`translate(${p.x},${p.y})`} style={{ cursor: 'pointer' }}
                onMouseEnter={() => setHovered(n.id)} onMouseLeave={() => setHovered(null)}>
+              {online && <circle r={30 + load * 16} fill={c} opacity={0.10 + load * 0.18} />}
               {lit && <circle r={34} fill={c} opacity={0.16} />}
-              <circle r={24} fill="#04080c" stroke={c} strokeWidth={lit ? 2.5 : 1.5}
+              <circle r={24} fill="#04080c" stroke={c} strokeWidth={online ? 3 : lit ? 2.5 : 1.5}
                 className={n.layer === 'CORE' ? 'agi-node-core' : ''}
-                opacity={lit ? 1 : 0.85} />
+                opacity={offline ? 0.35 : lit ? 1 : 0.85} />
               <text textAnchor="middle" dy="6" fontSize="20">{n.emoji}</text>
               <text textAnchor="middle" y={42} fontFamily="monospace" fontSize="11"
                 fill={lit ? c : '#a1a1aa'} fontWeight={lit ? 'bold' : 'normal'}>
