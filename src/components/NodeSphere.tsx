@@ -197,6 +197,13 @@ export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> =
                 <span>wersja</span><span className="text-emerald-300">{AGI_LOCAL.version}</span>
                 <span>{lang === 'pl' ? 'neuronów' : 'neurons'}</span><span className="text-emerald-300">{AGI_LOCAL.nodes.length}</span>
                 <span>{lang === 'pl' ? 'sparowane' : 'paired'}</span><span className="text-violet-300">{pairs.size}</span>
+                <span>{lang === 'pl' ? 'pula meshu' : 'mesh pool'}</span>
+                <span className="text-violet-300">{(16 + pairs.size * 8).toLocaleString()} GB</span>
+              </div>
+              <div className="text-[9px] text-zinc-500 mt-1.5 leading-snug">
+                {lang === 'pl'
+                  ? 'Parowanie = lista zaufanych rówieśników Twojej Katedry. Każdy most dokłada moc do wspólnej puli (VRAM/inferencja) — fundament p2p bez chmury.'
+                  : 'Pairing = your Cathedral’s trusted-peer list. Each bridge adds power to the shared pool (VRAM/inference) — the p2p foundation, no cloud.'}
               </div>
             </div>
           </div>
