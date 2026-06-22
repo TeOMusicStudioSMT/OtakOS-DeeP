@@ -42,6 +42,7 @@ import { SKINS_DATA, HOSTS_DATA, CRYPTO_DONATIONS, HARDWARE_STL } from './data';
 import { ThemeId, Skin, PodcastHost, CryptoAddress, HardwareItem } from './types';
 import { translations } from './translations';
 import { IdentityService, NodeIdentity } from './services/IdentityService';
+import NeuralMap from './components/NeuralMap';
 import { FIAT_DONATIONS_CONFIG } from './config/wallets';
 
 // Web Audio synthesizer for real-time retro tactile audio signals
@@ -1008,6 +1009,11 @@ export default function App() {
             </div>
           </div>
         </motion.div>
+      </section>
+
+      {/* 2.5 LIVE NEURAL MAP — LOKALNA AGI 0.00G */}
+      <section className="py-12 max-w-7xl mx-auto px-4 z-10 relative">
+        <NeuralMap lang={lang} />
       </section>
 
       {/* 3. DISCOVERY LOGS: ISKRA & ECHO */}
