@@ -43,6 +43,7 @@ import { ThemeId, Skin, PodcastHost, CryptoAddress, HardwareItem } from './types
 import { translations } from './translations';
 import { IdentityService, NodeIdentity } from './services/IdentityService';
 import NeuralMap from './components/NeuralMap';
+import NodeSphere from './components/NodeSphere';
 import { FIAT_DONATIONS_CONFIG } from './config/wallets';
 
 // Web Audio synthesizer for real-time retro tactile audio signals
@@ -205,6 +206,7 @@ export default function App() {
 
   // Global VRAM counters and sliders
   const [globalVramCount, setGlobalVramCount] = useState<number>(18342948.33);
+  const [sphereOpen, setSphereOpen] = useState<boolean>(false);
   const [userVramSlider, setUserVramSlider] = useState<number>(16); // default 16GB
   const [userVramContributed, setUserVramContributed] = useState<boolean>(false);
 
@@ -894,14 +896,16 @@ export default function App() {
                 <h3 className="text-sm font-bold text-zinc-300 uppercase">
                   {t.vramWidget.resonanceLabel}
                 </h3>
-                <div className="flex items-baseline space-x-2">
+                <button onClick={() => setSphereOpen(true)} title={lang === 'pl' ? 'Kliknij — szklana sieć 3D węzłów' : 'Click — glass 3D node network'}
+                  className="flex items-baseline space-x-2 group cursor-pointer hover:scale-[1.02] transition-transform origin-left">
                   <span className={`text-2xl sm:text-3xl font-bold tracking-tight ${
                     activeThemeId === 'kawaii' ? 'text-pink-400 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)]' : 'text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]'
                   }`}>
                     {globalVramCount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                   <span className="text-zinc-500 text-xs">GB VRAM</span>
-                </div>
+                  <span className="text-[10px] text-emerald-500/0 group-hover:text-emerald-400/80 transition-colors">🔮 {lang === 'pl' ? 'sieć 3D' : '3D net'}</span>
+                </button>
                 <p className="text-[11px] text-zinc-500 font-sans leading-relaxed">
                   {t.vramWidget.desc}
                 </p>
@@ -1015,6 +1019,9 @@ export default function App() {
       <section className="py-12 max-w-7xl mx-auto px-4 z-10 relative">
         <NeuralMap lang={lang} />
       </section>
+
+      {/* Szklana sieć 3D węzłów (modal po kliknięciu licznika VRAM) */}
+      {sphereOpen && <NodeSphere lang={lang} onClose={() => setSphereOpen(false)} />}
 
       {/* 3. DISCOVERY LOGS: ISKRA & ECHO */}
       <section className="py-16 max-w-7xl mx-auto px-4 z-10 relative">
