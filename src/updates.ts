@@ -33,6 +33,9 @@ export const SECTORS: Sector[] = [
 
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
+  { date: '2026-06-23', ref: '61cb9dd', sector: 'core',   title: 'Whisper — transkrypcja audio podcastów', desc: 'Most: audio → tekst (whisper.cpp, ffmpeg 16kHz, zero chmury). Operator Dziennika: klik na podcast = transkrypcja → tekst → przemiał. Pętla audio→kronika domknięta.' },
+  { date: '2026-06-23', ref: 'a26d92b', sector: 'core',   title: 'Asystent → Gemma 4 (koniec mocka 270m)', desc: 'FieldControl: usunięty mock „Gemma 270m" z fejkowym downloadem. Realny Rdzeń Lokalny: Gemma 4 (MAIN) + Gemma Diffusion, status z mostu, realny pull na USB.' },
+  { date: '2026-06-23', ref: '7804f5a', sector: 'web',    title: 'Agent Muzyczny — odświeżanie listy utworów', desc: '🔄 w bibliotece Winampa 0.00G — koniec przeładowywania całej strony, by zobaczyć nowe utwory.' },
   { date: '2026-06-23', ref: 'bb6a8fc', sector: 'core',   title: 'Kronika Osobista — personalny dziennik każdej Katedry', desc: 'Żywy kreator z agentami wpięty w QuantumJournal + zakładka „Kronika Osobista" w Dzienniku Pokładowym. Stan lokalny per węzeł = każda Katedra ma swój dziennik. Kwantyzacja 0.00G.' },
   { date: '2026-06-23', ref: '75988e8', sector: 'core',   title: 'Żywa Kronika 0.00G — narracja AI + agenci', desc: 'Wklej rozmowę → lokalny Gemma 4 pisze narrację, a 3 agenci (Adamus/Bella/ODDI) RÓWNOLEGLE dają feedback. Żywe karty z GRV i aurą. Atrapa ożywiona w prawdziwy organizm.' },
   { date: '2026-06-23', ref: 'd705f79', sector: 'core',   title: 'Dziennik Pokładowy — przemiał podcastów', desc: 'Moduł-operator: podcast/rozmowa → LLM strukturyzuje → infografika 0.00G (Chart.js radar/doughnut/oś czasu) w stylu gotowych. Katedra zyskuje wlutowaną historię — żywą Iskrę.' },
