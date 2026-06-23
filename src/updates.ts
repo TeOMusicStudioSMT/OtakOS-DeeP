@@ -33,6 +33,8 @@ export const SECTORS: Sector[] = [
 
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
+  { date: '2026-06-23', ref: '3a69625', sector: 'grv',    title: 'Portfel zewnętrzny (MetaMask / Ledger)', desc: 'Read-only agregacja: saldo natywne ETH/MATIC/BNB przez publiczny RPC + ceny CoinGecko → zbiorcza zasobność. Ledger przez MetaMask. Zasili Teda + Kronosa.' },
+  { date: '2026-06-23', ref: 'a7f7d28', sector: 'web',    title: 'Kronika UPDATE na otakos.wtf', desc: 'Ta zakładka — changelog z filtrem sektorów ekosystemu, dopisywany automatycznie przy każdym pushu.' },
   { date: '2026-06-23', ref: 'd2ccd06', sector: 'web',    title: 'GRAVITON — Skarbiec GRV + Crypto-Agility', desc: 'Widok GRAVITON w dashboardzie pokazuje realne tiery genezy i przełącznik trybu post-kwantowego z self-testem.' },
   { date: '2026-06-23', ref: '0c5a8cc', sector: 'crypto', title: 'Crypto-Agility z realnym post-kwantem', desc: 'ML-KEM-768 (Kyber) + ML-DSA-65 (Dilithium) + AES-256-GCM. Tryby classical/pqc/hybrid przełączane jednym wywołaniem. Self-test: allPass.' },
   { date: '2026-06-23', ref: '5ba564d', sector: 'grv',    title: 'Geneza GRV — ekonomia suwerennych węzłów', desc: 'TeO = ∞ (zarządca), Mistrz Arkadiusz = 1M. Pule: 13×1M, 26×100k, 61×10k = 16,21M GRV. Nowy węzeł = 1000.' },
