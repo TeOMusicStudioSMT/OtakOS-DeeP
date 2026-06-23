@@ -518,15 +518,32 @@ export default function App() {
   }, [showInstaller, installProgress, installerStatus, lang]);
 
   // Generate the real text parameters payload for user after simulation finishes
-  const triggerActualDownloadBlob = () => {
+  const triggerActualDownloadBlob = async () => {
     synth.beep(1200, 'sine', 0.1);
-    // Serve the real V_ZERO_archive.zip from public/ (Vite static assets)
-    const link = document.createElement('a');
-    link.href = '/V_ZERO_archive.zip';
-    link.download = 'V_ZERO_archive.zip';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const ZIP = '/V_ZERO_archive.zip';
+    // Źródło awaryjne: zip jest w repo OtakOS-DeeP (public/) — zawsze dostępny.
+    const RAW = 'https://raw.githubusercontent.com/TeOMusicStudioSMT/OtakOS-DeeP/main/public/V_ZERO_archive.zip';
+    try {
+      // fetch+blob: realny błąd zamiast mylnego "brak internetu"; omija SPA-rewrite.
+      const res = await fetch(ZIP, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const ct = res.headers.get('content-type') || '';
+      if (ct.includes('text/html')) throw new Error('host zwrocil HTML (rewrite) zamiast pliku');
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'V_ZERO_archive.zip';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    } catch (e: any) {
+      setInstallLog(prev => [...prev, lang === 'pl'
+        ? `⚠ Host nie podał pliku (${e.message}) — otwieram źródło z GitHub (zapisz plik)...`
+        : `⚠ Host failed to serve file (${e.message}) — opening GitHub source (save the file)...`]);
+      window.open(RAW, '_blank');
+    }
   };
 
   // Close simulation window
