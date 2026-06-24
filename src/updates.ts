@@ -33,6 +33,7 @@ export const SECTORS: Sector[] = [
 
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
+  { date: '2026-06-24', ref: '40e7037', sector: 'core',   title: 'Economis (Academy) + „Siebie" dla węzłów', desc: 'Moduł Economis: agenci (ISTed/Adamus/ODDI) czytają KATALOG wiedzy i dyskutują ulepszenia GRV. Wzorzec katalogowy = standard Academy. CLAUDE.md jedzie z distro — każdy odpalony Klaudiusz zna protokoły i tożsamość.' },
   { date: '2026-06-24', ref: 'b01a7bf', sector: 'grv',    title: 'Marketplace 0.00G + pierwszy produkt', desc: 'Sklep produktów za GRV (skórki, personalizacja Katedry), TOP 10/moduł wg głosów, reszta co miesiąc spalana → GRV wraca twórcom. Produkt #1: buton „🦀 Odpal Tu...Kurka!" w KatedraChat — odpala Klaudiusza w Katedrze.' },
   { date: '2026-06-24', ref: 'f03ca12', sector: 'grv',    title: 'Geneza GRV — dosypane węzły założycielskie', desc: 'Founder 13→26 (×1M), Filar 26→57 (×100k). Pula obdarowań rośnie do 32,31M GRV.' },
   { date: '2026-06-24', ref: 'site',    sector: 'web',    title: 'otakos.wtf — Titanium FREE + Słowo od Architekta', desc: 'Edycja Titanium teraz darmowa (open source). Rozwijany moduł „Słowo od Architekta OtakOS" — System w ciągłej Produkcji, Wersja Zero.' },
