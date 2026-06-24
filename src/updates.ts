@@ -33,6 +33,8 @@ export const SECTORS: Sector[] = [
 
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
+  { date: '2026-06-24', ref: 'f03ca12', sector: 'grv',    title: 'Geneza GRV — dosypane węzły założycielskie', desc: 'Founder 13→26 (×1M), Filar 26→57 (×100k). Pula obdarowań rośnie do 32,31M GRV.' },
+  { date: '2026-06-24', ref: 'site',    sector: 'web',    title: 'otakos.wtf — Titanium FREE + Słowo od Architekta', desc: 'Edycja Titanium teraz darmowa (open source). Rozwijany moduł „Słowo od Architekta OtakOS" — System w ciągłej Produkcji, Wersja Zero.' },
   { date: '2026-06-23', ref: 'ae36bab', sector: 'crypto', title: 'Suwerenny klon głosu + onboarding', desc: 'Klonuj swój głos LOKALNIE (zero chmury) — Katedra mówi Tobą. Działa od razu (głos przeglądarki), podbija się do klonu z lokalnym silnikiem. Pogawędka zapoznawcza z głosem na pierwszym wejściu.' },
   { date: '2026-06-23', ref: '61cb9dd', sector: 'core',   title: 'Whisper — transkrypcja audio podcastów', desc: 'Most: audio → tekst (whisper.cpp, ffmpeg 16kHz, zero chmury). Operator Dziennika: klik na podcast = transkrypcja → tekst → przemiał. Pętla audio→kronika domknięta.' },
   { date: '2026-06-23', ref: 'a26d92b', sector: 'core',   title: 'Asystent → Gemma 4 (koniec mocka 270m)', desc: 'FieldControl: usunięty mock „Gemma 270m" z fejkowym downloadem. Realny Rdzeń Lokalny: Gemma 4 (MAIN) + Gemma Diffusion, status z mostu, realny pull na USB.' },

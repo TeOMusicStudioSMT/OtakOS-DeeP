@@ -113,7 +113,7 @@ export const HARDWARE_STL: HardwareItem[] = [
     name: 'Premium Titanium Physical Edition',
     desc: 'Bespoke CNC machined Aerospace Grade-5 Titanium casing with laser-etched cryptographic key signatures and integrated Faraday shielding mesh inserts.',
     stlName: 'Grade-5 CNC physical delivery',
-    cost: '$149.00 (Distro Edition)',
+    cost: 'FREE / Open Source',
     status: 'Premium Titanium',
     meshStructure: 'M 15 25 L 85 25 L 95 35 L 95 65 L 85 75 L 15 75 L 5 65 L 5 35 Z'
   },

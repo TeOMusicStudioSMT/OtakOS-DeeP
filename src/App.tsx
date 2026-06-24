@@ -45,6 +45,7 @@ import { IdentityService, NodeIdentity } from './services/IdentityService';
 import NeuralMap from './components/NeuralMap';
 import NodeSphere from './components/NodeSphere';
 import UpdatesSection from './components/UpdatesSection';
+import ArchitectWord from './components/ArchitectWord';
 import { FIAT_DONATIONS_CONFIG } from './config/wallets';
 
 // Web Audio synthesizer for real-time retro tactile audio signals
@@ -1031,6 +1032,11 @@ export default function App() {
             </div>
           </div>
         </motion.div>
+      </section>
+
+      {/* 2.4 SŁOWO OD ARCHITEKTA */}
+      <section className="py-8 max-w-3xl mx-auto px-4 z-10 relative">
+        <ArchitectWord lang={lang} />
       </section>
 
       {/* 2.5 LIVE NEURAL MAP — LOKALNA AGI 0.00G */}
