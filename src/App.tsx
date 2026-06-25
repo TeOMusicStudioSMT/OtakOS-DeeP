@@ -47,6 +47,10 @@ import NodeSphere from './components/NodeSphere';
 import UpdatesSection from './components/UpdatesSection';
 import ArchitectWord from './components/ArchitectWord';
 import AetherArena from './components/AetherArena';
+
+// 🔒 Przed oficjalnym startem każda pobrana kopia = NODE w systemie. Możliwy reset
+// genezy przy starcie — dlatego pobieranie tymczasowo wstrzymane (przełącz na false, by wznowić).
+const DOWNLOAD_LOCKED = true;
 import { FIAT_DONATIONS_CONFIG } from './config/wallets';
 
 // Web Audio synthesizer for real-time retro tactile audio signals
@@ -810,20 +814,40 @@ export default function App() {
         >
           {/* Main Glowing CTA button */}
           <button
-            onClick={startBootstrappedZipDownload}
-            className={`w-full group relative py-4 px-6 rounded-lg font-mono font-medium text-black uppercase tracking-wider overflow-hidden hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer ${
-              activeThemeId === 'emerald' || activeThemeId === 'matrix' ? 'bg-emerald-400 hover:bg-emerald-300' :
-              activeThemeId === 'kawaii' ? 'bg-pink-400 hover:bg-pink-300' : 'bg-purple-400 hover:bg-purple-300'
-            } shadow-[0_0_25px_rgba(16,185,129,0.25)]`}
+            onClick={DOWNLOAD_LOCKED ? undefined : startBootstrappedZipDownload}
+            disabled={DOWNLOAD_LOCKED}
+            className={`w-full group relative py-4 px-6 rounded-lg font-mono font-medium uppercase tracking-wider overflow-hidden transition-all ${
+              DOWNLOAD_LOCKED
+                ? 'text-amber-100 bg-amber-700/40 border border-amber-500/50 cursor-not-allowed'
+                : `text-black hover:scale-[1.01] active:scale-[0.98] cursor-pointer ${
+                    activeThemeId === 'emerald' || activeThemeId === 'matrix' ? 'bg-emerald-400 hover:bg-emerald-300' :
+                    activeThemeId === 'kawaii' ? 'bg-pink-400 hover:bg-pink-300' : 'bg-purple-400 hover:bg-purple-300'
+                  } shadow-[0_0_25px_rgba(16,185,129,0.25)]`
+            }`}
           >
             {/* Ambient sliding neon lines inside button */}
-            <span className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
-            
+            {!DOWNLOAD_LOCKED && <span className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />}
+
             <div className="flex items-center justify-center space-x-3">
-              <Download className="h-5 w-5 animate-bounce" />
-              <span>{t.hero.downloadBtn}</span>
+              {DOWNLOAD_LOCKED ? (
+                <span>{lang === 'pl' ? '🔄 Aktualizacja w toku — pobieranie wstrzymane' : '🔄 Update in progress — downloads paused'}</span>
+              ) : (
+                <>
+                  <Download className="h-5 w-5 animate-bounce" />
+                  <span>{t.hero.downloadBtn}</span>
+                </>
+              )}
             </div>
           </button>
+
+          {/* 🔒 Wyjaśnienie pauzy — każda pobrana kopia to NODE genezy */}
+          {DOWNLOAD_LOCKED && (
+            <div className="w-full text-center text-[11px] font-mono text-amber-300/80 bg-amber-950/20 border border-amber-500/25 rounded-lg px-3 py-2 leading-relaxed">
+              {lang === 'pl'
+                ? '⚠ Od teraz każda pobrana Katedra staje się żywym NODEM systemu. Wstrzymujemy pobieranie do oficjalnego startu (możliwy reset genezy). Niedługo: przycisk Aktualizacji.'
+                : '⚠ From now on every downloaded Cathedral becomes a living NODE. Downloads are paused until the official launch (genesis reset possible). Soon: an Update button.'}
+            </div>
+          )}
 
           {/* Tech metadata details about download package */}
           <div className="flex items-center space-x-4 text-[10px] font-mono text-zinc-500">
