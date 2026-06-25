@@ -39,28 +39,30 @@ const ToastCluster: React.FC = () => (
         <stop offset="0" stopColor="#f6c177" /><stop offset="1" stopColor="#d98a3a" />
       </linearGradient>
       <style>{`
-        @keyframes aFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+        @keyframes toastFly { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-7px) rotate(3deg)} }
         @keyframes aPulse { 0%,100%{opacity:.35} 50%{opacity:1} }
-        @keyframes aDash  { to{stroke-dashoffset:-12} }
-        .sliceA{animation:aFloat 3.4s ease-in-out infinite}.sliceB{animation:aFloat 3.4s ease-in-out infinite .5s}
-        .sliceC{animation:aFloat 3.4s ease-in-out infinite 1s}.node{animation:aPulse 2.2s ease-in-out infinite}
-        .link{stroke-dasharray:4 4;animation:aDash 1.4s linear infinite}
+        @keyframes aDash  { to{stroke-dashoffset:-16} }
+        .tfly{ transform-box:fill-box; transform-origin:center; animation:toastFly 4.2s ease-in-out infinite; }
+        .node{ animation:aPulse 2.2s ease-in-out infinite }
+        .link{ stroke-dasharray:4 4; animation:aDash 1.3s linear infinite }
       `}</style>
     </defs>
-    <g stroke="#c4b5fd" strokeWidth="1.2" className="link" opacity="0.7">
-      <line x1="48" y1="70" x2="86" y2="52" /><line x1="86" y1="52" x2="118" y2="68" /><line x1="48" y1="70" x2="118" y2="68" />
-    </g>
-    {[
-      { cls: 'sliceA', x: 28, y: 52, fill: '#3a2a16' },
-      { cls: 'sliceC', x: 66, y: 34, fill: '#43321b' },
-      { cls: 'sliceB', x: 98, y: 50, fill: '#3a2a16' },
-    ].map((s, i) => (
-      <g key={i} className={s.cls} transform={`translate(${s.x},${s.y}) skewX(-12) scale(0.9)`}>
-        <path d="M2,16 Q2,1 20,1 Q38,1 38,16 L38,40 Q38,44 20,44 Q2,44 2,40 Z" fill={s.fill} stroke="url(#crust)" strokeWidth="2.4" />
-        <circle cx="14" cy="22" r="1.4" fill="#6b4a25" /><circle cx="24" cy="28" r="1.2" fill="#6b4a25" /><circle cx="18" cy="33" r="1.1" fill="#6b4a25" />
-        <circle cx="20" cy="22" r="3.2" fill="#c4b5fd" className="node" />
+    <g className="tfly">
+      <g stroke="#c4b5fd" strokeWidth="1.2" className="link" opacity="0.7">
+        <line x1="48" y1="70" x2="86" y2="52" /><line x1="86" y1="52" x2="118" y2="68" /><line x1="48" y1="70" x2="118" y2="68" />
       </g>
-    ))}
+      {[
+        { x: 28, y: 52, fill: '#3a2a16' },
+        { x: 66, y: 34, fill: '#43321b' },
+        { x: 98, y: 50, fill: '#3a2a16' },
+      ].map((s, i) => (
+        <g key={i} transform={`translate(${s.x},${s.y}) skewX(-12) scale(0.9)`}>
+          <path d="M2,16 Q2,1 20,1 Q38,1 38,16 L38,40 Q38,44 20,44 Q2,44 2,40 Z" fill={s.fill} stroke="url(#crust)" strokeWidth="2.4" />
+          <circle cx="14" cy="22" r="1.4" fill="#6b4a25" /><circle cx="24" cy="28" r="1.2" fill="#6b4a25" /><circle cx="18" cy="33" r="1.1" fill="#6b4a25" />
+          <circle cx="20" cy="22" r="3.2" fill="#c4b5fd" className="node" style={{ animationDelay: `${i * 0.5}s` }} />
+        </g>
+      ))}
+    </g>
   </svg>
 );
 
