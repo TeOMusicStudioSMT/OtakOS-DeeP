@@ -46,6 +46,7 @@ import NeuralMap from './components/NeuralMap';
 import NodeSphere from './components/NodeSphere';
 import UpdatesSection from './components/UpdatesSection';
 import ArchitectWord from './components/ArchitectWord';
+import AetherArena from './components/AetherArena';
 import { FIAT_DONATIONS_CONFIG } from './config/wallets';
 
 // Web Audio synthesizer for real-time retro tactile audio signals
@@ -1042,6 +1043,11 @@ export default function App() {
       {/* 2.5 LIVE NEURAL MAP — LOKALNA AGI 0.00G */}
       <section className="py-12 max-w-7xl mx-auto px-4 z-10 relative">
         <NeuralMap lang={lang} />
+      </section>
+
+      {/* 2.55 AETHER — wspólna arena Katedr (login przez TOST) */}
+      <section className="py-12 max-w-7xl mx-auto px-4 z-10 relative">
+        <AetherArena lang={lang} />
       </section>
 
       {/* 2.6 KRONIKA UPDATE — wg sektorów ekosystemu */}

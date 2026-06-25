@@ -33,6 +33,8 @@ export const SECTORS: Sector[] = [
 
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
+  { date: '2026-06-25', ref: 'aether',  sector: 'mesh',   title: 'AETHER — wspólna arena Katedr', desc: 'Nowa sekcja: logujesz się przez TOST, wybierasz specjalizację (Art/Economic/Tactic/Health/Energotonic/Respond), wchodzisz na arenę gdzie Katedry debatują/tworzą/uczą się razem — i PRZYNOSISZ wiedzę do domu (0.00G). Teaser federacji.' },
+  { date: '2026-06-25', ref: '6230921', sector: 'core',   title: 'System Skórek Zadań + realny zakup GRV', desc: '6 kafelkowych skórek (dusza/system-prompt) + własne, wpięte w CoBotSummoner i Klub Mistrzów (skórka primuje agenta, Co-Bot wykuwany suwerennie w Ollamie). Skórki na sprzedaż w Marketplace, realny zakup za GRV (deduct z portfela). Most chat→agent: Kurka przekazuje zadanie jako brief realnemu Claude Code.' },
   { date: '2026-06-24', ref: '40e7037', sector: 'core',   title: 'Economis (Academy) + „Siebie" dla węzłów', desc: 'Moduł Economis: agenci (ISTed/Adamus/ODDI) czytają KATALOG wiedzy i dyskutują ulepszenia GRV. Wzorzec katalogowy = standard Academy. CLAUDE.md jedzie z distro — każdy odpalony Klaudiusz zna protokoły i tożsamość.' },
   { date: '2026-06-24', ref: 'b01a7bf', sector: 'grv',    title: 'Marketplace 0.00G + pierwszy produkt', desc: 'Sklep produktów za GRV (skórki, personalizacja Katedry), TOP 10/moduł wg głosów, reszta co miesiąc spalana → GRV wraca twórcom. Produkt #1: buton „🦀 Odpal Tu...Kurka!" w KatedraChat — odpala Klaudiusza w Katedrze.' },
   { date: '2026-06-24', ref: 'f03ca12', sector: 'grv',    title: 'Geneza GRV — dosypane węzły założycielskie', desc: 'Founder 13→26 (×1M), Filar 26→57 (×100k). Pula obdarowań rośnie do 32,31M GRV.' },
