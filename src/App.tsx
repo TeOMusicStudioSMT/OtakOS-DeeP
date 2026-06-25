@@ -47,6 +47,7 @@ import NodeSphere from './components/NodeSphere';
 import UpdatesSection from './components/UpdatesSection';
 import ArchitectWord from './components/ArchitectWord';
 import AetherArena from './components/AetherArena';
+import SlowoSuwerena from './components/SlowoSuwerena';
 
 // 🔒 Przed oficjalnym startem każda pobrana kopia = NODE w systemie. Możliwy reset
 // genezy przy starcie — dlatego pobieranie tymczasowo wstrzymane (przełącz na false, by wznowić).
@@ -1064,6 +1065,11 @@ export default function App() {
       {/* 2.4 SŁOWO OD ARCHITEKTA */}
       <section className="py-8 max-w-3xl mx-auto px-4 z-10 relative">
         <ArchitectWord lang={lang} />
+      </section>
+
+      {/* 2.45 SŁOWO SUWERENA — Energia Źródła */}
+      <section className="py-4 max-w-3xl mx-auto px-4 z-10 relative">
+        <SlowoSuwerena lang={lang} />
       </section>
 
       {/* 2.5 LIVE NEURAL MAP — LOKALNA AGI 0.00G */}
