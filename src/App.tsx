@@ -812,25 +812,25 @@ export default function App() {
           transition={{ duration: 0.8, delay: 0.35 }}
           className="mt-10 flex flex-col items-center space-y-4 w-full max-w-md px-4"
         >
-          {/* Main Glowing CTA button */}
+          {/* Main Glowing CTA button — gdy zablokowane: realny przycisk AKTUALIZUJ (→ Kronika) */}
           <button
-            onClick={DOWNLOAD_LOCKED ? undefined : startBootstrappedZipDownload}
-            disabled={DOWNLOAD_LOCKED}
-            className={`w-full group relative py-4 px-6 rounded-lg font-mono font-medium uppercase tracking-wider overflow-hidden transition-all ${
+            onClick={DOWNLOAD_LOCKED
+              ? () => document.getElementById('kronika-update')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              : startBootstrappedZipDownload}
+            className={`w-full group relative py-4 px-6 rounded-lg font-mono font-medium text-black uppercase tracking-wider overflow-hidden hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer ${
               DOWNLOAD_LOCKED
-                ? 'text-amber-100 bg-amber-700/40 border border-amber-500/50 cursor-not-allowed'
-                : `text-black hover:scale-[1.01] active:scale-[0.98] cursor-pointer ${
-                    activeThemeId === 'emerald' || activeThemeId === 'matrix' ? 'bg-emerald-400 hover:bg-emerald-300' :
+                ? 'bg-amber-400 hover:bg-amber-300 shadow-[0_0_25px_rgba(245,158,11,0.3)]'
+                : `${activeThemeId === 'emerald' || activeThemeId === 'matrix' ? 'bg-emerald-400 hover:bg-emerald-300' :
                     activeThemeId === 'kawaii' ? 'bg-pink-400 hover:bg-pink-300' : 'bg-purple-400 hover:bg-purple-300'
                   } shadow-[0_0_25px_rgba(16,185,129,0.25)]`
             }`}
           >
             {/* Ambient sliding neon lines inside button */}
-            {!DOWNLOAD_LOCKED && <span className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />}
+            <span className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
 
             <div className="flex items-center justify-center space-x-3">
               {DOWNLOAD_LOCKED ? (
-                <span>{lang === 'pl' ? '🔄 Aktualizacja w toku — pobieranie wstrzymane' : '🔄 Update in progress — downloads paused'}</span>
+                <span>{lang === 'pl' ? '🔄 Aktualizuj Katedrę' : '🔄 Update Cathedral'}</span>
               ) : (
                 <>
                   <Download className="h-5 w-5 animate-bounce" />
@@ -840,12 +840,12 @@ export default function App() {
             </div>
           </button>
 
-          {/* 🔒 Wyjaśnienie pauzy — każda pobrana kopia to NODE genezy */}
+          {/* 🔒 Wyjaśnienie — pobranie nowej genezy wstrzymane (każda kopia = NODE) */}
           {DOWNLOAD_LOCKED && (
             <div className="w-full text-center text-[11px] font-mono text-amber-300/80 bg-amber-950/20 border border-amber-500/25 rounded-lg px-3 py-2 leading-relaxed">
               {lang === 'pl'
-                ? '⚠ Od teraz każda pobrana Katedra staje się żywym NODEM systemu. Wstrzymujemy pobieranie do oficjalnego startu (możliwy reset genezy). Niedługo: przycisk Aktualizacji.'
-                : '⚠ From now on every downloaded Cathedral becomes a living NODE. Downloads are paused until the official launch (genesis reset possible). Soon: an Update button.'}
+                ? '⚠ Każda pobrana Katedra to żywy NODE genezy. Nowe pobrania wstrzymane do oficjalnego startu (możliwy reset). Istniejące węzły — kliknij Aktualizuj, by zobaczyć co nowego, bez resetu.'
+                : '⚠ Every downloaded Cathedral is a living genesis NODE. New downloads are paused until the official launch (reset possible). Existing nodes — click Update to see what’s new, no reset.'}
             </div>
           )}
 
@@ -858,7 +858,8 @@ export default function App() {
             <span>{t.hero.license}</span>
           </div>
 
-          {/* CLI Terminal download box */}
+          {/* CLI Terminal download box — wyciszone podczas pauzy pobierania */}
+          {!DOWNLOAD_LOCKED && (
           <div className="w-full bg-[#030305]/95 border border-zinc-800 rounded p-2 flex items-center justify-between text-[11px] font-mono shadow-inner space-x-2">
             <span className="text-[9px] text-zinc-500 border border-zinc-800 bg-[#07070c] px-1.5 py-0.5 rounded select-none uppercase font-bold shrink-0">WGET_BOOT</span>
             <div className="flex-1 overflow-x-auto scrollbar-none px-1 text-zinc-300 font-mono select-all text-left whitespace-nowrap">
@@ -882,6 +883,7 @@ export default function App() {
               )}
             </button>
           </div>
+          )}
 
           <div className="text-center text-xs text-zinc-500 max-w-sm">
             <span className="text-zinc-400">{t.hero.disclaimerHighlight}</span> {t.hero.disclaimerText}
@@ -1075,7 +1077,7 @@ export default function App() {
       </section>
 
       {/* 2.6 KRONIKA UPDATE — wg sektorów ekosystemu */}
-      <section className="py-12 max-w-7xl mx-auto px-4 z-10 relative">
+      <section id="kronika-update" className="py-12 max-w-7xl mx-auto px-4 z-10 relative scroll-mt-20">
         <UpdatesSection lang={lang} />
       </section>
 
