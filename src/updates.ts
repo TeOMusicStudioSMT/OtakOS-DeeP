@@ -33,6 +33,20 @@ export const SECTORS: Sector[] = [
 
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
+  {
+    date: '2026-07-02',
+    ref: 'agent33',
+    sector: 'core',
+    title: 'Dynamic Agent Core — dynamiczny rejestr i obsługa profili Agency 33',
+    desc: 'Wdrożenie elastycznego modułu rejestru i bezbibliotecznego parsera YAML frontmatter (core/agents/index.js), który w locie wczytuje profile agentów z plików markdown w katalogu profiles/. Zaktualizowano proxy API (/api/claude oraz /api/gemini) – dodano parametr "agent" do dynamicznego wstrzykiwania tożsamości i reguł systemowych agentów. Dodano endpoint GET /api/agents listujący aktywne profile. Jako pierwszego wgrano agenta "Minimal Change Engineer" jako wzorzec restrykcji zmian.'
+  },
+  {
+    date: '2026-07-02',
+    ref: 'tacosgd',
+    sector: 'crypto',
+    title: 'Tacos Guard — strażnik VRAM na straży stabilności Katedry',
+    desc: 'Zaimplementowano demona monitorującego (core/tacos-guard.js) wpiętego w Wiesio-Bridge, który co 30 sekund odpytuje nvidia-smi o procesy compute obciążające VRAM. Procesy przekraczające limit zdefiniowany w pliku .env (TACOS_GUARD_LIMIT_MB, domyślnie 300MB) i niebędące na białej liście (ollama, cursor, dwm.exe, explorer.exe, nvcontainer.exe) są natychmiastowo eliminowane (tacosowane) przez taskkill, zapobiegając wyciekom RAM-u i resetom systemu.'
+  },
   { date: '2026-06-30', ref: 'engine', sector: 'core',   title: 'GRA = SILNIK = INTERFEJS — Wyspa materializuje się z kodu (0.00G)', desc: 'Kognitywny przełom: NIE wydajemy gry (.exe/Steam) — tryb Play UE staje się trójwymiarowym MONITOREM Katedry. Silnik + Python + lokalny Co-Bot = żywy interfejs. Twoja WYSPA powstaje słowem: agent czyta tożsamość → „Whole Builder" (build_island.py) → świat materializuje się lokalnie. Złoty TOST-portal (kromka z galaktycznym wirem) generowany PROCEDURALNIE z KODU (AssetTemplate.ts) — zero pobierania, zero chmurowych pikseli; geometria liczona lokalnie. Wyspa LEWITUJE w Eterze (precz ocean — woda żarła VRAM). Las Megascans + 496 Twoich zdjęć jako żywa baza świata. Co-Bot modyfikuje świat NA ŻYWO przez rozmowę (/api/gameforge/mutate), bez restartu. Basic tier działa na 16GB; pełnia (fotorealizm bez limitu) = Cloud GPU / Pixel Streaming — podłączasz się jak do ekranu. Skille agentów (Księgarnia), katalog assetów (Składnica), UE headless (~1.6GB RAM). Rada rzeźbi duszę, Klaudiusz materializuje w UE.' },
   { date: '2026-06-29', ref: '2ec186c', sector: 'mesh',   title: 'O TAK… WYSPA — start ze schronu na otwartą Wyspę', desc: 'Aksjologiczny zwrot: zamknięty schron ustępuje WYSPIE — otwartej przestrzeni kreacji (Miłość 2.0, Tier III; nazwa lokacji skasowana z kodu). Brak danych → dziewicza wyspa + mityczna Antresola (punkt obserwacyjny). Z Twoimi katalogami zdjęć → Katedra krystalizuje bazę: OSOBNO ludzie, OSOBNO przedmioty/surowce, rozrzucone po wyspie. 🪟 Szklane tafle Atrium = OKNA NA WYSPY innych suwerenów (sieć węzłów GRV: panel 1 = OtakOS, 2-4 = losowe wyspy). 🤖 Co-Bot — wirtualny mentor uczy planować, zarządzać energią i dostroić intencje do realu (kreacja bez destrukcji). ⛵ Stocznia: zbuduj statek (drewno/lina/żagiel/żywica) i popłyń na inne wyspy. Lewitujący TOST obniżony na wysokość wzroku.' },
   { date: '2026-06-29', ref: 'rezyser', sector: 'core',   title: 'Reżyser — składaj grę = Film = opowieść (+ mody za GRV)', desc: 'Nowa warstwa kompozycji: układasz film ze SCEN i UJĘĆ w Katedrze (środowiska, kamery, podpisy, Prompt Startowy Świata), eksportujesz JEDEN manifest, wrzucasz do Unreal Engine → kompilator generuje HYBRYDĘ film→gra (grywalny poziom + Level Sequence z cięciami kamer, „otwarcie oczu" fade). System WTYCZEK (modów): generator pisze wtyczkę lokalnym mózgiem (Ollama) wg kontraktu; mody wystawiasz i kupujesz za GRV w Marketplace — Tarcza Prawdy skanuje kod przed instalacją (blokuje sabotaż). Twory są jawne, lokalne, suwerenne.' },
