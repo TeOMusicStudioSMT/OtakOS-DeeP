@@ -45,6 +45,7 @@ import { IdentityService, NodeIdentity } from './services/IdentityService';
 import NeuralMap from './components/NeuralMap';
 import NodeSphere from './components/NodeSphere';
 import UpdatesSection from './components/UpdatesSection';
+import AdTowerSection from './components/AdTowerSection';
 import ArchitectWord from './components/ArchitectWord';
 import AetherArena from './components/AetherArena';
 import SlowoSuwerena from './components/SlowoSuwerena';
@@ -1085,6 +1086,11 @@ export default function App() {
       {/* 2.6 KRONIKA UPDATE — wg sektorów ekosystemu */}
       <section id="kronika-update" className="py-12 max-w-7xl mx-auto px-4 z-10 relative scroll-mt-20">
         <UpdatesSection lang={lang} />
+      </section>
+
+      {/* 2.7 WIEŻA PARTNERÓW — wykup reklamy na prawym panelu Orbity */}
+      <section id="reklama" className="py-12 max-w-4xl mx-auto px-4 z-10 relative scroll-mt-20">
+        <AdTowerSection lang={lang} />
       </section>
 
       {/* Szklana sieć 3D węzłów (modal po kliknięciu licznika VRAM) */}
