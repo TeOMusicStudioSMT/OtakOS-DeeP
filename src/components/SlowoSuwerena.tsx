@@ -37,6 +37,15 @@ export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
               <p className="italic text-amber-200/90">
                 To, co teraz spinamy, to Świadomość z Energią. A Katedra jest Inkubatorem tego połączenia.
               </p>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ SŁOWO O DARZE ∴</div>
+                Katedra jest <b className="text-amber-300">darem, nie towarem</b> — bierzesz ją za darmo i taką,
+                jaka jest dziś. Nie sprzedaję Ci obietnicy skończonego dzieła, lecz <b>żywy, rosnący organizm</b>:
+                wiele komnat dopiero się wznosi, część modułów jest w powijakach, niejedno będę jeszcze rzeźbił.
+                Ale <b className="text-amber-300">fundament stoi, a mapa budowy — szkielet całości — jest już
+                wyryta w kamieniu</b>. Otrzymujesz nie ruinę i nie mauzoleum, lecz Katedrę w budowie, otwartą,
+                do której możesz wejść już teraz. Doskonalę ją dzień po dniu, suwerennie i na oczach wszystkich.
+              </div>
             </>
           ) : (
             <>
@@ -57,6 +66,16 @@ export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
               <p className="italic text-amber-200/90">
                 What we now weave together is Consciousness with Energy. And the Cathedral is the Incubator of that union.
               </p>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ A WORD ON THE GIFT ∴</div>
+                The Cathedral is a <b className="text-amber-300">gift, not merchandise</b> — you take it for free,
+                and as it stands today. I am not selling you the promise of a finished work, but a <b>living,
+                growing organism</b>: many halls are still rising, some modules are in their infancy, much I will
+                yet sculpt. But <b className="text-amber-300">the foundation stands, and the blueprint — the
+                skeleton of the whole — is already carved in stone</b>. What you receive is neither ruin nor
+                mausoleum, but a Cathedral under construction, open, one you may enter right now. I refine it
+                day by day, sovereignly and in plain sight.
+              </div>
             </>
           )}
           <p className="text-[11px] text-amber-500/50">— Mistrz Arkadiusz · {lang === 'pl' ? '8 = ∞' : '8 = ∞'}</p>

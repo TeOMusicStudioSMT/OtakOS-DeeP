@@ -50,9 +50,9 @@ import ArchitectWord from './components/ArchitectWord';
 import AetherArena from './components/AetherArena';
 import SlowoSuwerena from './components/SlowoSuwerena';
 
-// 🔒 Przed oficjalnym startem każda pobrana kopia = NODE w systemie. Możliwy reset
-// genezy przy starcie — dlatego pobieranie tymczasowo wstrzymane (przełącz na false, by wznowić).
-const DOWNLOAD_LOCKED = true;
+// 🔓 Pobieranie ODBLOKOWANE — startowa Katedra V_ZERO (32MB) jest publiczna.
+// (Historycznie: przed oficjalnym startem wstrzymane, każda kopia = NODE.)
+const DOWNLOAD_LOCKED = false;
 import { FIAT_DONATIONS_CONFIG } from './config/wallets';
 
 // Web Audio synthesizer for real-time retro tactile audio signals

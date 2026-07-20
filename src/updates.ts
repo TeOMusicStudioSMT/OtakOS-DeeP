@@ -34,6 +34,34 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: '2026-07-14',
+    ref: '813ef14',
+    sector: 'distro',
+    title: 'V_ZERO 32MB — startowa Katedra publiczna, pobieranie odblokowane',
+    desc: 'Obecna Katedra staje się wersją startową do pobrania z otakos.wtf. Distro odchudzone (wykluczone narzędzia deweloperskie Unreal/RealityScan — użytkownik instaluje je osobno, jak Whisper czy XTTS): 710 plików / 55MB → archiwum 32MB. W środku komplet warstwy twórczej: teledyski pełnej długości, karaoke, napisy, substrony Music/Story/App, Whisper (model mowy dociąga się przy pierwszym starcie). Produkt darmowy, suwerenny, w pełni lokalny — zero telemetrii.'
+  },
+  {
+    date: '2026-07-14',
+    ref: 'kadr',
+    sector: 'core',
+    title: 'TeO Kadr — montażownia teledysków (ffmpeg, 0.00G)',
+    desc: 'Realny generator teledysków sprzężony z osią energii utworu: wektory soniczne rozkładane na pełną długość audio (ffprobe), beat-sync tnie materiał na uderzenia basu, biblioteka źródeł tasowana z całego drzewa (setki klipów, każdy render inny), montaż zawsze na całą długość utworu. Napisy z pliku .lrc wypalane na dole obrazu. "Wizja Joanny" — mały kompan-agent słucha utworu sercem i pisze reżyserowi brief, o czym jest piosenka, zanim powstanie storyboard. Spawacz klocków (intro + wkład + outro) przepisany na normalizację strumieni — koniec z dopychaniem ciszy przy różnych klatkażach.'
+  },
+  {
+    date: '2026-07-14',
+    ref: 'joanna',
+    sector: 'core',
+    title: 'Karaoke-sync przez Joannę — Whisper daje czas, LLM rozumie sens',
+    desc: 'Automatyczna synchronizacja tekstu (.lrc) przebudowana: lokalny Whisper.cpp buduje oś czasu z nagrania, a lokalny model językowy dopasowuje PRAWDZIWE wersy Suwerena do tej osi — rozumiejąc sens, nie zgadując po pojedynczych słowach. Twardy bezpiecznik monotoniczności (znaczniki czasu tylko rosną) zamiast dawnych skoków. Whisper zasila też transkrypcję podcastów i wejście głosowe do Sfery.'
+  },
+  {
+    date: '2026-07-14',
+    ref: 'apps',
+    sector: 'web',
+    title: 'Substrony pod jednym dachem — Music V2 / Story V2 / App V2',
+    desc: 'Trzy studia (muzyka, opowieść, aplikacje) serwowane statycznie przez most Katedry pod /apps — teleport między światami działa też z Live-USB, gdzie nie ma serwerów deweloperskich. Interfejsy ujednolicone do szklanej estetyki spójnej z tłem. Nowe panele boczne Orbity: TeOgochi (kompan komentujący muzykę na żywo), Wieża Partnerów (miejsce na reklamy firm), Puls Maszyny (tętno sprzętu: RAM/CPU/VRAM/temperatura).'
+  },
+  {
     date: '2026-07-02',
     ref: 'agent33',
     sector: 'core',
