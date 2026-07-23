@@ -1,16 +1,12 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-// --- TYPY I INTERFEJSY ---
+// Types & Interfaces
 export type LayoutMode = 'GRID' | 'FOCUS_SELF' | 'FOCUS_GUEST' | 'FOCUS_ORB';
 
 export interface PodcastCoreProps {
-  /** Adres serwera WebSocket przekaźnika RTMP (np. Node.js + FFmpeg -> YouTube Live API) */
   wsUrl?: string;
-  /** Callback powiadamiający o stanie transmisji na żywo */
   onStreamStateChange?: (isBroadcasting: boolean) => void;
-  /** Zewnętrzny strumień wideo od Gościa Live (WebRTC Peer) */
   guestStream?: MediaStream | null;
-  /** Opcjonalne zewnętrzne źródło dźwięku modelu AI */
   audioStreamSource?: MediaStream | AudioNode | null;
 }
 
@@ -20,29 +16,28 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
   guestStream = null,
   audioStreamSource = null,
 }) => {
-  // --- STANY SYSTEMOWE ---
+  // --- States ---
   const [layout, setLayout] = useState<LayoutMode>('GRID');
   const [isBroadcasting, setIsBroadcasting] = useState<boolean>(false);
   const [isCamActive, setIsCamActive] = useState<boolean>(false);
   const [isMicMuted, setIsMicMuted] = useState<boolean>(false);
   const [activeSpeaker, setActiveSpeaker] = useState<'SELF' | 'GUEST' | 'ORB'>('SELF');
 
-  // --- REFERENCJE DO ELEMENTÓW I STRUMIENI ---
+  // --- Refs ---
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const guestVideoRef = useRef<HTMLVideoElement | null>(null);
   const orbCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const compositeCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  
   const wsRef = useRef<WebSocket | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const localStreamRef = useRef<MediaStream | null>(null);
   
+  const localStreamRef = useRef<MediaStream | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const compositeAnimRef = useRef<number | null>(null);
 
-  // 1. WEBRTC LOCAL CAMERA CAPTURE (Widok Siebie)
+  // 1. WebRTC Local Camera Capture (Widok Siebie)
   const initLocalStream = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -56,7 +51,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
       setIsCamActive(true);
       initAudioAnalyser(stream);
     } catch (err) {
-      console.error('[PodcastCore] Błąd dostępu do kamery/mikrofonu:', err);
+      console.error('[PodcastCore] Error accessing camera/mic:', err);
     }
   }, []);
 
@@ -71,7 +66,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
     setIsCamActive(false);
   }, []);
 
-  // 2. AUDIO ORB (Web Audio API Analyser dla PCM Modelu AI)
+  // 2. AI Orb (Web Audio API Analyser)
   const initAudioAnalyser = (streamSource: MediaStream) => {
     try {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -87,7 +82,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
 
       drawOrb();
     } catch (e) {
-      console.warn('[PodcastCore] Inicjalizacja AudioContext wstrzymana:', e);
+      console.warn('[PodcastCore] AudioContext init skipped or restrained:', e);
     }
   };
 
@@ -106,7 +101,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
       if (analyser) {
         analyser.getByteFrequencyData(dataArray);
       } else {
-        // Płynny impuls spoczynkowy (Fallback Idle Pulse)
+        // Subtle fallback idle pulse
         for (let i = 0; i < bufferLength; i++) dataArray[i] = Math.sin(Date.now() * 0.005 + i) * 20 + 30;
       }
 
@@ -114,6 +109,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
       for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
       const avgAmplitude = sum / bufferLength;
 
+      // Speaker auto-detection simulation for Orb responsiveness
       if (avgAmplitude > 70 && activeSpeaker !== 'ORB') {
         setActiveSpeaker('ORB');
       }
@@ -124,7 +120,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
       const centerY = canvas.height / 2;
       const baseRadius = 60 + (avgAmplitude / 255) * 45;
 
-      // Aura świetlna (Glow Gradient)
+      // Glow Aura
       const gradient = ctx.createRadialGradient(centerX, centerY, baseRadius * 0.2, centerX, centerY, baseRadius * 1.8);
       gradient.addColorStop(0, 'rgba(0, 240, 255, 0.9)');
       gradient.addColorStop(0.5, 'rgba(138, 43, 226, 0.5)');
@@ -135,7 +131,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
       ctx.arc(centerX, centerY, baseRadius * 1.8, 0, Math.PI * 2);
       ctx.fill();
 
-      // Dynamiczny Rdzeń AI
+      // Dynamic Core Orb
       ctx.beginPath();
       ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
       ctx.fillStyle = '#00f0ff';
@@ -144,10 +140,10 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // Pierścień Widmowy Waveform
+      // Waveform Orbit Ring
       ctx.beginPath();
       ctx.lineWidth = 3;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
       for (let i = 0; i < bufferLength; i++) {
         const angle = (i / bufferLength) * Math.PI * 2;
         const offset = (dataArray[i] / 255) * 20;
@@ -165,14 +161,14 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
     render();
   };
 
-  // 3. GOŚĆ LIVE (Podłączenie zewnętrznego strumienia wideo)
+  // 3. Gość Live (Guest Stream Attachment)
   useEffect(() => {
     if (guestVideoRef.current && guestStream) {
       guestVideoRef.current.srcObject = guestStream;
     }
   }, [guestStream]);
 
-  // 4. RTMP BROADCAST ENGINE (Offscreen Canvas 1080p 60FPS -> WebSocket Ingest)
+  // 4. RTMP Broadcast Base (Offscreen Composite Canvas + WebSocket Ingest)
   const startRTMPBroadcast = useCallback(() => {
     const canvas = compositeCanvasRef.current;
     if (!canvas) return;
@@ -182,11 +178,11 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
       wsRef.current = ws;
 
       ws.onopen = () => {
-        console.log('[PodcastCore] Połączono z przekaźnikiem RTMP WebSocket');
+        console.log('[PodcastCore] Connected to RTMP WebSocket Relay');
         setIsBroadcasting(true);
         onStreamStateChange?.(true);
 
-        const stream = canvas.captureStream(60); // 60 FPS 1080p Stream
+        const stream = canvas.captureStream(60); // 60 FPS Canvas stream
         const mediaRecorder = new MediaRecorder(stream, {
           mimeType: 'video/webm;codecs=vp8,opus',
           videoBitsPerSecond: 4500000,
@@ -198,12 +194,12 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
           }
         };
 
-        mediaRecorder.start(250); // Pakiety wysyłane co 250ms
+        mediaRecorder.start(250); // Send chunk every 250ms
         mediaRecorderRef.current = mediaRecorder;
       };
 
       ws.onerror = (err) => {
-        console.error('[PodcastCore] Błąd WebSocket RTMP Relay:', err);
+        console.error('[PodcastCore] WebSocket RTMP Relay Error:', err);
         stopRTMPBroadcast();
       };
 
@@ -211,7 +207,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
         stopRTMPBroadcast();
       };
     } catch (e) {
-      console.error('[PodcastCore] Nieudana inicjalizacja WebSocket RTMP:', e);
+      console.error('[PodcastCore] Failed to initialize RTMP WebSocket:', e);
     }
   }, [wsUrl, onStreamStateChange]);
 
@@ -228,7 +224,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
     onStreamStateChange?.(false);
   }, [onStreamStateChange]);
 
-  // 5. RENDERING KOMPOZYTOWY CANVASA DLA TRANSMISJI YOUTUBE RTMP
+  // 5. Composite Canvas Render Loop for RTMP Export
   useEffect(() => {
     const canvas = compositeCanvasRef.current;
     if (!canvas) return;
@@ -240,6 +236,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
       ctx.fillStyle = '#090a0f';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // Render video feeds onto offscreen 1920x1080 canvas for YouTube
       if (localVideoRef.current && isCamActive) {
         ctx.drawImage(localVideoRef.current, 0, 0, canvas.width / 2, canvas.height);
       }
@@ -260,6 +257,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
     };
   }, [isCamActive, guestStream]);
 
+  // Initial stream trigger
   useEffect(() => {
     initLocalStream();
     return () => {
@@ -281,10 +279,10 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
 
   return (
     <div className="relative w-full h-full min-h-[650px] bg-[#050608] text-white flex flex-col justify-between p-4 rounded-2xl border border-cyan-500/20 shadow-2xl overflow-hidden backdrop-blur-xl">
-      {/* Ukryty Canvas kompozytowy 1080p 60FPS dla Ingestu RTMP */}
+      {/* Hidden Offscreen Composite Canvas for RTMP Stream Capture */}
       <canvas ref={compositeCanvasRef} width={1920} height={1080} className="hidden" />
 
-      {/* --- PAN INFORMACYJNY I BROADCAST CONTROL --- */}
+      {/* --- TOP BAR (Status & Broadcast controls) --- */}
       <div className="flex items-center justify-between z-10 bg-black/40 px-6 py-3 rounded-xl border border-white/10 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <span className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse" />
@@ -310,9 +308,9 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
         </div>
       </div>
 
-      {/* --- SCENA DYNAMICZNA / GRID --- */}
+      {/* --- DYNAMIC STAGE / GRID LAYOUT --- */}
       <div className="relative flex-1 my-4 grid gap-4 transition-all duration-500 ease-out grid-cols-1 md:grid-cols-2">
-        {/* 1. WIDOK SIEBIE */}
+        {/* 1. WIDOK SIEBIE (WebRTC Local View) */}
         <div
           onClick={() => setLayout('FOCUS_SELF')}
           className={`relative rounded-xl overflow-hidden border transition-all duration-500 cursor-pointer bg-black/60 flex items-center justify-center ${
@@ -334,7 +332,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
           </div>
         </div>
 
-        {/* 2. GOŚĆ LIVE */}
+        {/* 2. GOŚĆ LIVE (External Stream Slot) */}
         <div
           onClick={() => setLayout('FOCUS_GUEST')}
           className={`relative rounded-xl overflow-hidden border transition-all duration-500 cursor-pointer bg-black/60 flex items-center justify-center ${
@@ -359,7 +357,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
           </div>
         </div>
 
-        {/* 3. AI ORB */}
+        {/* 3. AI ORB (Sound-Reactive Model Visualizer) */}
         <div
           onClick={() => setLayout(layout === 'FOCUS_ORB' ? 'GRID' : 'FOCUS_ORB')}
           className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 z-30 cursor-pointer ${
@@ -375,7 +373,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
         </div>
       </div>
 
-      {/* --- PANEL STEROWANIA URZĄDZENIAMI I UŁOŻENIEM --- */}
+      {/* --- BOTTOM CONTROLS --- */}
       <div className="flex items-center justify-between z-10 bg-black/40 px-6 py-3 rounded-xl border border-white/10 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <button
@@ -396,6 +394,7 @@ export const PodcastCore: React.FC<PodcastCoreProps> = ({
           </button>
         </div>
 
+        {/* Layout Selectors */}
         <div className="flex items-center gap-2">
           {(['GRID', 'FOCUS_SELF', 'FOCUS_GUEST', 'FOCUS_ORB'] as LayoutMode[]).map((mode) => (
             <button
