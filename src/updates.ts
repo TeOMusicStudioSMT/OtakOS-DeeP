@@ -34,6 +34,41 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: '2026-08-02',
+    ref: '8103fcb',
+    sector: 'crypto',
+    title: 'Straż Mostu — tunel przestaje być otwartymi drzwiami',
+    desc: 'Kwantowy Tunel pozwala sterować Katedrą z telefonu, ale Most nie miał dotąd żadnej kontroli: kto znał adres, mógł uruchomić dowolną komendę na maszynie Suwerena. Teraz stoją dwie warstwy. Klucz sesji odcina skanery i przypadkowych gości. Druga warstwa jest ważniejsza — nawet z poprawnym kluczem żądanie z tunelu nie uruchomi komendy ani nie zapisze pliku. To celowe: kod QR niesie klucz, więc zdjęcie ekranu na streamie oznacza wyciek. Bez drugiej warstwy znaczyłoby to przejęcie maszyny; z nią znaczy tyle, że ktoś obcy przełączy utwór w radiu. Na własnym komputerze wszystko działa jak dotąd, bez konfiguracji. Gdyby kod QR kiedyś mignął w kadrze — jedno kliknięcie przekuwa klucz i wszystkie stare linki umierają.'
+  },
+  {
+    date: '2026-08-02',
+    ref: 'rynek',
+    sector: 'crypto',
+    title: 'Centrum Finansowe — fakty, kontekst, decyzja (i koniec wróżenia ze świec)',
+    desc: 'Cztery moduły w celowej kolejności. Tunel Wiadomości zbiera nagłówki z sześciu kanałów i streszcza nastrój prasy lokalnym modelem — rynek reaguje emocjonalnie, więc ton mediów jest realnym sygnałem. Mapa Sektorów liczy korelacje z prawdziwych notowań: okazuje się, że ETH, SOL i LINK chodzą za Bitcoinem tak blisko, że „portfel z pięciu monet" bywa jedną pozycją w pięciu przebraniach. Dziennik Decyzji zapisuje rozumowanie ZANIM znany jest wynik — razem z migawką nastroju prasy, żeby po miesiącu było widać, czy decyzja zapadała w panice czy w euforii. Pamięć tego nie odtworzy. A Kronos Oracle dostał uczciwą etykietę: to symulacja scenariusza, nie prognoza — dolar różnicy w cenie startowej odwraca jego „werdykt", bo pod spodem jest błądzenie losowe. Moduł zostaje przydatny, zmienia się tylko to, za co się podaje. Katedra nie doradza, co kupić. Daje narzędzia i mówi prawdę o ich granicach.'
+  },
+  {
+    date: '2026-08-02',
+    ref: 'c9c6f6d',
+    sector: 'core',
+    title: 'Protokół rzetelności — koniec pewnych siebie zmyśleń',
+    desc: 'Mechanik meldował „Wykryto zator pamięci VRAM. Podnoszę limity magistrali i restartuję nasłuch rdzenia..." — przy sprawnej pamięci i wolnym GPU. Dwa grzechy naraz: zgadywanie podane jako fakt oraz opis czynności, których w kodzie nie ma. Diagnoza wypowiedziana pewnym tonem wysyła człowieka w wielogodzinne polowanie na zły trop. Teraz każdy meldunek ma cztery części: FAKTY (surowy błąd, endpoint, model, czas), HIPOTEZY jawnie oznaczone jako hipotezy, CO ZROBIONO — wyłącznie czynności faktycznie wykonane, i SPRAWDŹ SAM z poleceniem rozstrzygającym. Ta sama zasada objęła kontrolkę Mostu, która potrafiła świecić na zielono, gdy każda komenda leciała w próżnię: wskaźnik mierzy teraz tę samą drogę, którą naprawdę jedzie ruch.'
+  },
+  {
+    date: '2026-07-30',
+    ref: 'ecbca53',
+    sector: 'core',
+    title: 'Rdzeń narracyjny — pięć modułów mówiło do modelu, którego nie ma',
+    desc: 'Joanna, Kronika, Dziennik, wizja teledysku i storyboard miały wpisany na sztywno model nieobecny w instalacji. Wszystkie pięć chybiało po cichu: Joanna spadała na awaryjny model 0,8 GB i mówiła łamaną polszczyzną („byntę słodki wiatr"), reszta po prostu milczała. Jedna nazwana stała zamiast pięciu rozsypanych literałów, a fallback przestał być cichy — odpowiedź niesie teraz informację, że odpowiadał model zapasowy. Przy okazji zmierzone: pełna gemma4 wywraca backend na słabszym sprzęcie, wariant e2b tej samej rodziny działa i mówi czysto. Zasada na przyszłość: nazwa modelu z dokumentacji to nie to samo co nazwa zainstalowana — sprawdzić przed wpisaniem w kod.'
+  },
+  {
+    date: '2026-07-30',
+    ref: 'c50c9f2',
+    sector: 'core',
+    title: 'Wektory soniczne — teledysk wreszcie trafia w rytm',
+    desc: 'Generator struktury rytmicznej przepisany od podstaw: analiza pasm w czasie rzeczywistym, wykrywanie uderzeń basu względem ruchomej średniej, BPM liczony regresją po numerach taktów (błąd poniżej 0,1% w zakresie 80–174 BPM). Naprawione dwa błędy, które po cichu psuły każdy montaż: brak osi czasu w zapisie sprawiał, że montażownia ściskała utwór 24-sekundowy do 16 sekund, a zła skala wartości powodowała, że wszystkie cięcia dostawały ten sam efekt. Teraz plik z wektorami niesie prawdziwe sekundy i znormalizowane pasma, a Studio może z niego zbudować plan cięć zgrany z muzyką.'
+  },
+  {
     date: '2026-07-14',
     ref: '813ef14',
     sector: 'distro',
