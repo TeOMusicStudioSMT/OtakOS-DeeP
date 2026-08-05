@@ -34,6 +34,27 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: '2026-08-05',
+    ref: '59ab34e',
+    sector: 'core',
+    title: 'Reżyser — sfera dostaje ręce, pamięć i obsadę',
+    desc: 'Świecąca kula na wejściu TeO Story potrafiła rozmawiać i tyle. Teraz prowadzi produkcję. Po pierwsze ma ręce: kiedy prosisz o kartę na tablicy, karta na niej ląduje — nie pojawia się zdanie „już dodałem". Pod sferą widać ślad po każdej akcji, zielony gdy się udała, bursztynowy z powodem gdy nie; to ta linijka odróżnia „powiedział" od „zrobił". Po drugie ma pamięć: fakty kanoniczne serialu i streszczenia odcinków przeżywają zamknięcie karty i wracają do każdej rozmowy, więc „następny odcinek" przestaje być fikcją. Pamięć rośnie w nieskończoność, a okno modelu nie — przy przycinaniu najpierw lecą stare odcinki, fakty bronią się najdłużej, a system MÓWI, co wypadło. Cicha utrata faktu wygląda dokładnie tak samo jak brak pamięci, a to dwa różne problemy. Po trzecie ma obsadę: swojego towarzysza AI można wgrać do bańki — plikiem albo wklejeniem — a relacja zbudowana gdzie indziej zostaje zaszczepiona, zamiast zaczynać od zera. Rozpoznawane są trzy zapisy: eksport JSON z innego systemu, profil z nagłówkiem i goły opis „kim jesteś".'
+  },
+  {
+    date: '2026-08-05',
+    ref: '733f3f7',
+    sector: 'core',
+    title: 'Kolejka Kreatywna — praca produkcyjna dostaje własny tor',
+    desc: 'Zadania kreatywne szły dotąd do kolejki Mechanika, który generuje łatki do plików źródłowych. Wynik był dokładnie taki, jakiego można się spodziewać po wsadzeniu polecenia „narysuj kartę postaci" do narzędzia naprawiającego kod: trzy bezsensowne łatki do skasowania. Praca nad kreskówką ma inny cykl życia — nie „zastosuj albo odrzuć", tylko „wyślij, przynieś z powrotem, przepuść dalej". Powstała więc Tablica Produkcji: pięć kolumn odwzorowuje realną drogę od biblii projektu, przez klatki kluczowe i ich ożywienie, po montaż. Sercem jest biblia projektu — to, co wróciło z ustalania stylu, dokleja się automatycznie do każdego następnego polecenia. Bez tej kotwicy kreskówka rozjeżdża się nie dlatego, że model źle rysuje, tylko dlatego, że w czternastym kadrze nikt już nie pamięta koloru płaszcza. Dopóki biblia jest pusta, tablica ostrzega o tym czerwono. Uczciwa granica powiedziana wprost: zewnętrzne narzędzia graficzne działają w przeglądarce i Katedra nie ma do nich dostępu — buduje gotowe polecenie i przyjmuje wynik, rundę robi człowiek. Jedyny etap dziejący się naprawdę na maszynie to montaż.'
+  },
+  {
+    date: '2026-08-05',
+    ref: 'a973b52',
+    sector: 'core',
+    title: 'Rada meldowała sukces przy pustej kolejce',
+    desc: 'W logach stały obok siebie trzy linijki, które nie mogły być jednocześnie prawdziwe: trzykrotne ostrzeżenie „brak danych zadania", zaraz pod nim zielony ptaszek „3 pod-zadania wstrzyknięto do kolejki", a niżej stan kolejki: jedno zadanie, zero oczekujących. Pod spodem siedziały trzy usterki jedna w drugiej. Rada nie przekazywała identyfikatora zadania, choć miała go dwie linijki obok — więc każde wstrzyknięcie odpadało na wejściu. Kolejka przy odmowie zwracała pustą wartość zamiast zgłosić błąd, więc obsługa błędów nigdy się nie uruchamiała i kod bezwarunkowo meldował sukces. A oba endpointy Rady miały wpisany na sztywno wariant modelu, o którym wiadomo, że wywraca backend — najpewniejsze źródło dziesięciominutowych zawieszeń. Melduje się teraz to, co się wydarzyło, a nie to, co miało się wydarzyć: liczba przyjętych, liczba odrzuconych i powód każdej odmowy. Ten sam grzech wypleniliśmy tydzień wcześniej u Mechanika — tym razem piętro wyżej.'
+  },
+  {
     date: '2026-08-02',
     ref: '8103fcb',
     sector: 'crypto',
