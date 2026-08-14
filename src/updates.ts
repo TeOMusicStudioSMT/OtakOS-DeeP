@@ -34,6 +34,34 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: '2026-08-13',
+    ref: '95d44b4',
+    sector: 'core',
+    title: 'Spiżarnia Zasobów — katalog, który mówi, czego NIE potrafi',
+    desc: 'Katalog darmowych źródeł dla modułów Katedry, zbudowany na znanej liście „300 darmowych stron". Przy czytaniu tej listy wyszła rzecz, która zmieniła cały kształt modułu: to jest spis stron DLA CZŁOWIEKA, a nie katalog interfejsów, które program może wywołać. Agent nie pobierze niczego z serwisu, który ma tylko stronę do klikania. Zbudowanie funkcji udającej, że pobiera z każdego wpisu, byłoby atrapą — więc zamiast tego każdy zasób nosi widoczną etykietę: wywoływalny bez klucza, wymagający rejestracji, albo miejsce wyłącznie dla człowieka. Pobieranie działa tylko dla pierwszych; dla reszty moduł mówi wprost, że pobrania nie było, i podaje odnośnik. Z dwudziestu dziewięciu pozycji siedem da się realnie odpytać — i to są te, które nakarmią Dom Joanny, montażownię i etap rysowania kadrów. Przy okazji dwie rzeczy złapane własnym testem: jedno źródło miało etykietę „wywoływalne", nie mając czym wywołać, a wyszukiwarka nie łączyła zapytania „Joanna" z modułem „Dom Joanny" — polska odmiana. Oba naprawione. Wskaźnik stanu nie jest zieloną kropką: przycisk realnie odpytuje źródło i pokazuje, co wróciło.'
+  },
+  {
+    date: '2026-08-13',
+    ref: 'b715b09',
+    sector: 'crypto',
+    title: 'Portfel przestał zaniżać stan posiadania',
+    desc: 'Katedra liczyła wyłącznie salda natywne — ether, matic, bnb. Wszystko, co leży w tokenach, dla systemu nie istniało. Ta zaniżona suma szła prosto do modułów analitycznych jako obraz portfela, a zła liczba na wejściu psuje każdy wniosek dalej. Skala okazała się większa, niż zakładałem: na publicznym adresie testowym stary widok pokazywał około trzydziestu procent stanu posiadania. Odczyt tokenów idzie tymi samymi publicznymi węzłami sieci, których używały salda natywne — bez żadnego klucza, bez rejestracji, bez pośrednika. Dwie rzeczy trzeba było zmierzyć, nie zgadnąć. Po pierwsze, darmowy plan serwisu z cenami przyjmuje dokładnie jeden adres kontraktu na zapytanie, więc pierwsza, oczywista wersja nie zwracała ani jednej ceny; znane tokeny idą teraz jednym zbiorczym zapytaniem. Po drugie, liczba miejsc po przecinku czytana jest z samego kontraktu, a nie z naszej tabelki — pomyłka w spisie nie zamieni się wtedy w fałszywe saldo. Widzimy tylko te tokeny, o które pytamy, i moduł mówi to wprost: zastąpienie jednego cichego zaniżenia drugim byłoby gorsze niż brak zmiany, bo tym razem suma wyglądałaby na kompletną. Granica bez zmian: tylko odczyt, zero kluczy, zero podpisów, zero transakcji.'
+  },
+  {
+    date: '2026-08-06',
+    ref: 'dfcc6ae',
+    sector: 'mesh',
+    title: 'Telefon jako kamera — i uczciwe „tego się nie da"',
+    desc: 'Studio wideopodcastu miało cztery gniazda kamer, ale telefon dało się wpiąć tylko obcym programem instalującym w systemie wirtualną kamerę. Teraz jest droga własna: telefon otwiera stronę, oddaje obraz, koniec. Po drodze trzeba było powiedzieć dwie rzeczy wprost. Pierwsza: Bluetooth nigdy nie przeniesie obrazu — przenosi około dwóch megabitów na sekundę, a obraz w jakości pełnej wysokiej rozdzielczości potrzebuje kilkunastu. To granica fizyczna, nie brak sterownika; aparat sparowany przez Bluetooth nie pojawi się na liście kamer i żadne oprogramowanie tego nie obejdzie. Panel mówi to zamiast pozwalać szukać usterki tam, gdzie jej nie ma. Druga: przeglądarka telefonu nie odda kamery bez bezpiecznego połączenia — sprawdzone na żywo, pod zwykłym adresem w sieci domowej funkcja dostępu do kamery po prostu nie istnieje. Dlatego uzgodnienie połączenia idzie przez tunel, a sam obraz i tak leci potem po domowym wi-fi, bezpośrednio między urządzeniami. Strona dla telefonu blokuje przycisk i tłumaczy powód, zamiast dać klikać w martwą kontrolkę. Przy wpinaniu wyszła też usterka sąsiedzka: dotychczasowy moduł transmisji niszczył każde nieznane połączenie, więc zabijał nowy kanał — teraz nikt nie sprząta cudzych ścieżek.'
+  },
+  {
+    date: '2026-08-06',
+    ref: 'bdc0134',
+    sector: 'core',
+    title: 'Joanna przestała być niema',
+    desc: 'Kompan przy radiu pisał w dymku, ale nie mówił. Teraz mówi — tą samą drogą co reszta Katedry: najpierw lokalny silnik klonu głosu, a gdy go nie ma, syntezator przeglądarki. Zero pamięci karty graficznej, zero chmury, działa od razu i samo podbije się do sklonowanego głosu, gdy lokalny silnik stanie. Po drodze pięć pułapek, z których każda osobno wystarczy, żeby głos brzmiał jak zepsuty automat. Lista głosów przy pierwszym pytaniu jest pusta — zmierzone: zero dostępnych od razu, osiem po chwili. Samo ustawienie języka nie wystarcza, trzeba wskazać konkretny głos. Emoji są czytane na głos, a dymek kompana jest ich pełen. Bez wcześniejszego kliknięcia przeglądarka kolejkuje mowę i nigdy jej nie odtwarza, więc kod „myśli", że powiedział — teraz zgłasza ciszę zamiast udawać sukces. I piąta, która wyszła dopiero przy spojrzeniu na żywą przeglądarkę: w systemie są dwa polskie głosy, męski i żeński, a kod brał pierwszy z brzegu — ciepła kompanka przemówiłaby męskim głosem. Rozpoznanie po imieniu naprawiło to, czego test bez przeglądarki nie miał szans złapać.'
+  },
+  {
     date: '2026-08-05',
     ref: '59ab34e',
     sector: 'core',
