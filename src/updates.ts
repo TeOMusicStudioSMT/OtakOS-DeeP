@@ -34,6 +34,27 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: '2026-08-18',
+    ref: '83993f7',
+    sector: 'core',
+    title: 'MCP Skillboard — skille, które przyznają się, że nie działają',
+    desc: 'Kolektyw agentów dostał tablicę skilli MCP. Przy weryfikacji wyszło, że z 14 kart realnie działały dwie, a reszta odpowiadała „SUCCESS" nic nie robiąc — na zapytanie DROP TABLE do nieistniejącej bazy też. Teraz skill bez podpiętego serwera zwraca wprost „NIEZAIMPLEMENTOWANE", a zerwane połączenie wygląda na awarię, nie na sukces. Zamknięte dwie dziury: odczyt plików wydawał klucze i .env, a terminal omijał sanitizer komend. Doszły trzy własne skille: Puls Katedry (diagnoza węzła jednym strzałem), Biblioteka Dźwięku i Sumienie Katedry — skaner szukający w kodzie miejsc, które udają działanie.',
+  },
+  {
+    date: '2026-08-18',
+    ref: '85649d5',
+    sector: 'core',
+    title: 'TeO Music V2 gra naprawdę — pierwszy utwór w 28 sekund',
+    desc: 'Muzyczny człon Katedry liczy realnie, lokalnie, na jednej karcie 6 GB. Poprzedni silnik był atrapą: pętla wypisywała fałszywe kroki dyfuzji i podstawiała gotowy plik z biblioteki. Wycięte. W zamian: suwerenny katalog wag poza repo, pobieranie z wznawianiem po zerwaniu (zweryfikowane — plik wznowiony ma identyczny hash), i dwie rodziny modeli. MiniMax-Music-3 zmierzono na tym sprzęcie: 6 godzin 50 minut na minutę muzyki. ACE-Step 1.5 turbo robi to samo w ośmiu krokach — 10 sekund dźwięku w 28 sekund liczenia, z obsługą polskich tekstów. Wagi rodzin się nie mieszają i most tego pilnuje.',
+  },
+  {
+    date: '2026-08-18',
+    ref: '83993f7',
+    sector: 'distro',
+    title: 'Teleport na Music V2 budzi silnik sam',
+    desc: 'Wejście do studia muzycznego uruchamia ComfyUI w tle, jeśli nie działa. Hak siedzi po stronie mostu, więc łapie każdą drogę wejścia — kafel w Projektach, dashboard, zakładkę w przeglądarce, telefon przez Kwantowy Tunel. Strona ładuje się natychmiast, silnik dochodzi po kilkunastu sekundach. Kilka wejść pod rząd nie odpala kilku instancji.',
+  },
+  {
     date: '2026-08-13',
     ref: '95d44b4',
     sector: 'core',
