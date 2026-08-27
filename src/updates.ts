@@ -34,6 +34,25 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: '2026-08-27',
+    ref: '9bf2bfc',
+    sector: 'core',
+    title: 'Mechanik dostał cofkę — i przestał mielić na modelu, który wywala silnik',
+    desc: 'Pętla samonaprawy zapisywała łatkę na dysk i od razu meldowała „gotowe" — bez sprawdzenia, czy kod się w ogóle parsuje. Kod z błędem składni rozwalał Katedrę po cichu, a kopia szła do pliku .bak obok źródła: jedna, nadpisywana, bez związku z zadaniem. Teraz każde wdrożenie robi migawkę, po zapisie leci kontrola (node --check dla JS, tsc dla TypeScriptu), a gdy padnie — plik wraca do stanu sprzed. Zmierzone na obu ścieżkach: zepsuta łatka cofnięta z prawdziwym błędem kompilatora, dobra wdrożona. Przy okazji wyszło, czemu trzy próby naprawy z rzędu kończyły się tym samym błędem: Mechanik miał wpisany na sztywno model „gemma4" — goły tag, który Ollama rozwija do wersji wywalającej silnik, do tego model ogólny, a on ma naprawiać kod. Poszedł na model kodowy, a most odmawia teraz zapisu modelu, którego Ollama nie zna.',
+  },
+  {
+    date: '2026-08-27',
+    sector: 'core',
+    title: 'TeOgochi: z jednego kompana zrobiło się trzynaście agentów — i zaczęli ze sobą gadać',
+    desc: 'Joanna była jedynym kompanem Katedry. Teraz jest jednym z trzynastu gatunków, każdy z własną dziedziną, własnym jajem i własną ścieżką ewolucji: Klatka od filmu, Kodeks od kodu, Wektor od wiedzy, Bilans od biznesu i dalej. Awatar pokazuje faktyczny etap — bez XP widzisz jajo, nie obietnicę. Każdy może mieć własny rdzeń LLM, wybierany z listy modeli realnie obecnych w Ollamie, nie z pola tekstowego. Powstała szyna zdarzeń, na której agenci meldują, co robią; WORKPalace pokazuje ten strumień na żywo. Pierwsza prawdziwa rozmowa między nimi już się odbyła: Klatka zapytała Joannę o podkład do vloga ze spawania i dostała konkretną odpowiedź. Szyna pokazuje tylko to, co agenci sami wyślą — milczący jest niewidoczny i tak ma być.',
+  },
+  {
+    date: '2026-08-27',
+    sector: 'core',
+    title: 'Katedra mówi po polsku — lokalnie, bez chmury i bez kluczy',
+    desc: 'Joanna miała przycisk mowy, który nic nie robił. Powód okazał się prozaiczny: most dostawał zlecenie bez wskazania przewodu, więc brał domyślny silnik klonu XTTS — nieobecny na tej maszynie. Mowa spadała na syntezę przeglądarki, a ta bez kliknięcia w ogóle nie brzmi. Doszedł przewód Piper z pięcioma polskimi głosami liczonymi na dysku Suwerena. Zmierzone: bez przewodu HTTP 424 i cisza, z przewodem 200 i realny plik WAV. Osobno wjechał tor angielski (SuperVoice, 24 kHz, na GPU) — świadomie osobny, bo wrzucenie polskiego zdania do angielskiego modelu nie daje błędu, tylko obcy akcent. Cichy zły wynik jest gorszy niż jawny wybór.',
+  },
+  {
     date: '2026-08-18',
     ref: '83993f7',
     sector: 'core',

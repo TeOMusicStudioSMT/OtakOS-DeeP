@@ -1,0 +1,57 @@
+{
+  "_opis": "Globalne oferty Marketplace Katedry. Ten plik jest ZRZUTEM DZIENNYM — Katedra pobiera go przyciskiem 'Synchronizuj z globalnym' i scala z lokalnymi produktami. Nowe oferty dopisuje sie TUTAJ i deployuje strone; wtedy widzi je kazda Katedra w sieci.",
+  "_kontrakt": {
+    "id": "unikalny, stabilny — po nim idzie scalanie, wiec ta sama oferta nie zdubluje sie przy kolejnej synchronizacji",
+    "module": "modul Katedry: music | story | app | games | core",
+    "type": "item | skill | pack | preset",
+    "name": "nazwa wyswietlana",
+    "desc": "jedno-dwa zdania",
+    "priceGrv": "cena w GRV, 0 = darmowe",
+    "creator": "kto wystawil",
+    "payload": "dane oferty albo null"
+  },
+  "wersja": 1,
+  "zrzut": "2026-08-27",
+  "oferty": [
+    {
+      "id": "core-piper-glosy-pl",
+      "module": "core",
+      "type": "pack",
+      "name": "Głosy polskie Piper",
+      "desc": "Pięć polskich głosów liczonych lokalnie, bez chmury i bez kluczy. Wagi pobierane z rhasspy/piper-voices.",
+      "priceGrv": 0,
+      "creator": "TeO",
+      "payload": { "glosy": ["pl_PL-gosia-medium", "pl_PL-bass-high"] }
+    },
+    {
+      "id": "core-graphify-wiedza",
+      "module": "core",
+      "type": "skill",
+      "name": "Moduł wiedzy Graphify",
+      "desc": "Zamienia katalogi Katedry w przeszukiwalny graf. Liczy z AST — zero tokenów, zero chmury.",
+      "priceGrv": 0,
+      "creator": "TeO",
+      "payload": { "trasy": ["/api/wiedza/stan", "/api/wiedza/buduj", "/api/wiedza/wyjasnij"] }
+    },
+    {
+      "id": "core-petla-naprawcza",
+      "module": "core",
+      "type": "skill",
+      "name": "Pętla naprawcza z cofaniem",
+      "desc": "Migawka przed wdrożeniem, weryfikacja po zapisie, automatyczne cofnięcie gdy łatka nie przechodzi kontroli.",
+      "priceGrv": 0,
+      "creator": "TeO",
+      "payload": { "dziennik": "_OtakOs_Kopie/naprawy/dziennik.jsonl" }
+    },
+    {
+      "id": "games-tgs-to-get-sauce",
+      "module": "games",
+      "type": "item",
+      "name": "TGS — To Get Sauce",
+      "desc": "Gra 2D, w której barwa świata zależy od autentyczności gracza. Świat jest wypadkową postaci.",
+      "priceGrv": 0,
+      "creator": "TeO Games Studio",
+      "payload": null
+    }
+  ]
+}
