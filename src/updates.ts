@@ -34,6 +34,27 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: '2026-08-28',
+    ref: 'e5f6516',
+    sector: 'grv',
+    title: 'Konta przestały mieć dwie prawdy — portfel pyta księgę, a nie sam siebie',
+    desc: 'Mapowanie „które konto to który węzeł księgi" siedziało w przeglądarce, w jednej funkcji portfela. Most miał o tym własne zdanie, więc dwie warstwy mogły twierdzić co innego o tym, czyj to portfel — a nazwa węzła to nie kosmetyka, tylko klucz, po którym idą przelewy GRV. Rejestr kont przeniósł się na most i to on jest teraz właścicielem odpowiedzi: teo@teo.center to bank ekosystemu (saldo nieskończone, nie portfel osobisty), a osobne konto Suwerena to Pierwszy Founder. Nieznane konto dostaje odmowę zamiast zgadywania — bo zgadnięcie przypisałoby komuś cudzy milion. Przy okazji poleciały trzy liczby z palca: zmyślone 99 999 999 GRV dla banku (księga mówi „nieskończoność" i tak to teraz wygląda na ekranie), oraz saldo 3975,78 pokazywane zawsze, gdy portfel nie był z niczym spięty. Brak salda wygląda odtąd jak brak salda.',
+  },
+  {
+    date: '2026-08-28',
+    ref: 'e5f6516',
+    sector: 'grv',
+    title: 'Klucze założycielskie — działają dokładnie raz i nie obiecują miejsc, których nie ma',
+    desc: 'Founder to 26 miejsc po milionie GRV i jedyna droga do tej rangi prowadzi teraz przez klucz wydany przez Suwerena. Klucz jest jednorazowy: po użyciu zostaje wypalony razem z datą i nazwą węzła, który go zużył, więc drugi raz nie zadziała. Most odmawia też wydania większej liczby kluczy, niż zostało wolnych miejsc — klucz bez pokrycia byłby gorszy niż odmowa, bo mówiłby „masz milion", a przy próbie użycia okazywałby się pusty. Sprawdzone na żywej księdze: klucz zmyślony odrzucony, ten sam klucz drugi raz odrzucony z podaniem kto i kiedy go zużył, klucz podany komuś, kto już jest Founderem, odrzucony i pozostawiony nietknięty. Ranga zapisuje się przed wypaleniem klucza, żeby nieudany zapis nie zjadł klucza po cichu.',
+  },
+  {
+    date: '2026-08-28',
+    ref: 'e5f6516',
+    sector: 'web',
+    title: 'Brama Katedry ma drugie drzwi — wejście bez chmury, ale tylko na własnej maszynie',
+    desc: 'Katedra deklaruje „zero chmury jako domyślne", a front drzwi wymagał konta Google i działającego okienka logowania. Przy zablokowanym popupie albo bez sieci nie dało się wejść w ogóle. Obok stoi teraz wejście suwerenne: pyta „kim jesteś przy tej klawiaturze", pokazuje konta prosto z mostu i po wyborze robi to samo, co dawało logowanie — personalizuje i spina konto z księgą GRV. Saldo po wejściu jest księgowe co do grosza, bank pokazuje nieskończoność, a wejście bez konta uczciwie pokazuje puste saldo zamiast wymyślonej liczby. Świadome ograniczenie: te drzwi widać wyłącznie na maszynie lokalnej, bo ta sama brama stoi publicznie — a tam „most na 127.0.0.1" należy do odwiedzającego, nie do Katedry.',
+  },
+  {
     date: '2026-08-27',
     ref: '9bf2bfc',
     sector: 'core',
