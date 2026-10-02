@@ -38,7 +38,7 @@ test('zatwierdzony nick z dobrym podpisem i żywą wizytówką → na liście (t
     const w = await r.meldunek(meldunek());
     assert.equal(w.status, 200, w.wiadomosc);
     assert.deepEqual(pukniecia, [`${ADRES}/api/wizytowka`]);
-    assert.deepEqual(r.lista(), [{ nick: 'teo-center', adres: ADRES, motto: 'Tu ta chwila', widziano: new Date(zegar).toISOString() }]);
+    assert.deepEqual(r.lista(), [{ nick: 'teo-center', adres: ADRES, motto: 'Tu ta chwila', klucz: KLUCZ, widziano: new Date(zegar).toISOString() }]);
     // kolejny meldunek w ciągu 5 min z tym samym adresem nie puka ponownie
     zegar += 60_000;
     assert.equal((await r.meldunek(meldunek())).status, 200);

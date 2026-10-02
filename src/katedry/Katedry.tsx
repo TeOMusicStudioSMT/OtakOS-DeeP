@@ -15,8 +15,16 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import KartaKatedry from './KartaKatedry';
 import { katedryOnline, twojaWizytowka, wizytowkaZ, type KatedraOnline, type Wizytowka } from './wizytowka';
 
-const czyKatedry = () => /^#katedry(\/|$)/.test(window.location.hash);
+const czyKatedry = () => /^#katedry([/?]|$)/.test(window.location.hash);
 const nickZHasha = () => window.location.hash.match(/^#katedry\/([a-z0-9-]{3,32})$/)?.[1] ?? null;
+
+/** „Moja Katedra" na urządzeniu bez Katedry (telefon): nick zapamiętany w przeglądarce.
+ *  Ustawia go „⭐ To moja" na karcie albo link ze StoL: otakos.wtf/#katedry?moja=<nick>. */
+const KLUCZ_MOJEJ = 'otakos_moja_katedra';
+const NICK = /^[a-z0-9][a-z0-9-]{2,31}$/;
+function mojaKatedra(): string | null { try { const n = localStorage.getItem(KLUCZ_MOJEJ); return n && NICK.test(n) ? n : null; } catch { return null; } }
+function ustawMoja(n: string | null) { try { n ? localStorage.setItem(KLUCZ_MOJEJ, n) : localStorage.removeItem(KLUCZ_MOJEJ); } catch { /* tryb prywatny */ } }
+function mojaZHasha() { const n = window.location.hash.match(/^#katedry\?moja=([a-z0-9-]{3,32})$/)?.[1]; if (n && NICK.test(n)) ustawMoja(n); }
 
 /** Gest: poziomy ruch palca (dx) wyraźnie większy niż pionowy. */
 function useGestPoziomy(cel: React.RefObject<HTMLElement | null> | null, onGest: (dx: number) => void) {
@@ -38,9 +46,32 @@ function useGestPoziomy(cel: React.RefObject<HTMLElement | null> | null, onGest:
 
 const TwojaPanel: React.FC<{ pl: boolean }> = ({ pl }) => {
   const [w, setW] = useState<Wizytowka | null | 'brak-nicka' | 'laduje'>('laduje');
-  useEffect(() => { void twojaWizytowka().then(setW); }, []);
-  if (w === 'laduje') return <p className="pt-24 text-center text-sm text-slate-500">{pl ? 'Szukam Katedry na tej maszynie…' : 'Looking for a Cathedral on this machine…'}</p>;
+  const [offline, setOffline] = useState<string | null>(null);
+  useEffect(() => {
+    void (async () => {
+      const lokalna = await twojaWizytowka();
+      if (lokalna) return setW(lokalna);
+      // Telefon / inny komputer: Katedry obok nie ma — bierzemy zapamiętaną z sieci.
+      const moja = mojaKatedra();
+      if (moja) {
+        const k = (await katedryOnline())?.find((x) => x.nick === moja);
+        const z = k ? await wizytowkaZ(k.adres).catch(() => null) : null;
+        if (z) return setW(z);
+        setOffline(moja);
+      }
+      setW(lokalna);
+    })();
+  }, []);
+  if (w === 'laduje') return <p className="pt-24 text-center text-sm text-slate-500">{pl ? 'Szukam Twojej Katedry…' : 'Looking for your Cathedral…'}</p>;
   if (w && w !== 'brak-nicka') return <KartaKatedry w={w} pl={pl} twoja />;
+  if (offline) return (
+    <div className="mx-auto max-w-xl px-6 pt-20 text-center">
+      <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">{pl ? '∴ Twoja Katedra ∴' : '∴ Your Cathedral ∴'}</div>
+      <h2 className="mt-2 font-mono text-4xl font-black text-white">{offline}</h2>
+      <p className="mt-4 text-sm text-slate-400">{pl ? 'Jest teraz offline — wizytówka wróci, gdy Katedra włączy tunel i meldunek.' : 'It is offline right now — the card returns once the Cathedral enables its tunnel and check-in.'}</p>
+      <button onClick={() => { ustawMoja(null); setOffline(null); }} className="mt-6 text-[11px] text-slate-500 underline">{pl ? 'to nie moja Katedra' : 'not my Cathedral'}</button>
+    </div>
+  );
   return (
     <div className="mx-auto max-w-xl px-6 pt-20 text-center">
       <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">{pl ? '∴ Twoja Katedra ∴' : '∴ Your Cathedral ∴'}</div>
@@ -68,8 +99,13 @@ const KartaSieci: React.FC<{ k: KatedraOnline; pl: boolean; aktywna: boolean }> 
     setW('laduje');
     wizytowkaZ(k.adres).then((x) => setW(x ?? 'blad')).catch(() => setW('blad'));
   }, [aktywna, w, k.adres]);
+  const [moja, setMoja] = useState(() => mojaKatedra() === k.nick);
   return (
-    <section data-nick={k.nick} className="min-h-full snap-start border-b border-white/5">
+    <section data-nick={k.nick} className="relative min-h-full snap-start border-b border-white/5">
+      <button onClick={() => { ustawMoja(moja ? null : k.nick); setMoja(!moja); }}
+        className={`absolute right-3 top-3 z-10 rounded-full border px-2.5 py-0.5 font-mono text-[10px] ${moja ? 'border-amber-300/60 bg-amber-400/20 text-amber-100' : 'border-white/15 text-slate-500 hover:text-slate-200'}`}>
+        {moja ? (pl ? '⭐ moja' : '⭐ mine') : (pl ? '☆ to moja' : '☆ this is mine')}
+      </button>
       {w && w !== 'laduje' && w !== 'blad' ? <KartaKatedry w={w} pl={pl} /> : (
         <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
           <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">∴ Katedra ∴</div>
@@ -118,13 +154,13 @@ const SiecPanel: React.FC<{ pl: boolean; cel: string | null }> = ({ pl, cel }) =
 
 export const Katedry: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
   const pl = lang === 'pl';
-  const [otwarte, setOtwarte] = useState(czyKatedry);
+  const [otwarte, setOtwarte] = useState(() => { mojaZHasha(); return czyKatedry(); });
   const [cel, setCel] = useState(nickZHasha);
   const [panel, setPanel] = useState(0);
   const pozioma = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const zmiana = () => { setOtwarte(czyKatedry()); setCel(nickZHasha()); };
+    const zmiana = () => { mojaZHasha(); setOtwarte(czyKatedry()); setCel(nickZHasha()); };
     window.addEventListener('hashchange', zmiana);
     return () => window.removeEventListener('hashchange', zmiana);
   }, []);

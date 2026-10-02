@@ -17,7 +17,7 @@ export interface SunoUtwor { id: string; tytul: string; embed: string; okladka: 
 export interface Suno { id: string; typ: 'utwor' | 'playlista'; tytul: string; opis: string; url: string; embed: string | null; okladka: string | null; utwory: SunoUtwor[] }
 export interface Produkt { id: string; tytul: string; opis: string; dzial: string; rodzaj: string; obraz: string | null }
 export interface Wizytowka { nick: string; motto: string; opis: string; adres: string; filmy: Film[]; utwory: Utwor[]; suno: Suno[]; produkty: Produkt[] }
-export interface KatedraOnline { nick: string; adres: string; motto: string; widziano: string }
+export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; widziano: string }
 
 const tekst = (x: unknown, max = 300) => (typeof x === 'string' ? x.slice(0, max) : '');
 const https = (x: unknown) => (typeof x === 'string' && /^https:\/\/[^\s"'<>]+$/.test(x) ? x : null);

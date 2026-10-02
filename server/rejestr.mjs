@@ -11,7 +11,7 @@
  *   3. adres to https na *.trycloudflare.com albo stała domena wpisana przy nicku
  *      (rejestr nie puka pod dowolne adresy — żadnego SSRF),
  *   4. pod adresem naprawdę odpowiada wizytówka z tym nickiem i kluczem.
- * Lista żyje w pamięci: kto milczy dłużej niż 3 minuty, znika. Restart serwera = pusta lista,
+ * Lista (z kluczem publicznym — TOST między Katedrami weryfikuje nim nadawcę) żyje w pamięci: kto milczy dłużej niż 3 minuty, znika. Restart serwera = pusta lista,
  * która wraca w ciągu minuty (Katedry meldują się same).
  */
 import crypto from 'node:crypto';
@@ -71,7 +71,7 @@ export function utworzRejestr({ zatwierdzone = () => [], fetch: fetchFn = fetch,
             catch (e) { return odp(502, `Pod adresem nie odpowiada wizytówka (${e.message}).`); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.');
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -82,7 +82,7 @@ export function utworzRejestr({ zatwierdzone = () => [], fetch: fetchFn = fetch,
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(zatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || !dozwolone.has(nick)) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, widziano }) => ({ nick, adres, motto, widziano: new Date(widziano).toISOString() }));
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, widziano }) => ({ nick, adres, motto, klucz, widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista };
