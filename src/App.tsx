@@ -49,6 +49,7 @@ import AdTowerSection from './components/AdTowerSection';
 import ArchitectWord from './components/ArchitectWord';
 import AetherArena from './components/AetherArena';
 import SlowoSuwerena from './components/SlowoSuwerena';
+import Katedry from './katedry/Katedry';
 
 // 🔓 Pobieranie ODBLOKOWANE — startowa Katedra V_ZERO (32MB) jest publiczna.
 // (Historycznie: przed oficjalnym startem wstrzymane, każda kopia = NODE.)
@@ -2130,6 +2131,9 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* 🧭 Katedry w sieci — wizytówki (przesuń w lewo albo zakładka przy prawej krawędzi) */}
+      <Katedry lang={lang} />
 
     </div>
   );
