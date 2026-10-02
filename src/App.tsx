@@ -233,6 +233,17 @@ export default function App() {
   const [installLog, setInstallLog] = useState<string[]>([]);
   const [installerStatus, setInstallerStatus] = useState<'idle' | 'extracting' | 'optimizing' | 'completed'>('idle');
 
+  // 🔐 Prawdziwa suma paczki — z public/wersja.json (pisze ją Miniaturyzator przy każdym wydaniu).
+  // Wcześniej stał tu wymyślony napis „sha256-fc9a103c88". Brak pliku / HTML z fallbacku SPA = mówimy wprost, że sumy nie ma.
+  const [wersjaPaczki, setWersjaPaczki] = useState<{ numer: string; sha256: string; bajtow?: number } | null | 'brak'>(null);
+  useEffect(() => {
+    if (!showInstaller || wersjaPaczki) return;
+    fetch('/wersja.json', { cache: 'no-store' })
+      .then((r) => (r.ok && !(r.headers.get('content-type') || '').includes('text/html') ? r.json() : Promise.reject()))
+      .then((w) => (/^[0-9a-f]{64}$/i.test(w?.sha256 ?? '') ? setWersjaPaczki({ numer: String(w.numer ?? ''), sha256: w.sha256.toLowerCase(), bajtow: w.bajtow }) : setWersjaPaczki('brak')))
+      .catch(() => setWersjaPaczki('brak'));
+  }, [showInstaller, wersjaPaczki]);
+
   // Co-hosts dynamic resonance logs states
   const [playingLogHost, setPlayingLogHost] = useState<'iskra' | 'echo' | null>(null);
   const [hostLogTimestamp, setHostLogTimestamp] = useState<number>(0);
@@ -539,6 +550,14 @@ export default function App() {
       const ct = res.headers.get('content-type') || '';
       if (ct.includes('text/html')) throw new Error('host zwrocil HTML (rewrite) zamiast pliku');
       const blob = await res.blob();
+      // Sprawdzamy pobrany plik z sumą z wersja.json — naprawdę, w przeglądarce, zanim trafi na dysk.
+      if (wersjaPaczki && wersjaPaczki !== 'brak' && crypto?.subtle) {
+        const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', await blob.arrayBuffer())))
+          .map((b) => b.toString(16).padStart(2, '0')).join('');
+        setInstallLog(prev => [...prev, hash === wersjaPaczki.sha256
+          ? (lang === 'pl' ? `✓ SHA-256 zgodna z wersja.json (${hash.slice(0, 16)}…)` : `✓ SHA-256 matches wersja.json (${hash.slice(0, 16)}…)`)
+          : (lang === 'pl' ? `⚠ SHA-256 NIEZGODNA: plik ${hash.slice(0, 16)}… ≠ wersja.json ${wersjaPaczki.sha256.slice(0, 16)}… — strona może być w trakcie wdrażania; spróbuj za chwilę.` : `⚠ SHA-256 MISMATCH: file ${hash.slice(0, 16)}… ≠ wersja.json ${wersjaPaczki.sha256.slice(0, 16)}… — the site may be mid-deploy; try again shortly.`)]);
+      }
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -1954,7 +1973,11 @@ export default function App() {
               {/* Trigger Raw Parameters File Download on completed status */}
               <div className="bg-[#07070a] border-t border-zinc-950 p-4 flex justify-between items-center">
                 <span className="text-[10px] text-zinc-500">
-                  {lang === 'pl' ? 'SPÓJNOŚĆ_ZAPEWNIONA: sha256-fc9a103c88' : 'INTEGRITY_VERIFIED: sha256-fc9a103c88'}
+                  {wersjaPaczki === null
+                    ? 'SHA-256: …'
+                    : wersjaPaczki === 'brak'
+                      ? (lang === 'pl' ? 'SHA-256: brak wersja.json' : 'SHA-256: no wersja.json')
+                      : <span title={wersjaPaczki.sha256} className="select-all">SHA-256: {wersjaPaczki.sha256.slice(0, 16)}… · v{wersjaPaczki.numer}</span>}
                 </span>
 
                 {installerStatus === 'completed' ? (
