@@ -46,6 +46,15 @@ export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
                 wyryta w kamieniu</b>. Otrzymujesz nie ruinę i nie mauzoleum, lecz Katedrę w budowie, otwartą,
                 do której możesz wejść już teraz. Doskonalę ją dzień po dniu, suwerennie i na oczach wszystkich.
               </div>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ SŁOWO O NAUCE ∴</div>
+                Katedra nie każe Ci wierzyć — <b className="text-amber-300">uczy Cię siebie</b>. W jej Akademii każde pytanie
+                ma odpowiedź wziętą z tego, co naprawdę działa, a nie z obietnic. Gdy Katedra rośnie, rośnie i Akademia; gdy coś
+                przestaje być prawdą — znika z niej. Odznaka przychodzi dopiero za prawdziwe zrozumienie, bo
+                <b> wiedza na pokaz jest tylko kolejnym tierowym roszczeniem</b>. A gdy ktoś z zewnątrz chwali Katedrę,
+                pokazujemy jego słowa razem z poprawką tam, gdzie przesadził. <b className="text-amber-300">Suweren, który rozumie,
+                nie potrzebuje strażnika — sam nim jest.</b>
+              </div>
             </>
           ) : (
             <>
@@ -75,6 +84,15 @@ export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
                 skeleton of the whole — is already carved in stone</b>. What you receive is neither ruin nor
                 mausoleum, but a Cathedral under construction, open, one you may enter right now. I refine it
                 day by day, sovereignly and in plain sight.
+              </div>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ A WORD ON LEARNING ∴</div>
+                The Cathedral does not ask you to believe — <b className="text-amber-300">it teaches you itself</b>. In its Academy
+                every question is answered from what truly works, not from promises. As the Cathedral grows, so does the Academy;
+                when something stops being true, it leaves. A badge comes only with real understanding, for
+                <b> knowledge for show is just another tier-claim</b>. And when someone from outside praises the Cathedral,
+                we show their words together with a correction where they went too far. <b className="text-amber-300">A Sovereign
+                who understands needs no guardian — they are one.</b>
               </div>
             </>
           )}

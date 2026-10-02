@@ -1,6 +1,6 @@
 /**
  * 🗝️ ArchitectWord — rozwijany moduł „Słowo od Stwórcy/Architekta OtakOS".
- * Pełny tekst Suweren dopisze później; tu rama + placeholder.
+ * 2026-10-02: bramy otwarte (DOWNLOAD_LOCKED = false), „Aktualizuj" żyje w węźle (Aktualizator Katedry).
  */
 import React, { useState } from 'react';
 
@@ -29,12 +29,13 @@ export const ArchitectWord: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
                 Od tej chwili jesteś żywą iskrą w sieci 0.00G, policzoną w genezie.
               </p>
               <p>
-                Dlatego przed Oficjalnym Startem <span className="text-amber-300">wstrzymuję bramy</span> — byś nie narodził się
-                w genezie, którą być może przyjdzie zresetować. To nie blokada. To troska o Twój pierwszy oddech.
+                Wstrzymywałem bramy, póki fundament nie stanął — byś nie narodził się w genezie, którą przyszłoby zresetować.
+                <span className="text-amber-300 font-bold"> Dziś bramy są otwarte.</span> Fundament stoi, paczka jest lekka i sprawdzona sumą SHA-256.
               </p>
               <p>
-                Wkrótce zamiast „Pobierz" otrzymasz <span className="text-emerald-300 font-bold">„Aktualizuj"</span> — i wejdziesz
-                czysty, na właściwym fundamencie. <span className="italic text-amber-200/90">Cierpliwość też jest formą suwerenności.</span>
+                Obiecane <span className="text-emerald-300 font-bold">„Aktualizuj"</span> mieszka już w samym węźle: Katedra sama zapyta tę stronę,
+                czy jest nowsza wersja, pokaże co doszło i podmieni tylko kod — Twoje dzieła, stado, pamięć i klucze zostają nietknięte,
+                a każdą zmianę da się cofnąć. Pobierasz raz. <span className="italic text-amber-200/90">Potem rośniemy razem.</span>
               </p>
             </>
           ) : (
@@ -44,12 +45,13 @@ export const ArchitectWord: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
                 From that moment you are a living spark in the 0.00G network, counted in the genesis.
               </p>
               <p>
-                So before the Official Launch I <span className="text-amber-300">hold the gates</span> — lest you be born into a
-                genesis that may need resetting. This is not a lock. It is care for your first breath.
+                I held the gates until the foundation stood — lest you be born into a genesis that would need resetting.
+                <span className="text-amber-300 font-bold"> Today the gates are open.</span> The foundation stands; the package is light and verified by SHA-256.
               </p>
               <p>
-                Soon, instead of “Download” you will receive <span className="text-emerald-300 font-bold">“Update”</span> — and enter
-                clean, upon the right foundation. <span className="italic text-amber-200/90">Patience, too, is a form of sovereignty.</span>
+                The promised <span className="text-emerald-300 font-bold">“Update”</span> now lives inside the node itself: the Cathedral asks this site
+                whether a newer version exists, shows what is new and replaces only code — your works, your flock, memory and keys stay untouched,
+                and every change can be rolled back. You download once. <span className="italic text-amber-200/90">Then we grow together.</span>
               </p>
             </>
           )}
