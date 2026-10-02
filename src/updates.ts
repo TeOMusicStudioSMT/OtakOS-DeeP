@@ -37,6 +37,28 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-02",
+    ref: "d7324b7",
+    sector: "core",
+    title: "Akademia Katedry od nowa — uczy tego, co naprawdę działa",
+    desc: "Dawna Akademia uczyła rzeczy, których w Katedrze nie ma: blockchainu odpornego na komputery kwantowe, sterowania dronami, chmurowego Gemini — a jej samouczki wskazywały na wymyślone filmy. Wszystko to zniknęło. Teraz są cztery quizy o prawdziwej Katedrze (fundament 0.00G, architektura węzła, stado TeOgochi, Główny z aktualizacjami i tłumaczem), sześć przewodników krok po kroku po prawdziwych ekranach z przyciskiem, który od razu je otwiera, zakładka Fundament z TeO Trust i Słowem Suwerena oraz Recenzje — pierwsza to rozmowa z Trybem AI Google, z nagraniem i uczciwym dopiskiem tam, gdzie AI przesadziło. Odznaka przychodzi dopiero od 80% (wcześniej wpadała nawet za 20%), a test pilnuje, że każda poprawna odpowiedź jest wśród opcji.",
+    en: {
+      title: "The Cathedral Academy, rebuilt — it teaches what really works",
+      desc: "The old Academy taught things the Cathedral does not have: a quantum-resistant blockchain, drone control, cloud Gemini — and its tutorials pointed at made-up videos. All of that is gone. Now there are four quizzes about the real Cathedral (0.00G foundation, node architecture, the TeOgochi flock, the Lead agent with updates and the translator), six step-by-step guides through real screens with a button that opens them, a Foundation tab with the TeO Trust and the Sovereign's Word, and Reviews — the first is a conversation with Google's AI Mode, with the recording and an honest note where the AI overstated things. A badge now takes 80% (it used to come even at 20%), and a test makes sure every correct answer is among the options.",
+    },
+  },
+  {
+    date: "2026-10-02",
+    ref: "4b90cf6",
+    sector: "distro",
+    title: "Paczka Katedry: 32 MB zamiast 322 MB — i pierwsza z plikiem wersji",
+    desc: "Pierwsza próba wydania paczki z aktualizatorem spakowała 6 GB lokalnych środowisk — Pythona, modeli i assetów 3D — w zip 322 MB, którego GitHub nie przyjął, a skrypt i tak napisał „OK”. Teraz katalog AI w paczce jest na białej liście: jadą tylko narzędzia i workflowy, a środowiska i modele zostają u Suwerena. Zip powyżej 95 MB zatrzymuje wydanie przed stroną i wypisuje najcięższe katalogi, a odrzucony push kończy się błędem, nie „OK”. Wynik: 912 plików, 32 MB, wszystkie ścieżki zgodne ze standardem ZIP, a plik wersji na stronie niesie sumę SHA-256 sprawdzoną co do bajtu — od teraz węzły z paczki widzą aktualizacje same.",
+    en: {
+      title: "The Cathedral package: 32 MB instead of 322 MB — and the first with a version file",
+      desc: "The first attempt to release a package with the updater packed 6 GB of local environments — Python, models and 3D assets — into a 322 MB zip that GitHub refused, while the script still said “OK”. Now the AI folder in the package is allow-listed: only tools and workflows ship, environments and models stay with the Sovereign. A zip over 95 MB stops the release before it reaches the site and lists the heaviest folders, and a rejected push ends in an error, not “OK”. Result: 912 files, 32 MB, all paths following the ZIP standard, and the version file on the site carries a SHA-256 verified to the byte — from now on, nodes installed from the package see updates by themselves.",
+    },
+  },
+  {
+    date: "2026-10-02",
     ref: "75f2edb",
     sector: "distro",
     title: "Węzeł sam wie, że jest nowsza Katedra — i aktualizuje tylko kod",
