@@ -37,6 +37,16 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-02",
+    sector: "mesh",
+    title: "Katedry w sieci — przesuń w lewo i przewijaj wizytówki aktywnych Katedr",
+    desc: "Każda Katedra dostała wizytówkę: swoją wystawę (filmy, utwory Suno i z dysku, produkty) pod samym nickiem, bez imion. Na otakos.wtf przesunięcie palcem w lewo (albo zakładka „Katedry” przy prawej krawędzi) otwiera najpierw Twoją wizytówkę — z Katedry działającej obok przeglądarki — a dalej Katedry, które są właśnie online, jedna pod drugą jak shorty. Wizytówka idzie prosto z Katedry przez jej Kwantowy Tunel; strona pamięta tylko, kto się zameldował w ostatnich minutach. Meldunek jest podpisany kluczem Katedry, a pokazują się wyłącznie nicki zatwierdzone przez Suwerena strony — nikt nie podszyje się pod cudzy nick ani nie wstawi obcej treści. Przez tunel widać wyłącznie wizytówkę; reszta Katedry dalej wymaga klucza, a ramki na stronie przyjmujemy tylko z YouTube i Suno.",
+    en: {
+      title: "Cathedrals online — swipe left and scroll through the cards of active Cathedrals",
+      desc: "Every Cathedral now has a card: its own exhibition (films, Suno tracks and tracks from disk, products) under a nick only, no names. On otakos.wtf, swiping left (or the “Cathedrals” tab on the right edge) first opens your own card — from a Cathedral running next to the browser — and then the Cathedrals that are online right now, one after another like shorts. The card comes straight from the Cathedral through its Quantum Tunnel; the site only remembers who checked in during the last few minutes. Check-ins are signed with the Cathedral's key, and only nicks approved by the site's Sovereign appear — nobody can take someone else's nick or slip in foreign content. Through the tunnel only the card is visible; the rest of the Cathedral still requires a key, and the site only accepts embeds from YouTube and Suno.",
+    },
+  },
+  {
+    date: "2026-10-02",
     ref: "d7324b7",
     sector: "core",
     title: "Akademia Katedry od nowa — uczy tego, co naprawdę działa",
