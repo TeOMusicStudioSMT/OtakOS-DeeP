@@ -20,6 +20,8 @@ export interface UpdateEntry {
   sector: SectorId;
   title: string;
   desc: string;
+  /** Wersja angielska (przełącznik PL/EN strony). Starsze wpisy jej nie mają — wtedy pokazujemy polski oryginał. */
+  en?: { title: string; desc: string };
 }
 
 export const SECTORS: Sector[] = [
@@ -33,6 +35,182 @@ export const SECTORS: Sector[] = [
 
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
+  {
+    date: "2026-10-02",
+    ref: "75f2edb",
+    sector: "distro",
+    title: "Węzeł sam wie, że jest nowsza Katedra — i aktualizuje tylko kod",
+    desc: "Do tej pory kto pobrał Katedrę z tej strony, ten zostawał z nią na zawsze: nowa wersja oznaczała ponowne pobranie i ręczne przenoszenie swoich danych. Teraz węzeł sam pyta stronę o plik wersji i pokazuje, co doszło. Aktualizacja pobiera paczkę, sprawdza jej sumę SHA-256 (bez zgodnej sumy nic nie rusza) i podmienia wyłącznie kod — dzieła, stado, pamięć, sekrety, modele i własne skille zostają nietknięte, a niczego nie kasuje. Każdy nadpisany plik ląduje najpierw w kopii, więc jednym przyciskiem da się cofnąć. Węzeł postawiony z gita aktualizuje się przez git pull i odmawia, gdy w plikach jest niezapisana praca. Przy okazji wyszedł błąd paczki: stary sposób pakowania zapisywał ścieżki z ukośnikiem wstecznym, przez co na Linuksie i w Termuxie rozpakowywały się płaskie pliki zamiast katalogów — paczki budujemy teraz zgodnie ze standardem ZIP. Węzeł pyta stronę, strona nic o węźle nie wie.",
+    en: {
+      title: "A node now knows there is a newer Cathedral — and updates only the code",
+      desc: "Until now, whoever downloaded the Cathedral from this site was stuck with that version: a new release meant downloading again and moving your data by hand. Now the node asks the site for a version file and shows what is new. The update downloads the package, checks its SHA-256 (no matching checksum, no change) and replaces only code — works, the flock, memory, secrets, models and your own skills stay untouched, and nothing is deleted. Every overwritten file is backed up first, so one button rolls it back. A node installed from git updates with git pull and refuses while there is unsaved work. Along the way we found a packaging bug: the old packer wrote paths with backslashes, so on Linux and Termux the archive unpacked into flat files instead of folders — packages now follow the ZIP standard. The node asks the site; the site knows nothing about the node.",
+    },
+  },
+  {
+    date: "2026-10-01",
+    ref: "e26b6d7",
+    sector: "crypto",
+    title: "Straż Głównego — swoboda przy tworzeniu, zgoda tylko na to, co ważne",
+    desc: "Główny agent pytał o zgodę nawet na wylistowanie katalogu, a mały model potrafił ponawiać odrzucone polecenie w kółko, aż skończył mu się limit tur — z kilkudziesięcioma identycznymi prośbami na ekranie. Teraz przed każdym narzędziem staje Straż: odczyt, polecenia tylko do odczytu, tworzenie nowych plików i katalogów idą od razu. Zmiana istniejących plików rdzenia Katedry, sekrety, zapis poza Katedrą i polecenia, które coś zmieniają, czekają na zgodę — z podglądem zmiany i wyjaśnieniem po ludzku. Model dostaje powód odmowy i prośbę, by nie obchodził jej innym poleceniem; po trzech różnych odmowach w jednej turze Główny sam się zatrzymuje. Sprawdzone na prawdziwym Claude Code: odczyt i nowy plik bez pytania, edycja rdzenia dopiero po zgodzie, wznowienie po zgodzie działa.",
+    en: {
+      title: "The Lead agent's Guard — freedom to create, consent only for what matters",
+      desc: "The Lead agent asked for permission even to list a folder, and a small model could retry a refused command over and over until it ran out of turns — leaving dozens of identical requests on screen. Now a Guard stands before every tool: reading, read-only commands and creating new files and folders go straight through. Changing existing core files, secrets, writing outside the Cathedral and commands that change things wait for consent — with a preview of the change and a plain-language explanation. The model is told why it was refused and not to work around it; after three different refusals in one turn the Lead stops by itself. Verified on real Claude Code: reading and a new file without asking, a core edit only after consent, resuming after consent works.",
+    },
+  },
+  {
+    date: "2026-10-01",
+    ref: "ed64d5c",
+    sector: "core",
+    title: "Główny — Claude Code w Katedrze, w czacie zamiast w osobnym oknie",
+    desc: "Przycisk „Odpal Tu…Kurka!” otwierał terminal, którego żaden czat ani agent nie widział. Teraz Claude Code działa w tle jako Główny agent, podłączony do Creative Zone, czatu Katedry i Orba, na lokalnym modelu przez Ollamę. Widać, co robi, a każdą prośbę o polecenie tłumaczy Tłumacz: co zrobi, z jakim ryzykiem i po co według samego agenta. Główny zleca pracę stadu TeOgochi, zna moce Katedry (np. przycinanie wideo ffmpegiem bez pytania) i widzi zrzuty ekranu wklejane do czatu. Uczciwie: na bardzo małym modelu (2B) gubi narzędzia — wybór modelu jest w czacie i ostrzega przy małych.",
+    en: {
+      title: "The Lead — Claude Code inside the Cathedral, in the chat instead of a separate window",
+      desc: "The “Odpal Tu…Kurka!” button used to open a terminal that no chat or agent could see. Now Claude Code runs in the background as the Lead agent, wired into Creative Zone, the Cathedral chat and the Orb, on a local model through Ollama. You see what it does, and every command request is explained by a Translator: what it will do, how risky it is, and why the agent wants it. The Lead delegates work to the TeOgochi flock, knows the Cathedral's abilities (e.g. trimming video with ffmpeg without asking) and sees screenshots pasted into the chat. Honestly: on a very small model (2B) it loses track of tools — the model picker in the chat warns about small ones.",
+    },
+  },
+  {
+    date: "2026-10-01",
+    ref: "0b5142d",
+    sector: "core",
+    title: "Porządki na dysku — propozycje z rozmiarem i powodem, nic samo nie znika",
+    desc: "Modele i paczki rosną po dziesiątki gigabajtów. Porządki przeglądają tylko to, o czym Katedra wie: pliki GGUF, które Ollama już skopiowała, modele bez żadnego agenta i pracy, resztki treningów Kuźni i cache instalatora. Każda pozycja ma rozmiar i powód, a usunięte zostaje wyłącznie to, co Suweren zaznaczy — i to po ponownym sprawdzeniu na świeżym przeglądzie. Dzieła Suwerena i bazy treningowe nigdy nie trafiają na listę.",
+    en: {
+      title: "Disk clean-up — proposals with size and reason, nothing disappears on its own",
+      desc: "Models and packages grow to tens of gigabytes. Clean-up only looks at what the Cathedral knows about: GGUF files Ollama has already copied, models with no agent or work, leftovers of Forge training runs and installer caches. Each item shows its size and reason, and only what the Sovereign ticks gets deleted — re-checked against a fresh scan first. The Sovereign's works and training bases never appear on the list.",
+    },
+  },
+  {
+    date: "2026-10-01",
+    ref: "87b3253",
+    sector: "core",
+    title: "Zwiadowca HF i Pionek — nowe TeOgochi od modeli i od gier",
+    desc: "Zwiadowca przegląda HuggingFace w poszukiwaniu modeli GGUF mieszczących się w karcie graficznej, czyta ich karty i zgłasza kandydatów Dyrygentowi — niczego nie pobiera sam, dopiero po akceptacji. Przyjmuje też bezpośrednie linki, a źródła spoza HuggingFace oznacza jako niezweryfikowane. Mówi prawdę o formacie: repozytorium w MLX to wagi wyłącznie dla Maców z Apple Silicon, a safetensors wymagają konwersji — wtedy szuka gotowej wersji GGUF tego samego modelu. Pionek pisze dokumenty projektowe gier w projektach stada i prowadzi Studio Gier.",
+    en: {
+      title: "HF Scout and Pawn — new TeOgochi for models and for games",
+      desc: "The Scout searches HuggingFace for GGUF models that fit the graphics card, reads their model cards and reports candidates to the Conductor — it downloads nothing on its own, only after acceptance. It also takes direct links and marks sources outside HuggingFace as unverified. It tells the truth about formats: an MLX repository is weights for Apple Silicon Macs only, and safetensors need conversion — then it looks for a ready GGUF build of the same model. Pawn writes game design documents in flock projects and drives the Games Studio.",
+    },
+  },
+  {
+    date: "2026-09-29",
+    ref: "11a7f4a",
+    sector: "core",
+    title: "Agenci znają fakty — projekty, Stół i pamięć zamiast domysłów",
+    desc: "Zapytani „co zrobione w projektach?” agenci zgadywali. Teraz most składa raport z faktów: projekty stada, karty Stołu, Nocna Zmiana, ostatnie zdarzenia z szyny i zajęta pamięć z opisem procesów (który Python to ComfyUI, a który trening). Proces można zamknąć po numerze — z Katedry albo ze sparowanego telefonu — ale tylko z świeżej listy i nigdy procesów chronionych, takich jak sam most czy kompresja pamięci systemu.",
+    en: {
+      title: "Agents know the facts — projects, the Table and memory instead of guesses",
+      desc: "Asked “what is done in the projects?”, agents used to guess. Now the bridge assembles a report from facts: flock projects, Table cards, the Night Shift, recent bus events and memory usage with a description of each process (which Python is ComfyUI and which is training). A process can be closed by its number — from the Cathedral or a paired phone — but only from a fresh list and never protected processes such as the bridge itself or system memory compression.",
+    },
+  },
+  {
+    date: "2026-09-28",
+    ref: "396811e",
+    sector: "core",
+    title: "Dyrygent modeli i Kuźnia Soup — każdy TeOgochi może dostać własny model",
+    desc: "Dyrygent dobiera modele do agentów z katalogu tego, co naprawdę jest w Ollamie, z kartami modeli i średnią oceną pracy w stadzie — propozycja jest sprawdzana, więc nie wymyśli modelu, którego nie ma. Kuźnia Soup trenuje własny model TeOgochi z jego najlepiej ocenionych wkładów (minimum osiem próbek), eksportuje go do GGUF i wpina do Ollamy — lokalnie, z wyłączoną telemetrią. Instalator środowiska stawia Pythona, PyTorch pod sterownik karty i narzędzia w katalogu Katedry. Wykuty model nie zastępuje silnika sam — to decyzja Suwerena.",
+    en: {
+      title: "Model Conductor and Soup Forge — every TeOgochi can get its own model",
+      desc: "The Conductor assigns models to agents from what is really installed in Ollama, using model cards and the average score of their flock work — its proposal is checked, so it cannot invent a model that is not there. Soup Forge trains a TeOgochi's own model from its best-rated contributions (at least eight samples), exports it to GGUF and plugs it into Ollama — locally, with telemetry off. The environment installer sets up Python, a PyTorch build matching the GPU driver and the tools inside the Cathedral folder. A forged model never replaces the engine by itself — that is the Sovereign's decision.",
+    },
+  },
+  {
+    date: "2026-09-27",
+    ref: "cc802c9",
+    sector: "core",
+    title: "Stół ratyfikacji i rundy doskonalenia — projekt dojrzewa, zanim ruszą moduły",
+    desc: "Propozycja trafia na Stół z rozmowy podcastu, z pliku albo z telefonu. Po przyjęciu stado pisze Biblię projektu, a Sędzia ocenia ją względem wizji i wypisuje braki; w kolejnych rundach (najwyżej pięć) każdy poprawia własne wkłady, a ocena 9 na 10 kończy pracę wcześniej. Dopiero ratyfikacja Suwerena uruchamia zlecenia dla modułów — muzyki, wideo, sklepu, gier. Rundy można puścić od razu albo na noc, także z telefonu, a koniec projektu zapowiada głos.",
+    en: {
+      title: "Ratification Table and refinement rounds — a project matures before modules start",
+      desc: "A proposal reaches the Table from a podcast conversation, a file or the phone. Once accepted, the flock writes the project Bible and a Judge scores it against the vision and lists what is missing; in further rounds (up to five) each agent improves its own contributions, and a score of 9 out of 10 ends the work early. Only the Sovereign's ratification starts work orders for the modules — music, video, shop, games. Rounds can run right away or overnight, also from the phone, and a voice announces when a project is done.",
+    },
+  },
+  {
+    date: "2026-09-26",
+    ref: "5c98342",
+    sector: "web",
+    title: "Powitanie Dnia — codzienny film od stada",
+    desc: "Rano każdy aktywny TeOgochi pisze na swoim modelu sentencję do Suwerena, opartą na prawdziwych śladach z ostatniej doby, a ffmpeg wpisuje ją w kadr: ujęcie z ComfyUI, prawdziwe dzieło albo barwa agenta, z najnowszą muzyką pod spodem. Gdy ComfyUI śpi, reszta scen nie czeka. Film pokazuje się sam raz na urządzeniu, w Świecie Katedry i na telefonie.",
+    en: {
+      title: "Morning Greeting — a daily film from the flock",
+      desc: "Each morning every active TeOgochi writes a sentence to the Sovereign on its own model, based on real traces from the last day, and ffmpeg sets it into a frame: a ComfyUI shot, a real work or the agent's own colour, with the newest music underneath. If ComfyUI is asleep, the other scenes don't wait. The film shows itself once per device, in the Cathedral World and on the phone.",
+    },
+  },
+  {
+    date: "2026-09-25",
+    ref: "e8ee345",
+    sector: "mesh",
+    title: "Projekt Stada, Świat klocków i StoL — Katedra w telefonie",
+    desc: "TeOgochi pracują razem nad jednym projektem, każdy na swoim modelu i ze swoją rolą: najpierw fundament, potem dziedziny (muzyka, zwiastun, gra, moda), na końcu całość i Biblia. Ich wkłady same zlecają moduły Katedry. Świat klocków pokazuje stado jako płytki z prawdziwych dzieł zebranych z dysku — stuknięcie w agenta otwiera jego sprawy. Aplikacja StoL na Androida paruje się z Katedrą i daje Stół, Izbę Akceptacji i rozmowę z każdym TeOgochi w kieszeni.",
+    en: {
+      title: "Flock Projects, the Brick World and StoL — the Cathedral on your phone",
+      desc: "TeOgochi work together on one project, each on its own model and in its own role: first the foundation, then the domains (music, trailer, game, fashion), finally the whole and the Bible. Their contributions place work orders with the Cathedral modules by themselves. The Brick World shows the flock as plates built from real works found on disk — tapping an agent opens its affairs. The StoL Android app pairs with the Cathedral and puts the Table, the Acceptance Chamber and a conversation with every TeOgochi in your pocket.",
+    },
+  },
+  {
+    date: "2026-09-25",
+    ref: "9e8911e",
+    sector: "core",
+    title: "Pierwsze testy mostu — Rewizor, Mapa Katedry i Recenzent Kodeksa",
+    desc: "Most ma setki tras w jednym pliku i do tego dnia nie miał żadnego testu. Rewizor wyłapuje zdublowane trasy, importy do nieistniejących plików i wywołania z interfejsu, których most nie zna, a sonda żywa sprawdza bezpieczne trasy na działającym moście. Mapa pokazuje drogę od ekranu przez API do serwisu i wskazuje martwe komponenty. Recenzent czyta kod rundy Kodeksa — zaślepki, wyciszone błędy, wycięty kod — zanim uwierzymy w zielony build. Od pierwszych 26 testów zestaw urósł do ponad 170.",
+    en: {
+      title: "The bridge's first tests — Auditor, Cathedral Map and Codex Reviewer",
+      desc: "The bridge has hundreds of routes in a single file and until that day had no tests at all. The Auditor catches duplicate routes, imports of missing files and interface calls the bridge does not know, and a live probe checks safe routes on a running bridge. The Map traces the path from screen through API to service and points out dead components. The Reviewer reads each Codex round's code — stubs, silenced errors, removed code — before we believe a green build. From the first 26 tests the suite has grown to over 170.",
+    },
+  },
+  {
+    date: "2026-09-22",
+    ref: "bccbd8a",
+    sector: "core",
+    title: "App Studio 2.0 i Assety 3D — Kodeks buduje i ogląda, co zbudował",
+    desc: "Kodeks pisze aplikacje i gry three.js w piaskownicy, a pętla sprawdza je jak człowiek: kompilacja, build, przeglądarka otwiera wynik, zbiera błędy i porównuje stronę przed i po kliknięciu. Martwy moduł i pliki bez zmian liczą się jako porażka rundy, nie sukces. Gry powstają z dokumentu projektowego, a Reżyser Gry proponuje zmiany w planie. Generator assetów 3D robi z tekstu albo zdjęcia gotowy model GLB — zmierzone na karcie 6 GB: obraz 61 s, bryła około 12 minut, uproszczenie do grywalnej siatki ułamek sekundy.",
+    en: {
+      title: "App Studio 2.0 and 3D Assets — Codex builds and looks at what it built",
+      desc: "Codex writes apps and three.js games in a sandbox, and the loop checks them like a person would: compile, build, a browser opens the result, collects errors and compares the page before and after a click. A dead module or unchanged files count as a failed round, not a success. Games are built from a design document, and a Game Director proposes changes to the plan. The 3D asset generator turns text or a photo into a ready GLB model — measured on a 6 GB card: image 61 s, mesh about 12 minutes, simplification to a playable mesh a fraction of a second.",
+    },
+  },
+  {
+    date: "2026-09-17",
+    ref: "f2e19c0",
+    sector: "mesh",
+    title: "Delegat Mobilny i Kwantowy Tunel jednym przyciskiem",
+    desc: "TeOgochi mówią i słuchają w telefonie Suwerena: głos idzie torami Katedry (Whisper i lokalna synteza), a odpowiedzi mogą sięgać po narzędzia z białej listy. Tunel do telefonu stawia się jednym przyciskiem i od razu pokazuje kod QR. Przy tej okazji złapana poważna dziura: żądania z tunelu dochodziły do mostu jak lokalne, więc omijały Straż — zmierzone przez internet i załatane. Własny stały adres z konta Suwerena działa opcjonalnie; domyślnie adres jest jednorazowy.",
+    en: {
+      title: "Mobile Delegate and the Quantum Tunnel in one click",
+      desc: "TeOgochi speak and listen on the Sovereign's phone: voice travels the Cathedral's own paths (Whisper and local speech synthesis), and answers can reach for whitelisted tools. The tunnel to the phone starts with one button and immediately shows a QR code. Along the way a serious hole was caught: requests through the tunnel reached the bridge as if they were local, so they bypassed the Guard — measured over the internet and patched. A fixed address from the Sovereign's own account is optional; by default the address is one-time.",
+    },
+  },
+  {
+    date: "2026-09-15",
+    ref: "44ee45f",
+    sector: "core",
+    title: "Warsztat utworów i YuE2 — przedłuż, zremiksuj, zrób cover",
+    desc: "Gotowy utwór można przedłużyć (kontynuacja z barwą oryginału, zszyta płynnym przejściem), zremiksować z nowymi tagami albo przearanżować jako cover tej samej długości — lokalnie, na ACE-Step 1.5. Nazwy są uczciwe: przedłużenie to kontynuacja, nie domalowanie w środku, bo silnik tego nie potrafi — zmierzone. Doszła rodzina YuE2 dla muzyki z tekstem, a most przed startem sprawdza, czy ComfyUI ma potrzebny węzeł, zamiast udawać pracę.",
+    en: {
+      title: "Track Workshop and YuE2 — extend, remix, cover",
+      desc: "A finished track can be extended (a continuation with the original's timbre, stitched with a smooth crossfade), remixed with new tags or re-arranged as a cover of the same length — locally, on ACE-Step 1.5. The names are honest: extending is continuation, not in-place inpainting, because the engine cannot do that — measured. The YuE2 family arrived for music with lyrics, and before starting the bridge checks that ComfyUI has the required node instead of faking work.",
+    },
+  },
+  {
+    date: "2026-09-12",
+    ref: "14ce452",
+    sector: "core",
+    title: "Nocna Zmiana — długie roboty ruszają, gdy Suweren nie pracuje",
+    desc: "Rendery, rundy projektów i produkcja gier potrafią zająć godziny. Nocna Zmiana uruchamia je dopiero przy trzech otwartych bramach: co najmniej dziesięć minut bezczynności, wolna karta graficzna i co najmniej 8 GB wolnej pamięci — tej ostatniej nauczyła noc, w której zabrakło RAM-u. Zadanie rozpoczęte kończy się, nawet gdy Suweren wróci, ale nowe nie startuje. Każde uruchomienie i wynik trafiają do dziennika.",
+    en: {
+      title: "Night Shift — long jobs start when the Sovereign is not working",
+      desc: "Renders, project rounds and game production can take hours. The Night Shift starts them only when three gates are open: at least ten minutes of idleness, a free graphics card and at least 8 GB of free memory — the last one learned from a night that ran out of RAM. A started job finishes even if the Sovereign returns, but no new one starts. Every run and result goes into a log.",
+    },
+  },
+  {
+    date: "2026-09-09",
+    ref: "1225eb5",
+    sector: "core",
+    title: "Produkcja filmowa na własnej karcie — kadr, ruch, montaż",
+    desc: "Z rozmowy w Pokoju Opowieści rodzi się serial: projekt, fakty kanoniczne i odcinki w planie. Potok produkcji jest wreszcie spójny: kadr robi jeden obraz, ruch ożywia dokładnie ten obraz, montaż skleja ujęcia — wcześniej kadr i ujęcie były dwoma niezależnymi losowaniami, więc postać w kadrze i w ruchu była kimś innym. Silnikiem wideo jest Wan 2.2, bo mieści się w 6 GB karty; większy model został widoczny, ale nie wybiera się sam, zamiast obiecywać sceny liczone godzinami.",
+    en: {
+      title: "Film production on your own graphics card — frame, motion, edit",
+      desc: "A conversation in the Story Room becomes a series: a project, canon facts and episodes in a plan. The production pipeline is finally consistent: the frame stage makes one image, motion animates exactly that image, editing joins the shots — before, frame and shot were two independent random draws, so the character in the frame and in motion were different people. The video engine is Wan 2.2 because it fits a 6 GB card; the larger model stays visible but is never picked automatically, instead of promising scenes that take hours.",
+    },
+  },
   {
     date: '2026-08-28',
     ref: 'e5f6516',

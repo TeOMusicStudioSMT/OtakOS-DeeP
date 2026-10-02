@@ -49,8 +49,11 @@ export const UpdatesSection: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }
                 <span className="text-[10px] text-zinc-500">{u.date}</span>
                 {u.ref && <span className="text-[10px] text-zinc-600">· {u.ref}</span>}
               </div>
-              <div className="text-sm font-bold text-zinc-100">{u.title}</div>
-              <div className="text-[11px] text-zinc-400 leading-relaxed">{u.desc}</div>
+              <div className="text-sm font-bold text-zinc-100">
+                {lang === 'en' && u.en ? u.en.title : u.title}
+                {lang === 'en' && !u.en && <span className="ml-2 text-[9px] font-normal text-zinc-500 align-middle">(PL)</span>}
+              </div>
+              <div className="text-[11px] text-zinc-400 leading-relaxed">{lang === 'en' && u.en ? u.en.desc : u.desc}</div>
             </div>
           );
         })}
