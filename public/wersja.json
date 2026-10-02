@@ -1,0 +1,137 @@
+{
+    "wersja":  "V_ZERO",
+    "numer":  "2026.10.02.2312",
+    "data":  "2026-10-02T21:12:17Z",
+    "commit":  "4b90cf6",
+    "katalogWPaczce":  "TeO_Genesis_V_ZERO",
+    "zmiany":  [
+                   {
+                       "data":  "2026-10-02",
+                       "ref":  "4b90cf6",
+                       "tytul":  "fix(miniaturyzator): _OtakOs_AI na bia┼éej li┼øcie, bezpiecznik 95 MB, PelnyCykl nie k┼éamie o pushu"
+                   },
+                   {
+                       "data":  "2026-10-02",
+                       "ref":  "f6f16ca",
+                       "tytul":  "feat(tlumacz): Katedra w dowolnym j─Özyku ÔÇö t┼éumacz ekranu i lokalny model z pami─Öci─à na dysku"
+                   },
+                   {
+                       "data":  "2026-10-02",
+                       "ref":  "75f2edb",
+                       "tytul":  "feat(aktualizator): w─Öze┼é sam sprawdza i aktualizuje Katedr─Ö (git albo paczka z otakos.wtf)"
+                   },
+                   {
+                       "data":  "2026-10-01",
+                       "ref":  "e26b6d7",
+                       "tytul":  "feat(glowny): Stra┼╝ ÔÇö swoboda odczytu i tworzenia, zgoda tylko na rdze┼ä Katedry; koniec p─Ötli odm├│w"
+                   },
+                   {
+                       "data":  "2026-10-01",
+                       "ref":  "ac3598d",
+                       "tytul":  "feat(glowny): moce Katedry (przycinanie wideo), zrzuty ekranu w czatach, wyb├│r modelu; Zwiadowca zna MLX/safetensors"
+                   },
+                   {
+                       "data":  "2026-10-01",
+                       "ref":  "ed64d5c",
+                       "tytul":  "feat(glowny): G┼é├│wny ÔÇö Claude Code w tle pod┼é─àczony do Creative Zone, KatedraChat i Orba, z T┼éumaczem pr├│┼øb"
+                   },
+                   {
+                       "data":  "2026-10-01",
+                       "ref":  "87b3253",
+                       "tytul":  "feat(zwiadowca): bezpo┼ørednie linki i pirateface.co jako ┼║r├│d┼éo z ostrze┼╝eniem"
+                   },
+                   {
+                       "data":  "2026-10-01",
+                       "ref":  "0b5142d",
+                       "tytul":  "feat(porzadki): porz─àdki na dysku ÔÇö propozycje z rozmiarem i powodem, usuwanie tylko zaznaczonego"
+                   },
+                   {
+                       "data":  "2026-09-29",
+                       "ref":  "1a5615a",
+                       "tytul":  "feat(stado): nowe TeOgochi ÔÇö Pionek (gry) i Zwiadowca HF (nowe modele dla Dyrygenta)"
+                   },
+                   {
+                       "data":  "2026-09-29",
+                       "ref":  "f442d1c",
+                       "tytul":  "feat(stol): sparowany telefon zwalnia pami─Ö─ç Katedry ÔÇö tylko po PID, z tokenem parowania"
+                   },
+                   {
+                       "data":  "2026-09-29",
+                       "ref":  "11a7f4a",
+                       "tytul":  "feat(stan): agenci znaj─à projekty, St├│┼é i pami─Ö─ç ÔÇö raport fakt├│w, procesy z PID, zamykanie po PID"
+                   },
+                   {
+                       "data":  "2026-09-29",
+                       "ref":  "33010b1",
+                       "tytul":  "fix(rynek): ceny krypto przez most ÔÇö raz na minut─Ö dla ca┼éej Katedry, ostatnie prawdziwe przy 429"
+                   },
+                   {
+                       "data":  "2026-09-29",
+                       "ref":  "c2f4ccb",
+                       "tytul":  "feat(kuznia): cache HuggingFace i pip w Katedrze, Python z _OtakOs_AI/python312"
+                   },
+                   {
+                       "data":  "2026-09-29",
+                       "ref":  "fd4c996",
+                       "tytul":  "feat(kuznia): ┼ørodowisko Ku┼║ni Soup w Katedrze ÔÇö wykrywanie, instalator, linki"
+                   },
+                   {
+                       "data":  "2026-09-28",
+                       "ref":  "396811e",
+                       "tytul":  "feat(stado): Studio Gier z Biblii, Dyrygent modeli i Ku┼║nia Soup ÔÇö w┼éasny model dla ka┼╝dego TeOgochi"
+                   },
+                   {
+                       "data":  "2026-09-27",
+                       "ref":  "0cbfaea",
+                       "tytul":  "feat(stado): projekt wraca do Podcast Twin, uwagi do rund i St├│┼é z telefonu ÔÇö teraz albo na noc"
+                   },
+                   {
+                       "data":  "2026-09-27",
+                       "ref":  "4b581f1",
+                       "tytul":  "feat(stado): rundy doskonalenia, p─Ötla kreatywna, Nocna Zmiana ├ùN i zapowied┼║ g┼éosowa ko┼äca projektu"
+                   },
+                   {
+                       "data":  "2026-09-27",
+                       "ref":  "cc802c9",
+                       "tytul":  "feat(stol): St├│┼é ratyfikacji ÔÇö propozycje ÔåÆ Projekt Stada ÔåÆ ratyfikacja ÔåÆ modu┼éy"
+                   },
+                   {
+                       "data":  "2026-09-27",
+                       "ref":  "481e6a6",
+                       "tytul":  "feat(podcast-twin): gospodarze znaj─à GRV i Katedr─Ö + rozmowa do pliku .txt"
+                   },
+                   {
+                       "data":  "2026-09-27",
+                       "ref":  "0f88750",
+                       "tytul":  "fix(stol): QR parowania otwiera stron─Ö z przyciskiem ÔÇ×Otw├│rz w StoL\""
+                   },
+                   {
+                       "data":  "2026-09-27",
+                       "ref":  "4dcfc98",
+                       "tytul":  "fix(swiat): ­ƒîà i ­ƒº® odpowiadaj─à od razu, b┼é─Ödy strony wida─ç na telefonie"
+                   },
+                   {
+                       "data":  "2026-09-27",
+                       "ref":  "b7cff63",
+                       "tytul":  "fix(stado): XP za prac─Ö stada + szuflada ┼øwiata przewija si─Ö w WebView"
+                   },
+                   {
+                       "data":  "2026-09-26",
+                       "ref":  "5c98342",
+                       "tytul":  "feat(powitanie): codzienny film od stada ÔÇö sentencje TeOgochi w kadrach"
+                   },
+                   {
+                       "data":  "2026-09-26",
+                       "ref":  "06ff178",
+                       "tytul":  "fix(swiat): pasek filmu chowa si─Ö, gdy panel projekt├│w otwarty"
+                   },
+                   {
+                       "data":  "2026-09-26",
+                       "ref":  "3fc3bcc",
+                       "tytul":  "feat(stol): QR do pobrania apki StoL na karcie w Katedrze"
+                   }
+               ],
+    "paczka":  "V_ZERO_archive.zip",
+    "sha256":  "be882630314eb6d4143e516a8b7f3b4d73862292e6e3b3c0dda157bd54688998",
+    "bajtow":  31741902
+}
