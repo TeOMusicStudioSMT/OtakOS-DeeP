@@ -37,6 +37,16 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-03",
+    sector: "core",
+    title: "Kanał YouTube w wizytówce i postprodukcja przez stado",
+    desc: "Wizytówka Katedry może teraz pokazać cały kanał YouTube w jednej ramce (wszystkie filmy, a obok najnowsze z publicznego kanału RSS — bez klucza API) i linki do innych serwisów. W Katedrze YouTube łączy się jednym kliknięciem (zgoda Google w okienku, bez kopiowania tokenów), a gotowy film przygotowuje Kronikarz: tytuł, opis, tagi. Wysyłka idzie dopiero po ✓ Suwerena (Hub albo Izba w StoL), jako film niepubliczny, a link sam trafia na Wystawę. Uczciwie: projekt API bez audytu Google trzyma filmy jako prywatne — Katedra sprawdza prawdziwy status i nie wstawia linku, który by nie zagrał.",
+    en: {
+      title: "YouTube channel on the card and post-production by the herd",
+      desc: "A Cathedral card can now show its whole YouTube channel in one frame (all videos, plus the latest ones from the channel's public RSS feed — no API key) and links to other services. In the Cathedral, YouTube connects with one click (Google consent in a pop-up, no copying tokens), and a finished film is prepared by the Chronicler: title, description, tags. Upload happens only after the Sovereign's ✓ (Hub or the Chamber in StoL), as an unlisted video, and the link lands on the Exhibition by itself. Honestly: an API project without a Google audit keeps videos private — the Cathedral checks the real status and won't insert a link that wouldn't play.",
+    },
+  },
+  {
+    date: "2026-10-03",
     sector: "mesh",
     title: "Katedry ze stałym adresem w sieci + „offline” mówi dlaczego",
     desc: "Rejestr przyjmował dotąd tylko adresy quick tunnel *.trycloudflare.com, więc Katedra na nazwanym tunelu (stały adres na własnej domenie) zostawała offline. Teraz stały adres zarządcy rejestru działa od razu, a stała domena każdej innej Katedry trafia na Stół zarządcy i po zatwierdzeniu jest odpytywana jak quick tunnel — rejestr dalej nie puka pod niezatwierdzone adresy. Gdy Twoja Katedra jest offline, panel „Twoja” pokazuje ostatnią odpowiedź rejestru na jej meldunek zamiast samego „offline”.",
