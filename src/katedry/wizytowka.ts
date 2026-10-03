@@ -16,7 +16,10 @@ export interface Utwor { id: string; tytul: string; plik: string }
 export interface SunoUtwor { id: string; tytul: string; embed: string; okladka: string | null; sekundy: number | null }
 export interface Suno { id: string; typ: 'utwor' | 'playlista'; tytul: string; opis: string; url: string; embed: string | null; okladka: string | null; utwory: SunoUtwor[] }
 export interface Produkt { id: string; tytul: string; opis: string; dzial: string; rodzaj: string; obraz: string | null }
-export interface Wizytowka { nick: string; motto: string; opis: string; adres: string; filmy: Film[]; utwory: Utwor[]; suno: Suno[]; produkty: Produkt[] }
+/** Kanał YouTube Katedry: ramka gra playlistę „wszystkie filmy” (UU…), lista = najnowsze z RSS kanału. */
+export interface Kanal { id: string; nazwa: string; adres: string; playlista: string; filmy: { id: string; tytul: string }[] }
+export interface Link { nazwa: string; url: string }
+export interface Wizytowka { nick: string; motto: string; opis: string; adres: string; filmy: Film[]; utwory: Utwor[]; suno: Suno[]; produkty: Produkt[]; kanal: Kanal | null; linki: Link[] }
 export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; widziano: string }
 
 const tekst = (x: unknown, max = 300) => (typeof x === 'string' ? x.slice(0, max) : '');
@@ -28,6 +31,14 @@ const sunoUrl = (x: unknown) => (typeof x === 'string' && /^https:\/\/suno\.(com
 /** Plik z Katedry: tylko jej adres + /wizytowka/(plik|plakat)/<id>. */
 const plikKatedry = (adres: string, x: unknown) => (typeof x === 'string' && /^\/wizytowka\/(plik|plakat)\/[\w-]{1,80}$/.test(x) ? `${adres}${x}` : null);
 const lista = (x: unknown): any[] => (Array.isArray(x) ? x : []);
+
+/** Kanał: id UC…, playlista UU… tego samego kanału, adres tylko youtube.com. */
+function kanalZ(k: any): Kanal | null {
+    if (!k || typeof k !== 'object' || typeof k.id !== 'string' || !/^UC[\w-]{22}$/.test(k.id)) return null;
+    const playlista = `UU${k.id.slice(2)}`;
+    const adres = typeof k.adres === 'string' && /^https:\/\/www\.youtube\.com\/(@[\w.-]{3,30}|channel\/UC[\w-]{22}|c\/[\w.-]{1,100}|user\/[\w.-]{1,100})$/.test(k.adres) ? k.adres : `https://www.youtube.com/channel/${k.id}`;
+    return { id: k.id, nazwa: tekst(k.nazwa, 100), adres, playlista, filmy: lista(k.filmy).slice(0, 15).flatMap((f) => (youtube(f?.id) ? [{ id: f.id, tytul: tekst(f.tytul, 160) }] : [])) };
+}
 
 /** Surowy JSON wizytówki → bezpieczna wizytówka (albo null, gdy to nie wizytówka). */
 export function oczysc(d: any, adres: string): Wizytowka | null {
@@ -41,6 +52,8 @@ export function oczysc(d: any, adres: string): Wizytowka | null {
             id: s.id, typ: s.typ === 'playlista' ? 'playlista' as const : 'utwor' as const, tytul: tekst(s.tytul, 160), opis: tekst(s.opis, 300), url: sunoUrl(s.url)!, embed: sunoEmbed(s.embed), okladka: https(s.okladka),
             utwory: lista(s.utwory).slice(0, 60).flatMap((u) => (id(u?.id) && sunoEmbed(u?.embed) ? [{ id: u.id, tytul: tekst(u.tytul, 160), embed: sunoEmbed(u.embed)!, okladka: https(u.okladka), sekundy: typeof u.sekundy === 'number' ? u.sekundy : null }] : [])),
         }] : [])),
+        kanal: kanalZ(d.kanal),
+        linki: lista(d.linki).slice(0, 10).flatMap((l) => (https(l?.url) ? [{ nazwa: tekst(l.nazwa, 40) || new URL(l.url).hostname, url: l.url }] : [])),
         produkty: lista(w.produkty).slice(0, 36).flatMap((p) => (id(p?.id) ? [{ id: p.id, tytul: tekst(p.tytul, 160), opis: tekst(p.opis, 300), dzial: tekst(p.dzial, 60), rodzaj: tekst(p.rodzaj, 30), obraz: plikKatedry(adres, p.obraz) }] : [])),
     };
 }

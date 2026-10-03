@@ -6,7 +6,7 @@
  * (wizytowka.ts → oczysc), tu tylko je pokazujemy.
  */
 import React, { useState } from 'react';
-import type { Film, Suno, Wizytowka } from './wizytowka';
+import type { Film, Kanal, Suno, Wizytowka } from './wizytowka';
 
 const czas = (s?: number | null) => (s ? `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}` : '');
 
@@ -61,8 +61,42 @@ const SunoBlok: React.FC<{ s: Suno }> = ({ s }) => {
   );
 };
 
+/** Cały kanał YouTube Katedry w jednej ramce: domyślnie playlista „wszystkie filmy”, klik w listę = ten film. */
+const KanalBlok: React.FC<{ k: Kanal; pl: boolean }> = ({ k, pl }) => {
+  const [gra, setGra] = useState<string | null>(null);   // null = nic nie ładujemy, dopóki gość nie kliknie
+  const src = gra === 'kanal' ? `https://www.youtube-nocookie.com/embed/videoseries?list=${k.playlista}&autoplay=1` : gra ? `https://www.youtube-nocookie.com/embed/${gra}?autoplay=1` : null;
+  return (
+    <section className="mb-6 overflow-hidden rounded-2xl border border-red-500/20 bg-white/[0.03]">
+      <div className="flex items-center gap-2 px-4 py-2.5">
+        <span className="text-sm">📺</span>
+        <span className="truncate text-sm font-bold text-slate-100">{k.nazwa || 'YouTube'}</span>
+        <a href={k.adres} target="_blank" rel="noreferrer" className="ml-auto text-[10px] text-slate-500 hover:text-red-200">{pl ? 'kanał na YouTube →' : 'channel on YouTube →'}</a>
+      </div>
+      <div className="grid md:grid-cols-[2fr_1fr]">
+        <div className="relative aspect-video bg-black">
+          {src ? <iframe key={src} src={src} title={k.nazwa} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen className="absolute inset-0 h-full w-full" />
+            : <button onClick={() => setGra('kanal')} className="group absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-red-950/50 to-black">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full border border-red-300/70 bg-black/50 text-2xl text-red-100 transition group-hover:scale-105">▶</span>
+                <span className="text-[11px] text-slate-400">{pl ? 'Odtwórz cały kanał' : 'Play the whole channel'}</span>
+              </button>}
+        </div>
+        {k.filmy.length > 0 && (
+          <ol className="max-h-[22rem] divide-y divide-white/5 overflow-y-auto md:max-h-none">
+            {k.filmy.map((f) => (
+              <li key={f.id}><button onClick={() => setGra(f.id)} className={`flex w-full items-center gap-2 px-3 py-2 text-left text-[11px] hover:bg-white/5 ${gra === f.id ? 'text-red-200' : 'text-slate-300'}`}>
+                <img src={`https://i.ytimg.com/vi/${f.id}/mqdefault.jpg`} alt="" loading="lazy" className="h-9 w-16 shrink-0 rounded object-cover" />
+                <span className="line-clamp-2">{f.tytul}</span>
+              </button></li>
+            ))}
+          </ol>
+        )}
+      </div>
+    </section>
+  );
+};
+
 export const KartaKatedry: React.FC<{ w: Wizytowka; pl: boolean; twoja?: boolean }> = ({ w, pl, twoja }) => {
-  const pusta = !w.filmy.length && !w.suno.length && !w.utwory.length && !w.produkty.length;
+  const pusta = !w.filmy.length && !w.suno.length && !w.utwory.length && !w.produkty.length && !w.kanal;
   return (
     <div className="mx-auto w-full max-w-5xl px-4 pb-16">
       <header className="pt-6 pb-6 text-center">
@@ -70,7 +104,13 @@ export const KartaKatedry: React.FC<{ w: Wizytowka; pl: boolean; twoja?: boolean
         <h2 className="mt-2 font-mono text-4xl font-black tracking-tight text-white sm:text-5xl">{w.nick}</h2>
         {w.motto && <p className="mt-2 text-sm italic text-amber-200/90">„{w.motto}”</p>}
         {w.opis && <p className="mx-auto mt-3 max-w-2xl text-[13px] leading-relaxed text-slate-400">{w.opis}</p>}
+        {w.linki.length > 0 && (
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            {w.linki.map((l) => <a key={l.url} href={l.url} target="_blank" rel="noreferrer nofollow" className="rounded-full border border-white/15 px-3 py-1 text-[11px] text-slate-300 hover:border-fuchsia-300/60 hover:text-fuchsia-100">{l.nazwa} ↗</a>)}
+          </div>
+        )}
       </header>
+      {w.kanal && <KanalBlok k={w.kanal} pl={pl} />}
       {pusta && <p className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center text-[12px] text-slate-500">{pl ? 'Ta Katedra nie wystawiła jeszcze żadnych dzieł.' : 'This Cathedral has not exhibited any works yet.'}</p>}
       {w.filmy.length > 0 && <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{w.filmy.map((f) => <KartaFilmu key={f.id} f={f} pl={pl} />)}</div>}
       {w.suno.length > 0 && <div className="mt-6 grid gap-4 md:grid-cols-2">{w.suno.map((s) => <SunoBlok key={s.id} s={s} />)}</div>}
