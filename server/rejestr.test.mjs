@@ -69,3 +69,38 @@ test('cofnięcie zatwierdzenia usuwa Katedrę z listy', async () => {
     zatw.length = 0;
     assert.deepEqual(r.lista(), []);
 });
+
+test('zatwierdzanie przez Stół: niezatwierdzona Katedra → oczekujące; podpisana lista zarządcy ją wpuszcza; cudza lista odrzucona', async () => {
+    const { trescListyZarzadcy } = await import('./rejestr.mjs');
+    const zarz = crypto.generateKeyPairSync('ed25519');
+    const ZK = zarz.publicKey.export({ format: 'der', type: 'spki' }).toString('base64');
+    const pukniecia = [];
+    const r = utworzRejestr({
+        zatwierdzone: () => [], zarzadca: () => ({ nick: 'teo', klucz: ZK }), teraz,
+        fetch: async (url) => { pukniecia.push(url); return { ok: true, status: 200, text: async () => JSON.stringify({ nick: 'teo-center', klucz: KLUCZ, motto: 'm' }) }; },
+    });
+    // nowa Katedra z ważnym podpisem → 403 + oczekuje (bez adresu, bez pukania pod adres)
+    const w = await r.meldunek(meldunek());
+    assert.equal(w.status, 403);
+    assert.deepEqual(r.oczekujace().map((o) => [o.nick, o.klucz, o.powod, 'adres' in o]), [['teo-center', KLUCZ, 'nowa Katedra', false]]);
+    assert.equal(pukniecia.length, 0);
+    // śmieciowy podpis nie trafia do oczekujących
+    await r.meldunek({ ...meldunek({ nick: 'smiec' }), podpis: 'AAAA' });
+    assert.equal(r.oczekujace().length, 1);
+
+    const czas = new Date(zegar).toISOString();
+    const lista = [{ nick: 'teo-center', klucz: KLUCZ }];
+    const podpisz = (k, c = czas, l = lista) => crypto.sign(null, Buffer.from(trescListyZarzadcy({ czas: c, zatwierdzone: l })), k).toString('base64');
+    assert.equal(r.ustawZatwierdzone({ czas, zatwierdzone: lista, podpis: podpisz(obca.privateKey) }).status, 401, 'nie zarządca');
+    assert.equal(r.ustawZatwierdzone({ czas, zatwierdzone: lista, podpis: podpisz(zarz.privateKey) }).status, 200);
+    assert.deepEqual(r.oczekujace(), [], 'zatwierdzona znika z oczekujących');
+    assert.equal(r.stanZarzadcy().odZarzadcy, 1);
+    assert.equal((await r.meldunek(meldunek())).status, 200);
+    assert.deepEqual(r.lista().map((x) => x.nick), ['teo-center']);
+    // starsza albo ta sama lista nie nadpisze nowszej; cofnięcie zatwierdzenia (pusta lista) zdejmuje ze strony
+    assert.match(r.ustawZatwierdzone({ czas, zatwierdzone: [], podpis: podpisz(zarz.privateKey, czas, []) }).wiadomosc, /Już mam/);
+    zegar += 1000;
+    const pozniej = new Date(zegar).toISOString();
+    assert.equal(r.ustawZatwierdzone({ czas: pozniej, zatwierdzone: [], podpis: podpisz(zarz.privateKey, pozniej, []) }).status, 200);
+    assert.deepEqual(r.lista(), []);
+});
