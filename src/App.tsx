@@ -1903,7 +1903,11 @@ export default function App() {
               {lang === 'pl' ? 'MAGNETY TORRENTÓW' : 'TORRENT MAGNETS'}
             </a>
             <span className="text-zinc-700">|</span>
-            <span className="text-zinc-600">SHA256: fc9a103c88bb7123992fae208b098defa214</span>
+            <a href="/teo-hub/" className="text-zinc-500 hover:text-emerald-400 transition">TEO HUB OTAKOS</a>
+            <span className="text-zinc-700">|</span>
+            <a href="/privacy/" className="text-zinc-500 hover:text-emerald-400 transition">{lang === 'pl' ? 'PRYWATNOŚĆ' : 'PRIVACY'}</a>
+            <span className="text-zinc-700">|</span>
+            <a href="/terms/" className="text-zinc-500 hover:text-emerald-400 transition">{lang === 'pl' ? 'WARUNKI' : 'TERMS'}</a>
           </div>
 
           {/* Clean modest credit matching human visual style guidelines */}

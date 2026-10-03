@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TeO Hub OtakOS — aplikacja Katedry OtakOS</title>
+<meta name="description" content="TeO Hub OtakOS to lokalna aplikacja twórcza Katedry OtakOS. Pomaga twórcy przygotować i — po jego zatwierdzeniu — wysłać własne filmy na jego kanał YouTube.">
+<style>:root{color-scheme:dark}body{margin:0;background:#06070b;color:#cbd5e1;font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}main{max-width:820px;margin:0 auto;padding:40px 20px 80px}h1{color:#fff;font-size:30px;line-height:1.2;margin:0 0 6px}h2{color:#f0abfc;font-size:20px;margin:34px 0 8px}h3{color:#e2e8f0;font-size:16px;margin:20px 0 4px}a{color:#67e8f9}nav{font-size:13px;margin-bottom:26px}nav a{margin-right:14px}.lead{color:#94a3b8}.lang{border-top:1px solid #1e293b;margin-top:44px;padding-top:10px;font-size:12px;letter-spacing:.2em;color:#64748b;text-transform:uppercase}ul{padding-left:22px}code{background:#111827;padding:1px 5px;border-radius:4px;font-size:14px}footer{margin-top:50px;font-size:13px;color:#64748b}</style></head><body><main>
+<nav><a href="/">otakos.wtf</a><a href="/teo-hub/">TeO Hub OtakOS</a><a href="/privacy/">Prywatność / Privacy</a><a href="/terms/">Warunki / Terms</a></nav>
+<h1>TeO Hub OtakOS</h1>
+<p class="lead">Lokalna aplikacja twórcza Katedry OtakOS — działa na komputerze twórcy, nie w chmurze.</p>
+
+<h2>Czym jest TeO Hub OtakOS</h2>
+<p>TeO Hub OtakOS to panel sterowania Katedry OtakOS: darmowego, otwartego oprogramowania, które twórca pobiera z otakos.wtf i uruchamia na własnym komputerze. W Katedrze lokalne modele AI pomagają tworzyć muzykę, filmy i opowieści, a gotowe dzieła trafiają na <em>Wystawę</em> — wizytówkę twórczości.</p>
+
+<h2>Do czego aplikacja używa YouTube</h2>
+<p>Gdy twórca połączy swoje konto Google („Połącz z YouTube”), TeO Hub OtakOS może:</p>
+<ul>
+<li><strong>wysłać na kanał twórcy film, który on sam wskazał i zatwierdził</strong> (zakres <code>youtube.upload</code>). Asystent w Katedrze proponuje tytuł, opis i tagi; twórca może je poprawić, a wysyłka rusza dopiero po jego kliknięciu „✓”. Film jest wysyłany jako niepubliczny;</li>
+<li><strong>odczytać nazwę kanału twórcy i status wysłanego filmu</strong> (zakres <code>youtube.readonly</code>) — żeby pokazać, z którym kanałem jest połączony, i wstawić link do filmu na jego Wystawę dopiero wtedy, gdy film da się obejrzeć.</li>
+</ul>
+<p>Aplikacja nie publikuje niczego bez decyzji twórcy, nie usuwa filmów, nie czyta komentarzy, subskrypcji ani statystyk i nie zarządza kanałem w żaden inny sposób.</p>
+
+<h2>Gdzie są dane</h2>
+<p>Token dostępu Google zapisuje się wyłącznie na komputerze twórcy, w katalogu jego Katedry. Nie trafia na serwery otakos.wtf ani do nikogo innego. Twórca odłącza YouTube jednym przyciskiem „Rozłącz” albo w ustawieniach konta Google: <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Szczegóły: <a href="/privacy/">Polityka prywatności</a> · <a href="/terms/">Warunki korzystania</a>.</p>
+
+<p class="lang">English</p>
+<h2>What is TeO Hub OtakOS</h2>
+<p>TeO Hub OtakOS is the control panel of Katedra OtakOS (the OtakOS Cathedral): free, open software that a creator downloads from otakos.wtf and runs on their own computer. Local AI models help create music, films and stories; finished works go to the creator's <em>Exhibition</em> — a showcase of their work.</p>
+<h2>How the app uses YouTube</h2>
+<p>When the creator connects their Google account (“Connect YouTube”), TeO Hub OtakOS can:</p>
+<ul>
+<li><strong>upload to the creator's own channel a video that the creator selected and approved</strong> (scope <code>youtube.upload</code>). An assistant proposes a title, description and tags; the creator can edit them, and the upload starts only after the creator clicks “✓”. Videos are uploaded as unlisted;</li>
+<li><strong>read the creator's channel name and the status of the uploaded video</strong> (scope <code>youtube.readonly</code>) — to show which channel is connected and to add the video link to the creator's Exhibition only once the video is watchable.</li>
+</ul>
+<p>The app never publishes without the creator's decision, never deletes videos, and does not read comments, subscriptions or analytics.</p>
+<h2>Where the data lives</h2>
+<p>The Google access token is stored only on the creator's computer, inside their Cathedral folder. It is never sent to otakos.wtf servers or anyone else. Disconnect with the “Disconnect” button or at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Details: <a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Service</a>.</p>
+<footer>TeO Hub OtakOS · Katedra OtakOS · kontakt / contact: <a href="mailto:teo@teo.center">teo@teo.center</a></footer>
+</main></body></html>
