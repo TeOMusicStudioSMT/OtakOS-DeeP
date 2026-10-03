@@ -1,4 +1,8 @@
 {
-  "_jak": "Katedry widoczne w przewijaniu na otakos.wtf. Dopisz {\"nick\", \"klucz\"} z karty Wystawy Katedry (🪪 Wizytówka → kopiuj); \"domena\" tylko dla stałego tunelu nazwanego (np. katedra.przyklad.pl). Usunięcie wpisu = Katedra znika ze strony po wdrożeniu.",
+  "_jak": "Zarządca rejestru („zarzadca”: nick + klucz z karty Wystawy jego Katedry) zatwierdza Katedry ze Stołu — w Hubie albo w StoL; jego Katedra wysyła tu podpisaną listę. Tu można też dopisać {\"nick\",\"klucz\"} ręcznie; \"domena\" tylko dla stałego tunelu nazwanego. Usunięcie wpisu = Katedra znika po wdrożeniu.",
+  "zarzadca": {
+    "nick": "teo-mas",
+    "klucz": "MCowBQYDK2VwAyEAAQmPQnBOdxLg+buOl+rNd6El7jtS0rBoJmiMujchPkM="
+  },
   "katedry": []
 }

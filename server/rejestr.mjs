@@ -18,6 +18,10 @@ import crypto from 'node:crypto';
 
 export const NICK = /^[a-z0-9][a-z0-9-]{2,31}$/;
 export const trescMeldunku = ({ nick, adres, czas }) => `otakos-meldunek\n${nick}\n${adres}\n${czas}`;
+/** Lista zatwierdzonych od zarządcy — podpisana jego kluczem (services/ZarzadcaRejestru.js w Katedrze). */
+export const trescListyZarzadcy = ({ czas, zatwierdzone }) => `otakos-zarzadca\n${czas}\n${JSON.stringify(zatwierdzone)}`;
+const MAX_OCZEKUJACYCH = 200;
+const OCZEKUJACY_MS = 24 * 3600_000;
 const ZYWOTNOSC_MS = 3 * 60_000;
 const SWIEZOSC_MS = 5 * 60_000;
 const PONOWNA_WERYFIKACJA_MS = 5 * 60_000;
@@ -41,18 +45,63 @@ async function pobierzWizytowke(fetchFn, adres) {
     return JSON.parse(tekst);
 }
 
-export function utworzRejestr({ zatwierdzone = () => [], fetch: fetchFn = fetch, teraz = () => Date.now() } = {}) {
+/**
+ * ZATWIERDZANIE PRZEZ STÓŁ (2026-10-03, Suweren: „niech też będzie możliwość zatwierdzenia przez Stół”):
+ *   · `zatwierdzone()` — plik w repo (start, wpisuje się ręcznie) + ZARZĄDCA (`zarzadca()`: nick i klucz z pliku),
+ *   · Katedra z ważnym podpisem, ale bez zatwierdzenia → trafia do OCZEKUJĄCYCH (nick, klucz, kiedy — bez adresu),
+ *   · Katedra zarządcy pokazuje oczekujące na Stole (Hub / StoL), a zatwierdzoną listę wysyła tu podpisaną swoim
+ *     kluczem (co minutę i po każdej zmianie). Źródło prawdy leży w Katedrze zarządcy — restart strony nic nie gubi
+ *     na dłużej niż do jej następnego wysłania.
+ */
+export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, fetch: fetchFn = fetch, teraz = () => Date.now() } = {}) {
     const online = new Map();   // nick → { nick, adres, motto, widziano, sprawdzono }
+    const oczekujace = new Map();   // nick → { nick, klucz, kiedy, powod }
+    let odZarzadcy = { czas: 0, katedry: [] };
+
+    /** Plik ∪ sam zarządca ∪ lista od zarządcy (wpis z pliku wygrywa). */
+    function wszystkieZatwierdzone() {
+        const m = new Map();
+        for (const z of odZarzadcy.katedry) m.set(z.nick, z);
+        const zr = zarzadca();
+        if (zr?.nick && zr?.klucz) m.set(zr.nick, { nick: zr.nick, klucz: zr.klucz, domena: zr.domena ?? null });
+        for (const z of zatwierdzone()) m.set(z.nick, z);
+        return [...m.values()];
+    }
+
+    function ustawZatwierdzone(cialo) {
+        const odp = (status, wiadomosc) => ({ status, wiadomosc });
+        const zr = zarzadca();
+        if (!zr?.klucz) return odp(503, 'Rejestr nie ma zarządcy (katedry-zatwierdzone.json → "zarzadca").');
+        const { czas, zatwierdzone: lista_, podpis } = cialo ?? {};
+        if (typeof czas !== 'string' || !Array.isArray(lista_) || typeof podpis !== 'string' || lista_.length > 500) return odp(400, 'Lista niekompletna.');
+        const t = Date.parse(czas);
+        if (!Number.isFinite(t) || Math.abs(teraz() - t) > SWIEZOSC_MS) return odp(400, 'Lista nieświeża — sprawdź zegar komputera.');
+        if (t <= odZarzadcy.czas) return odp(200, 'Już mam tę albo nowszą listę.');
+        let ok = false;
+        try { ok = crypto.verify(null, Buffer.from(trescListyZarzadcy({ czas, zatwierdzone: lista_ }), 'utf8'), crypto.createPublicKey({ key: Buffer.from(zr.klucz, 'base64'), format: 'der', type: 'spki' }), Buffer.from(podpis, 'base64')); } catch { ok = false; }
+        if (!ok) return odp(401, 'To nie jest podpis zarządcy rejestru.');
+        const katedry = lista_.filter((z) => NICK.test(String(z?.nick ?? '')) && typeof z.klucz === 'string' && z.klucz.length < 200)
+            .map((z) => ({ nick: z.nick, klucz: z.klucz, domena: typeof z.domena === 'string' ? z.domena.toLowerCase() : null }));
+        odZarzadcy = { czas: t, katedry };
+        for (const z of katedry) if (oczekujace.get(z.nick)?.klucz === z.klucz) oczekujace.delete(z.nick);
+        return odp(200, `Zatwierdzonych od zarządcy: ${katedry.length}.`);
+    }
+
+    function listaOczekujacych() {
+        const granica = teraz() - OCZEKUJACY_MS;
+        for (const [n, o] of oczekujace) if (o.kiedy < granica) oczekujace.delete(n);
+        return [...oczekujace.values()].sort((a, b) => b.kiedy - a.kiedy).map((o) => ({ ...o, kiedy: new Date(o.kiedy).toISOString() }));
+    }
+    function stanZarzadcy() {
+        const zr = zarzadca();
+        return { zarzadca: zr?.nick ?? null, lista: odZarzadcy.czas ? new Date(odZarzadcy.czas).toISOString() : null, odZarzadcy: odZarzadcy.katedry.length, zPliku: zatwierdzone().length };
+    }
 
     async function meldunek(cialo) {
         const { nick, adres, czas, klucz, podpis } = cialo ?? {};
         const odp = (status, wiadomosc) => ({ status, wiadomosc });
         if (!NICK.test(String(nick ?? ''))) return odp(400, 'Zły nick.');
         if (typeof adres !== 'string' || typeof czas !== 'string' || typeof klucz !== 'string' || typeof podpis !== 'string') return odp(400, 'Meldunek niekompletny.');
-        const wpis = zatwierdzone().find((z) => z.nick === nick);
-        if (!wpis || wpis.klucz !== klucz) {
-            return odp(403, `Nick „${nick}" czeka na zatwierdzenie na otakos.wtf — wyślij Suwerenowi strony nick i klucz publiczny z karty Wystawy.`);
-        }
         const t = Date.parse(czas);
         if (!Number.isFinite(t) || Math.abs(teraz() - t) > SWIEZOSC_MS) return odp(400, 'Meldunek nieświeży — sprawdź zegar komputera.');
         let ok = false;
@@ -61,6 +110,14 @@ export function utworzRejestr({ zatwierdzone = () => [], fetch: fetchFn = fetch,
             ok = crypto.verify(null, Buffer.from(trescMeldunku({ nick, adres, czas }), 'utf8'), pub, Buffer.from(podpis, 'base64'));
         } catch { ok = false; }
         if (!ok) return odp(401, 'Podpis się nie zgadza.');
+        // Podpis prawdziwy — dopiero teraz pytamy o zatwierdzenie (oczekujące to tylko Katedry z własnym kluczem).
+        const wpis = wszystkieZatwierdzone().find((z) => z.nick === nick);
+        if (!wpis || wpis.klucz !== klucz) {
+            if (oczekujace.size < MAX_OCZEKUJACYCH || oczekujace.has(nick)) {
+                oczekujace.set(nick, { nick, klucz, kiedy: teraz(), powod: wpis ? 'inny klucz niż zatwierdzony przy tym nicku' : 'nowa Katedra' });
+            }
+            return odp(403, `Nick „${nick}" czeka na zatwierdzenie — zarządca rejestru widzi go teraz na swoim Stole.`);
+        }
         if (!adresDozwolony(adres, wpis.domena)) return odp(400, 'Adres musi być https na *.trycloudflare.com albo stałą domeną zatwierdzoną przy nicku.');
 
         const byl = online.get(nick);
@@ -80,10 +137,10 @@ export function utworzRejestr({ zatwierdzone = () => [], fetch: fetchFn = fetch,
 
     function lista() {
         const granica = teraz() - ZYWOTNOSC_MS;
-        const dozwolone = new Map(zatwierdzone().map((z) => [z.nick, z.klucz]));
-        for (const [nick, w] of online) if (w.widziano < granica || !dozwolone.has(nick)) online.delete(nick);
+        const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
+        for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
         return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, widziano }) => ({ nick, adres, motto, klucz, widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
-    return { meldunek, lista };
+    return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy };
 }
