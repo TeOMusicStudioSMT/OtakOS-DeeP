@@ -13,7 +13,7 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import KartaKatedry from './KartaKatedry';
-import { katedryOnline, twojaWizytowka, wizytowkaZ, type KatedraOnline, type Wizytowka } from './wizytowka';
+import { katedryOnline, stanKatedry, twojaWizytowka, wizytowkaZ, type KatedraOnline, type StanKatedry, type Wizytowka } from './wizytowka';
 
 const czyKatedry = () => /^#katedry([/?]|$)/.test(window.location.hash);
 const nickZHasha = () => window.location.hash.match(/^#katedry\/([a-z0-9-]{3,32})$/)?.[1] ?? null;
@@ -47,6 +47,7 @@ function useGestPoziomy(cel: React.RefObject<HTMLElement | null> | null, onGest:
 const TwojaPanel: React.FC<{ pl: boolean }> = ({ pl }) => {
   const [w, setW] = useState<Wizytowka | null | 'brak-nicka' | 'laduje'>('laduje');
   const [offline, setOffline] = useState<string | null>(null);
+  const [powod, setPowod] = useState<StanKatedry | null | 'brak-wizytowki'>(null);
   useEffect(() => {
     void (async () => {
       const lokalna = await twojaWizytowka();
@@ -58,6 +59,8 @@ const TwojaPanel: React.FC<{ pl: boolean }> = ({ pl }) => {
         const z = k ? await wizytowkaZ(k.adres).catch(() => null) : null;
         if (z) return setW(z);
         setOffline(moja);
+        // Na liście jest, a wizytówka nie przyszła = rejestr ją widzi, tylko tunel nie odpowiada tej przeglądarce.
+        setPowod(k ? 'brak-wizytowki' : await stanKatedry(moja));
       }
       setW(lokalna);
     })();
@@ -69,6 +72,15 @@ const TwojaPanel: React.FC<{ pl: boolean }> = ({ pl }) => {
       <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">{pl ? '∴ Twoja Katedra ∴' : '∴ Your Cathedral ∴'}</div>
       <h2 className="mt-2 font-mono text-4xl font-black text-white">{offline}</h2>
       <p className="mt-4 text-sm text-slate-400">{pl ? 'Jest teraz offline — wizytówka wróci, gdy Katedra włączy tunel i meldunek.' : 'It is offline right now — the card returns once the Cathedral enables its tunnel and check-in.'}</p>
+      <p className="mt-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-[11px] leading-relaxed text-slate-300">
+        {powod === 'brak-wizytowki'
+          ? (pl ? 'Rejestr widzi ją online, ale jej tunel nie oddał wizytówki tej przeglądarce. Spróbuj za chwilę.' : 'The registry sees it online, but its tunnel did not return the card to this browser. Try again shortly.')
+          : powod?.meldunek
+            ? <>{pl ? 'Ostatni meldunek' : 'Last check-in'} ({new Date(powod.meldunek.kiedy).toLocaleTimeString(pl ? 'pl-PL' : 'en-GB')}): {powod.meldunek.ok ? '✓' : '⚠'} {powod.meldunek.wiadomosc}</>
+            : powod
+              ? (pl ? 'Rejestr nie dostał od niej meldunku od swojego ostatniego startu. W Katedrze: Kwantowy Tunel włączony + 🪪 „Melduj w sieci” — panel 🪪 pokazuje, co odpowiada rejestr.' : 'The registry has had no check-in from it since its last start. In the Cathedral: Quantum Tunnel on + 🪪 “check in” — the 🪪 panel shows the registry reply.')
+              : (pl ? 'Rejestr Katedr jest teraz nieosiągalny.' : 'The Cathedral registry is unreachable right now.')}
+      </p>
       <button onClick={() => { ustawMoja(null); setOffline(null); }} className="mt-6 text-[11px] text-slate-500 underline">{pl ? 'to nie moja Katedra' : 'not my Cathedral'}</button>
     </div>
   );
