@@ -37,6 +37,16 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-03",
+    sector: "web",
+    title: "Strona aplikacji TeO Hub OtakOS, polityka prywatności i warunki",
+    desc: "Nowe stałe strony /teo-hub/, /privacy/ i /terms/ (po polsku i angielsku): czym jest TeO Hub OtakOS, do czego i w jakim zakresie używa YouTube, gdzie są dane (tylko na komputerze twórcy) i jak cofnąć dostęp. Potrzebne do weryfikacji aplikacji w Google. W stopce linki zastąpiły wymyśloną sumę SHA256.",
+    en: {
+      title: "TeO Hub OtakOS app page, privacy policy and terms",
+      desc: "New static pages /teo-hub/, /privacy/ and /terms/ (Polish and English): what TeO Hub OtakOS is, how and to what extent it uses YouTube, where data lives (only on the creator's computer) and how to revoke access. Needed for Google app verification. In the footer, links replaced a made-up SHA256 value.",
+    },
+  },
+  {
+    date: "2026-10-03",
     sector: "core",
     title: "Kanał YouTube w wizytówce i postprodukcja przez stado",
     desc: "Wizytówka Katedry może teraz pokazać cały kanał YouTube w jednej ramce (wszystkie filmy, a obok najnowsze z publicznego kanału RSS — bez klucza API) i linki do innych serwisów. W Katedrze YouTube łączy się jednym kliknięciem (zgoda Google w okienku, bez kopiowania tokenów), a gotowy film przygotowuje Kronikarz: tytuł, opis, tagi. Wysyłka idzie dopiero po ✓ Suwerena (Hub albo Izba w StoL), jako film niepubliczny, a link sam trafia na Wystawę. Uczciwie: projekt API bez audytu Google trzyma filmy jako prywatne — Katedra sprawdza prawdziwy status i nie wstawia linku, który by nie zagrał.",

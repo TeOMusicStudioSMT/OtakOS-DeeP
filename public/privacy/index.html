@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Polityka prywatności — TeO Hub OtakOS</title>
+<meta name="description" content="Polityka prywatności aplikacji TeO Hub OtakOS i strony otakos.wtf: jakie dane, gdzie są przechowywane, jak używamy YouTube API i jak cofnąć dostęp.">
+<style>:root{color-scheme:dark}body{margin:0;background:#06070b;color:#cbd5e1;font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}main{max-width:820px;margin:0 auto;padding:40px 20px 80px}h1{color:#fff;font-size:30px;line-height:1.2;margin:0 0 6px}h2{color:#f0abfc;font-size:20px;margin:34px 0 8px}h3{color:#e2e8f0;font-size:16px;margin:20px 0 4px}a{color:#67e8f9}nav{font-size:13px;margin-bottom:26px}nav a{margin-right:14px}.lead{color:#94a3b8}.lang{border-top:1px solid #1e293b;margin-top:44px;padding-top:10px;font-size:12px;letter-spacing:.2em;color:#64748b;text-transform:uppercase}ul{padding-left:22px}code{background:#111827;padding:1px 5px;border-radius:4px;font-size:14px}footer{margin-top:50px;font-size:13px;color:#64748b}</style></head><body><main>
+<nav><a href="/">otakos.wtf</a><a href="/teo-hub/">TeO Hub OtakOS</a><a href="/privacy/">Prywatność / Privacy</a><a href="/terms/">Warunki / Terms</a></nav>
+<h1>Polityka prywatności</h1>
+<p class="lead">TeO Hub OtakOS (Katedra OtakOS) i strona otakos.wtf · obowiązuje od 3 października 2026</p>
+
+<h2>1. Kto odpowiada</h2>
+<p>Administratorem jest twórca projektu Katedra OtakOS, kontakt: <a href="mailto:teo@teo.center">teo@teo.center</a>. Polityka dotyczy aplikacji <strong>TeO Hub OtakOS</strong> (oprogramowanie uruchamiane lokalnie na komputerze użytkownika) oraz strony <strong>otakos.wtf</strong>.</p>
+
+<h2>2. Zasada: dane zostają na Twoim komputerze</h2>
+<p>TeO Hub OtakOS działa na Twoim sprzęcie. Twoje pliki, projekty, rozmowy z lokalnymi modelami AI i ustawienia są zapisywane w katalogu Katedry na Twoim komputerze. Nie mamy do nich dostępu i nie wysyłamy ich na nasze serwery.</p>
+
+<h2>3. Dane Google / YouTube (YouTube API Services)</h2>
+<p>TeO Hub OtakOS korzysta z YouTube API Services. Korzystając z funkcji YouTube, akceptujesz <a href="https://www.youtube.com/t/terms">Warunki korzystania z YouTube</a>, a Twoje dane w Google podlegają <a href="https://policies.google.com/privacy">Polityce prywatności Google</a>.</p>
+<h3>Jakie dane i po co</h3>
+<ul>
+<li><strong>Token OAuth Google</strong> (token odświeżania) — po kliknięciu „Połącz z YouTube” i Twojej zgodzie. Służy wyłącznie do działań opisanych niżej.</li>
+<li><strong>Wysyłanie filmów</strong> (<code>youtube.upload</code>) — na Twój kanał trafia tylko film, który sam wskazałeś, z tytułem, opisem i tagami, które zatwierdziłeś. Domyślna widoczność: niepubliczny.</li>
+<li><strong>Odczyt kanału i statusu filmu</strong> (<code>youtube.readonly</code>) — nazwa i adres Twojego kanału oraz status widoczności wysłanego filmu, żeby pokazać Ci, z którym kanałem jesteś połączony, i wstawić link do filmu na Twoją Wystawę dopiero, gdy da się go obejrzeć.</li>
+</ul>
+<h3>Gdzie są przechowywane</h3>
+<p>Token i informacje o wysłanych filmach zapisują się <strong>tylko lokalnie</strong>, w katalogu Twojej Katedry (plik skarbca poza jakimkolwiek repozytorium). Nie przesyłamy ich na serwery otakos.wtf, nie udostępniamy, nie sprzedajemy i nie używamy do reklam ani do trenowania modeli AI. Aplikacja łączy się bezpośrednio z serwerami Google.</p>
+<h3>Ograniczone wykorzystanie</h3>
+<p>Wykorzystanie i przekazywanie informacji otrzymanych z interfejsów API Google przez TeO Hub OtakOS jest zgodne z <a href="https://developers.google.com/terms/api-services-user-data-policy">Zasadami dotyczącymi danych użytkownika w usługach interfejsu API Google</a>, w tym z wymaganiami dotyczącymi ograniczonego wykorzystania (Limited Use).</p>
+<h3>Jak cofnąć dostęp i usunąć dane</h3>
+<ul>
+<li>W aplikacji: Impresariat → „Rozłącz” — token zostaje usunięty z Twojego komputera.</li>
+<li>W Google: <a href="https://security.google.com/settings/security/permissions">security.google.com/settings/security/permissions</a> — cofnięcie dostępu aplikacji TeO Hub OtakOS.</li>
+<li>Usunięcie katalogu Katedry usuwa wszystkie dane aplikacji z Twojego komputera.</li>
+</ul>
+
+<h2>4. Kanał YouTube w wizytówce</h2>
+<p>Jeśli wpiszesz adres swojego kanału do wizytówki, Katedra pobiera z YouTube <strong>publiczne</strong> informacje (nazwę kanału i listę najnowszych filmów z publicznego kanału RSS) — bez logowania i bez tokenu.</p>
+
+<h2>5. Strona otakos.wtf</h2>
+<ul>
+<li><strong>Rejestr Katedr</strong>: gdy włączysz meldunek, Twoja Katedra wysyła do otakos.wtf swój nick, publiczny adres tunelu i podpis. Rejestr trzyma je w pamięci serwera (znikają po ok. 3 minutach ciszy) i pokazuje tylko nicki zatwierdzone przez zarządcę rejestru.</li>
+<li><strong>Wizytówki</strong> są pobierane przez Twoją przeglądarkę bezpośrednio z Katedr ich właścicieli; ramki YouTube używają trybu youtube-nocookie i ładują się dopiero po kliknięciu.</li>
+<li>Strona nie używa ciasteczek reklamowych ani analitycznych. W pamięci przeglądarki (localStorage) zapisuje tylko Twoje ustawienia, np. język i „moją Katedrę”.</li>
+<li>Serwer hostingu (Google Cloud Run) zapisuje standardowe logi techniczne (adres IP, czas, adres żądania) na potrzeby działania i bezpieczeństwa.</li>
+</ul>
+
+<h2>6. Dzieci</h2>
+<p>Aplikacja nie jest skierowana do dzieci poniżej 13 lat.</p>
+<h2>7. Zmiany</h2>
+<p>O zmianach informujemy na tej stronie, z datą obowiązywania.</p>
+
+<p class="lang">English</p>
+<h1>Privacy Policy</h1>
+<p class="lead">TeO Hub OtakOS (Katedra OtakOS) and otakos.wtf · effective October 3, 2026</p>
+<h2>1. Who is responsible</h2>
+<p>The controller is the creator of the Katedra OtakOS project, contact: <a href="mailto:teo@teo.center">teo@teo.center</a>. This policy covers the <strong>TeO Hub OtakOS</strong> application (software that runs locally on the user's computer) and the <strong>otakos.wtf</strong> website.</p>
+<h2>2. Principle: your data stays on your computer</h2>
+<p>TeO Hub OtakOS runs on your hardware. Your files, projects, conversations with local AI models and settings are stored in the Cathedral folder on your computer. We have no access to them and do not send them to our servers.</p>
+<h2>3. Google / YouTube data (YouTube API Services)</h2>
+<p>TeO Hub OtakOS uses YouTube API Services. By using the YouTube features you agree to the <a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a>, and your Google data is governed by the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
+<h3>What data and why</h3>
+<ul>
+<li><strong>Google OAuth token</strong> (refresh token) — obtained after you click “Connect YouTube” and consent. Used only for the actions below.</li>
+<li><strong>Uploading videos</strong> (<code>youtube.upload</code>) — only a video you selected is uploaded to your channel, with the title, description and tags you approved. Default visibility: unlisted.</li>
+<li><strong>Reading your channel and video status</strong> (<code>youtube.readonly</code>) — your channel name and URL and the visibility status of the uploaded video, to show which channel is connected and to add the video link to your Exhibition only once it can be watched.</li>
+</ul>
+<h3>Where it is stored</h3>
+<p>The token and information about uploaded videos are stored <strong>only locally</strong>, in your Cathedral folder. We do not transfer them to otakos.wtf servers, share them, sell them, or use them for advertising or for training AI models. The app connects directly to Google's servers.</p>
+<h3>Limited Use</h3>
+<p>TeO Hub OtakOS's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+<h3>Revoking access and deleting data</h3>
+<ul>
+<li>In the app: Impresariat → “Disconnect” — the token is deleted from your computer.</li>
+<li>At Google: <a href="https://security.google.com/settings/security/permissions">security.google.com/settings/security/permissions</a> — revoke TeO Hub OtakOS's access.</li>
+<li>Deleting the Cathedral folder removes all app data from your computer.</li>
+</ul>
+<h2>4. YouTube channel on the card</h2>
+<p>If you add your channel URL to your card, the Cathedral fetches <strong>public</strong> information from YouTube (channel name and latest videos from the public RSS feed) — without signing in and without a token.</p>
+<h2>5. The otakos.wtf website</h2>
+<ul>
+<li><strong>Cathedral registry</strong>: when you enable check-in, your Cathedral sends otakos.wtf its nick, public tunnel address and a signature. The registry keeps them in server memory (gone after ~3 minutes of silence) and shows only nicks approved by the registry steward.</li>
+<li><strong>Cards</strong> are fetched by your browser directly from their owners' Cathedrals; YouTube frames use youtube-nocookie and load only after a click.</li>
+<li>The site uses no advertising or analytics cookies. Browser storage (localStorage) keeps only your settings, e.g. language and “my Cathedral”.</li>
+<li>The hosting server (Google Cloud Run) keeps standard technical logs (IP address, time, request URL) for operation and security.</li>
+</ul>
+<h2>6. Children</h2><p>The app is not directed at children under 13.</p>
+<h2>7. Changes</h2><p>Changes are announced on this page with an effective date.</p>
+<footer>TeO Hub OtakOS · <a href="mailto:teo@teo.center">teo@teo.center</a></footer>
+</main></body></html>
