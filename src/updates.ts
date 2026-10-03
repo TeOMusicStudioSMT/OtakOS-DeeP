@@ -36,6 +36,16 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-03",
+    sector: "mesh",
+    title: "Katedry ze stałym adresem w sieci + „offline” mówi dlaczego",
+    desc: "Rejestr przyjmował dotąd tylko adresy quick tunnel *.trycloudflare.com, więc Katedra na nazwanym tunelu (stały adres na własnej domenie) zostawała offline. Teraz stały adres zarządcy rejestru działa od razu, a stała domena każdej innej Katedry trafia na Stół zarządcy i po zatwierdzeniu jest odpytywana jak quick tunnel — rejestr dalej nie puka pod niezatwierdzone adresy. Gdy Twoja Katedra jest offline, panel „Twoja” pokazuje ostatnią odpowiedź rejestru na jej meldunek zamiast samego „offline”.",
+    en: {
+      title: "Cathedrals with a fixed address on the network + “offline” says why",
+      desc: "The registry used to accept only quick tunnel addresses (*.trycloudflare.com), so a Cathedral on a named tunnel (a fixed address on its own domain) stayed offline. Now the registry steward's fixed address works right away, and any other Cathedral's fixed domain lands on the steward's Table and, once approved, is checked like a quick tunnel — the registry still never calls unapproved addresses. When your Cathedral is offline, the “Yours” panel shows the registry's latest reply to its check-in instead of just “offline”.",
+    },
+  },
+  {
     date: "2026-10-02",
     sector: "mesh",
     title: "Katedry w sieci — przesuń w lewo i przewijaj wizytówki aktywnych Katedr",

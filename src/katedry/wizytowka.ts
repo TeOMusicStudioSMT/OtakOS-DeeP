@@ -63,6 +63,12 @@ export async function katedryOnline(): Promise<KatedraOnline[] | null> {
     } catch { return null; }
 }
 
+/** Dlaczego Katedra jest offline — odpowiedź rejestru na jej ostatni meldunek (null = rejestr nieosiągalny). */
+export interface StanKatedry { nick: string; online: boolean; meldunek: { kiedy: string; ok: boolean; wiadomosc: string } | null }
+export async function stanKatedry(nick: string): Promise<StanKatedry | null> {
+    try { return await json(`/api/katedry/stan/${encodeURIComponent(nick)}`, 6000); } catch { return null; }
+}
+
 export async function wizytowkaZ(adres: string, ms = 8000): Promise<Wizytowka | null> {
     return oczysc(await json(`${adres}/api/wizytowka`, ms), adres);
 }

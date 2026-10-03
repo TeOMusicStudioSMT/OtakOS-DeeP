@@ -6,6 +6,7 @@
  *
  *   GET  /api/katedry           → { katedry: [{ nick, adres, motto, widziano }] }
  *   POST /api/katedry/meldunek  → meldunek Katedry (podpisany ed25519, patrz rejestr.mjs)
+ *   GET  /api/katedry/stan/:nick → { online, meldunek: { kiedy, ok, wiadomosc } } — powód „offline”
  *   reszta                      → pliki z dist/, nieznane ścieżki → index.html (SPA)
  */
 import http from 'node:http';
@@ -88,6 +89,9 @@ export const serwer = http.createServer(async (req, res) => {
             const w = await rejestr.meldunek(cialo);
             return json(res, w.status, { wiadomosc: w.wiadomosc });
         }
+        // „Offline” na stronie mówi DLACZEGO: odpowiedź rejestru na ostatni meldunek tej Katedry.
+        const stan = url.pathname.match(/^\/api\/katedry\/stan\/([a-z0-9-]{3,32})$/);
+        if (stan && req.method === 'GET') { const s = rejestr.stanKatedry(stan[1]); return s ? json(res, 200, s) : json(res, 400, { wiadomosc: 'Zły nick.' }); }
         // Zatwierdzanie przez Stół: Katedra zarządcy czyta oczekujące i wysyła podpisaną listę zatwierdzonych.
         if (url.pathname === '/api/katedry/oczekujace' && req.method === 'GET') return json(res, 200, { oczekujace: rejestr.oczekujace(), ...rejestr.stanZarzadcy() });
         if (url.pathname === '/api/katedry/zarzadca' && req.method === 'GET') return json(res, 200, rejestr.stanZarzadcy());

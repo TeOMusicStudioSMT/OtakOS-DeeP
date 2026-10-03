@@ -104,3 +104,49 @@ test('zatwierdzanie przez Stół: niezatwierdzona Katedra → oczekujące; podpi
     assert.equal(r.ustawZatwierdzone({ czas: pozniej, zatwierdzone: [], podpis: podpisz(zarz.privateKey, pozniej, []) }).status, 200);
     assert.deepEqual(r.lista(), []);
 });
+
+test('nazwany tunel: zarządca melduje się ze stałej domeny od razu; inna Katedra czeka, aż zarządca zatwierdzi domenę', async () => {
+    const { trescListyZarzadcy } = await import('./rejestr.mjs');
+    const zarz = crypto.generateKeyPairSync('ed25519');
+    const ZK = zarz.publicKey.export({ format: 'der', type: 'spki' }).toString('base64');
+    const pukniecia = [];
+    const r = utworzRejestr({
+        zatwierdzone: () => [{ nick: 'teo-center', klucz: KLUCZ }], zarzadca: () => ({ nick: 'teo-mas', klucz: ZK }), teraz,
+        fetch: async (url) => {
+            pukniecia.push(url);
+            const w = url.startsWith('https://katedra.teo.pl') ? { nick: 'teo-mas', klucz: ZK } : { nick: 'teo-center', klucz: KLUCZ };
+            return { ok: true, status: 200, text: async () => JSON.stringify(w) };
+        },
+    });
+    // zarządca ze stałego adresu — bez niczyjej zgody
+    const mz = meldunek({ nick: 'teo-mas', adres: 'https://katedra.teo.pl', klucz: ZK, prywatny: zarz.privateKey });
+    assert.equal((await r.meldunek(mz)).status, 200);
+    assert.deepEqual(r.lista().map((k) => k.nick), ['teo-mas']);
+    assert.equal(r.stanKatedry('teo-mas').online, true);
+
+    // zatwierdzona Katedra ze stałym adresem → 403 + oczekująca z domeną, rejestr nie puka pod obcy host
+    const mk = meldunek({ adres: 'https://moja.domena.pl' });
+    const w = await r.meldunek(mk);
+    assert.equal(w.status, 403);
+    assert.match(w.wiadomosc, /moja\.domena\.pl czeka na zatwierdzenie/);
+    assert.equal(r.oczekujace()[0].domena, 'moja.domena.pl');
+    assert.ok(!pukniecia.some((u) => u.includes('moja.domena.pl')));
+    const s = r.stanKatedry('teo-center');
+    assert.equal(s.online, false);
+    assert.match(s.meldunek.wiadomosc, /czeka na zatwierdzenie/);
+
+    // zarządca zatwierdza nick z domeną → meldunek przechodzi, oczekująca znika
+    const czas = new Date(zegar).toISOString();
+    const zatwierdzone = [{ nick: 'teo-center', klucz: KLUCZ, domena: 'moja.domena.pl' }];
+    const podpis = crypto.sign(null, Buffer.from(trescListyZarzadcy({ czas, zatwierdzone })), zarz.privateKey).toString('base64');
+    assert.equal(r.ustawZatwierdzone({ czas, zatwierdzone, podpis }).status, 200);
+    assert.deepEqual(r.oczekujace(), []);
+    assert.equal((await r.meldunek(meldunek({ adres: 'https://moja.domena.pl' }))).status, 200);
+    assert.equal(r.stanKatedry('teo-center').online, true);
+
+    // podszywka pod nick nie zmienia powodu właściciela
+    const obcyKlucz = obca.publicKey.export({ format: 'der', type: 'spki' }).toString('base64');
+    await r.meldunek(meldunek({ klucz: obcyKlucz, prywatny: obca.privateKey }));
+    assert.equal(r.stanKatedry('teo-center').meldunek.ok, true);
+    assert.equal(r.stanKatedry('ZŁY'), null);
+});

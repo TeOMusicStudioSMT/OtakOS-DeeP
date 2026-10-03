@@ -8,7 +8,8 @@
  * + czas, podpisane kluczem ed25519. Rejestr przyjmuje meldunek tylko gdy:
  *   1. nick jest na liście zatwierdzonych (katedry-zatwierdzone.json) Z TYM SAMYM kluczem,
  *   2. podpis się zgadza, a czas jest świeży (±5 min — stary meldunek nie wróci),
- *   3. adres to https na *.trycloudflare.com albo stała domena wpisana przy nicku
+ *   3. adres to https na *.trycloudflare.com albo stała domena zatwierdzona przy nicku (nazwany tunel; zarządca
+ *      Stołem — oczekujące niosą domenę; własną domenę zarządcy rejestr przyjmuje od razu)
  *      (rejestr nie puka pod dowolne adresy — żadnego SSRF),
  *   4. pod adresem naprawdę odpowiada wizytówka z tym nickiem i kluczem.
  * Lista (z kluczem publicznym — TOST między Katedrami weryfikuje nim nadawcę) żyje w pamięci: kto milczy dłużej niż 3 minuty, znika. Restart serwera = pusta lista,
@@ -27,13 +28,21 @@ const SWIEZOSC_MS = 5 * 60_000;
 const PONOWNA_WERYFIKACJA_MS = 5 * 60_000;
 const MAX_WIZYTOWKA = 512 * 1024;
 
-/** Czy adres wolno odpytać: https, bez portu i ścieżki, host z trycloudflare albo stała domena nicka. */
-export function adresDozwolony(adres, domena) {
+const QUICK = /^[a-z0-9-]+\.trycloudflare\.com$/;
+/** Host adresu tunelu, gdy adres ma bezpieczną postać (https, nazwa domenowa, bez portu, ścieżki i IP) — inaczej null. */
+export function hostAdresu(adres) {
     let u;
-    try { u = new URL(adres); } catch { return false; }
-    if (u.protocol !== 'https:' || u.port || u.username || u.password || (u.pathname !== '/' && u.pathname !== '') || u.search || u.hash) return false;
+    try { u = new URL(adres); } catch { return null; }
+    if (u.protocol !== 'https:' || u.port || u.username || u.password || (u.pathname !== '/' && u.pathname !== '') || u.search || u.hash) return null;
     const h = u.hostname.toLowerCase();
-    if (/^[a-z0-9-]+\.trycloudflare\.com$/.test(h)) return true;
+    if (!/^([a-z0-9-]+\.)+[a-z]{2,}$/.test(h) || h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.local') || h.endsWith('.internal')) return null;
+    return h;
+}
+/** Czy adres wolno odpytać: host z trycloudflare albo stała domena zatwierdzona przy nicku. */
+export function adresDozwolony(adres, domena) {
+    const h = hostAdresu(adres);
+    if (!h) return false;
+    if (QUICK.test(h)) return true;
     return !!domena && h === String(domena).toLowerCase();
 }
 
@@ -56,15 +65,20 @@ async function pobierzWizytowke(fetchFn, adres) {
 export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, fetch: fetchFn = fetch, teraz = () => Date.now() } = {}) {
     const online = new Map();   // nick → { nick, adres, motto, widziano, sprawdzono }
     const oczekujace = new Map();   // nick → { nick, klucz, kiedy, powod }
+    const ostatnie = new Map();   // nick → { kiedy, ok, wiadomosc } — ostatni meldunek z WŁAŚCIWYM kluczem (powód „offline” dla strony)
     let odZarzadcy = { czas: 0, katedry: [] };
 
-    /** Plik ∪ sam zarządca ∪ lista od zarządcy (wpis z pliku wygrywa). */
+    /** Plik ∪ sam zarządca ∪ lista od zarządcy (wpis z pliku wygrywa; domenę bez wpisu w pliku bierze z listy zarządcy). */
     function wszystkieZatwierdzone() {
         const m = new Map();
         for (const z of odZarzadcy.katedry) m.set(z.nick, z);
+        const zDomena = (z) => {
+            const odZ = m.get(z.nick);
+            return { ...z, domena: z.domena ?? (odZ && odZ.klucz === z.klucz ? odZ.domena : null) ?? null };
+        };
         const zr = zarzadca();
-        if (zr?.nick && zr?.klucz) m.set(zr.nick, { nick: zr.nick, klucz: zr.klucz, domena: zr.domena ?? null });
-        for (const z of zatwierdzone()) m.set(z.nick, z);
+        if (zr?.nick && zr?.klucz) m.set(zr.nick, zDomena({ nick: zr.nick, klucz: zr.klucz, domena: zr.domena ?? null }));
+        for (const z of zatwierdzone()) m.set(z.nick, zDomena(z));
         return [...m.values()];
     }
 
@@ -81,9 +95,9 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         try { ok = crypto.verify(null, Buffer.from(trescListyZarzadcy({ czas, zatwierdzone: lista_ }), 'utf8'), crypto.createPublicKey({ key: Buffer.from(zr.klucz, 'base64'), format: 'der', type: 'spki' }), Buffer.from(podpis, 'base64')); } catch { ok = false; }
         if (!ok) return odp(401, 'To nie jest podpis zarządcy rejestru.');
         const katedry = lista_.filter((z) => NICK.test(String(z?.nick ?? '')) && typeof z.klucz === 'string' && z.klucz.length < 200)
-            .map((z) => ({ nick: z.nick, klucz: z.klucz, domena: typeof z.domena === 'string' ? z.domena.toLowerCase() : null }));
+            .map((z) => ({ nick: z.nick, klucz: z.klucz, domena: typeof z.domena === 'string' ? hostAdresu(`https://${z.domena}`) : null }));
         odZarzadcy = { czas: t, katedry };
-        for (const z of katedry) if (oczekujace.get(z.nick)?.klucz === z.klucz) oczekujace.delete(z.nick);
+        for (const z of katedry) { const o = oczekujace.get(z.nick); if (o?.klucz === z.klucz && (!o.domena || o.domena === z.domena)) oczekujace.delete(z.nick); }
         return odp(200, `Zatwierdzonych od zarządcy: ${katedry.length}.`);
     }
 
@@ -98,8 +112,14 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
     }
 
     async function meldunek(cialo) {
+        const w = await meldunek_(cialo);
+        if (w.nick) ostatnie.set(w.nick, { kiedy: teraz(), ok: w.status === 200, wiadomosc: w.wiadomosc });
+        return { status: w.status, wiadomosc: w.wiadomosc };
+    }
+    /** `nick` w odpowiedzi = zapamiętaj powód dla tego nicka (tylko podpis zgodny z kluczem właściciela albo nowa Katedra). */
+    async function meldunek_(cialo) {
         const { nick, adres, czas, klucz, podpis } = cialo ?? {};
-        const odp = (status, wiadomosc) => ({ status, wiadomosc });
+        const odp = (status, wiadomosc, n = null) => ({ status, wiadomosc, nick: n });
         if (!NICK.test(String(nick ?? ''))) return odp(400, 'Zły nick.');
         if (typeof adres !== 'string' || typeof czas !== 'string' || typeof klucz !== 'string' || typeof podpis !== 'string') return odp(400, 'Meldunek niekompletny.');
         const t = Date.parse(czas);
@@ -112,27 +132,45 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         if (!ok) return odp(401, 'Podpis się nie zgadza.');
         // Podpis prawdziwy — dopiero teraz pytamy o zatwierdzenie (oczekujące to tylko Katedry z własnym kluczem).
         const wpis = wszystkieZatwierdzone().find((z) => z.nick === nick);
+        const host = hostAdresu(adres);
+        // Stały adres (nazwany tunel Cloudflare na domenie Suwerena) — zarządca rejestru zatwierdza go razem z nickiem.
+        const domena = host && !QUICK.test(host) ? host : null;
+        const czekaj = (powod) => {
+            if (oczekujace.size < MAX_OCZEKUJACYCH || oczekujace.has(nick)) oczekujace.set(nick, { nick, klucz, ...(domena ? { domena } : {}), kiedy: teraz(), powod });
+        };
         if (!wpis || wpis.klucz !== klucz) {
-            if (oczekujace.size < MAX_OCZEKUJACYCH || oczekujace.has(nick)) {
-                oczekujace.set(nick, { nick, klucz, kiedy: teraz(), powod: wpis ? 'inny klucz niż zatwierdzony przy tym nicku' : 'nowa Katedra' });
-            }
-            return odp(403, `Nick „${nick}" czeka na zatwierdzenie — zarządca rejestru widzi go teraz na swoim Stole.`);
+            czekaj(wpis ? 'inny klucz niż zatwierdzony przy tym nicku' : domena ? `nowa Katedra · stały adres ${domena}` : 'nowa Katedra');
+            return odp(403, `Nick „${nick}" czeka na zatwierdzenie — zarządca rejestru widzi go teraz na swoim Stole.`, wpis ? null : nick);
         }
-        if (!adresDozwolony(adres, wpis.domena)) return odp(400, 'Adres musi być https na *.trycloudflare.com albo stałą domeną zatwierdzoną przy nicku.');
+        if (!host) return odp(400, 'Adres tunelu musi być https z nazwą domenową — bez portu, ścieżki i IP.', nick);
+        // Zarządca sam podpisuje swój adres (to jego rejestr) — jego stała domena nie potrzebuje niczyjej zgody.
+        const jestZarzadca = zarzadca()?.nick === nick && zarzadca()?.klucz === klucz;
+        if (!adresDozwolony(adres, wpis.domena) && !jestZarzadca) {
+            czekaj(`stały adres ${domena} — do zatwierdzenia przy nicku`);
+            return odp(403, `Stały adres ${domena} czeka na zatwierdzenie u zarządcy rejestru (Stół). Do tego czasu działa quick tunnel *.trycloudflare.com.`, nick);
+        }
 
         const byl = online.get(nick);
         let motto = byl?.motto ?? '';
         if (!byl || byl.adres !== adres || teraz() - byl.sprawdzono > PONOWNA_WERYFIKACJA_MS) {
             let w;
             try { w = await pobierzWizytowke(fetchFn, adres); }
-            catch (e) { return odp(502, `Pod adresem nie odpowiada wizytówka (${e.message}).`); }
-            if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.');
+            catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
+            if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
             online.set(nick, { nick, adres, motto, klucz, widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
-        return odp(200, 'Zameldowana — wizytówka widoczna na otakos.wtf.');
+        return odp(200, 'Zameldowana — wizytówka widoczna na otakos.wtf.', nick);
+    }
+
+    /** Dla strony „offline”: czy nick jest online i co rejestr odpowiedział na jego ostatni meldunek. */
+    function stanKatedry(nick) {
+        if (!NICK.test(String(nick ?? ''))) return null;
+        const jest = lista().some((k) => k.nick === nick);
+        const o = ostatnie.get(nick);
+        return { nick, online: jest, meldunek: o ? { ...o, kiedy: new Date(o.kiedy).toISOString() } : null };
     }
 
     function lista() {
@@ -142,5 +180,5 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, widziano }) => ({ nick, adres, motto, klucz, widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
-    return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy };
+    return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };
 }
