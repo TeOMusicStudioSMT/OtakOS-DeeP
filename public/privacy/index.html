@@ -32,6 +32,21 @@
 <li>Usunięcie katalogu Katedry usuwa wszystkie dane aplikacji z Twojego komputera.</li>
 </ul>
 
+<h3>Dokładnie jakie dane Google przetwarzamy</h3>
+<ul>
+<li><strong>Odczytujemy z Google:</strong> identyfikator, nazwę i adres Twojego kanału YouTube (<code>channels.list</code>, <code>mine=true</code>) oraz — wyłącznie dla filmów wysłanych przez aplikację — identyfikator filmu, jego widoczność (prywatny / niepubliczny / publiczny) i stan przetwarzania (<code>videos.list</code>, <code>part=status</code>).</li>
+<li><strong>Wysyłamy do Google:</strong> plik wideo, który wybrałeś, oraz zatwierdzone przez Ciebie tytuł, opis, tagi, kategorię i widoczność (<code>videos.insert</code>).</li>
+<li><strong>Nie odczytujemy</strong> Twojego adresu e-mail, imienia, kontaktów, innych filmów, playlist, komentarzy, subskrypcji, statystyk ani przychodów.</li>
+</ul>
+<h3>Jak długo przechowujemy</h3>
+<ul>
+<li>Token odświeżania — do chwili, gdy klikniesz „Rozłącz”, cofniesz dostęp w Google albo usuniesz Katedrę.</li>
+<li>Identyfikator i adres wysłanego filmu, jego tytuł, opis i tagi — w historii publikacji na Twoim komputerze, dopóki ich sam nie usuniesz.</li>
+<li>Nazwa kanału — w pamięci podręcznej aplikacji przez ok. 10 minut.</li>
+</ul>
+<h3>Udostępnianie i bezpieczeństwo</h3>
+<p>Nie przekazujemy danych użytkowników Google żadnym osobom trzecim — ani do analityki, ani do reklam, ani do brokerów danych. Nie mamy własnego serwera, który by je odbierał. Połączenia z Google idą szyfrowanym HTTPS; logowanie używa OAuth 2.0 z PKCE i jednorazowym parametrem <code>state</code>; token leży w pliku skarbca na Twoim komputerze, poza repozytorium kodu, a interfejsy zmieniające połączenie z YouTube są dostępne tylko z Twojego komputera (nie przez tunel ani z innych stron).</p>
+
 <h2>4. Kanał YouTube w wizytówce</h2>
 <p>Jeśli wpiszesz adres swojego kanału do wizytówki, Katedra pobiera z YouTube <strong>publiczne</strong> informacje (nazwę kanału i listę najnowszych filmów z publicznego kanału RSS) — bez logowania i bez tokenu.</p>
 
@@ -73,6 +88,21 @@
 <li>At Google: <a href="https://security.google.com/settings/security/permissions">security.google.com/settings/security/permissions</a> — revoke TeO Hub OtakOS's access.</li>
 <li>Deleting the Cathedral folder removes all app data from your computer.</li>
 </ul>
+<h3>Exactly which Google data we process</h3>
+<ul>
+<li><strong>We read from Google:</strong> the ID, title and URL of your YouTube channel (<code>channels.list</code>, <code>mine=true</code>) and — only for videos uploaded by the app — the video ID, its privacy status (private / unlisted / public) and processing status (<code>videos.list</code>, <code>part=status</code>).</li>
+<li><strong>We send to Google:</strong> the video file you selected and the title, description, tags, category and privacy setting you approved (<code>videos.insert</code>).</li>
+<li><strong>We do not read</strong> your email address, name, contacts, other videos, playlists, comments, subscriptions, analytics or revenue.</li>
+</ul>
+<h3>Retention</h3>
+<ul>
+<li>Refresh token — until you click “Disconnect”, revoke access at Google, or delete the Cathedral.</li>
+<li>ID and URL of an uploaded video, its title, description and tags — in the publication history on your computer until you delete them.</li>
+<li>Channel name — cached in the app for about 10 minutes.</li>
+</ul>
+<h3>Sharing and security</h3>
+<p>We do not transfer Google user data to any third party — not for analytics, advertising or data brokers. We operate no server that receives it. Connections to Google use encrypted HTTPS; sign-in uses OAuth 2.0 with PKCE and a one-time <code>state</code> parameter; the token is kept in a vault file on your computer, outside any code repository, and the endpoints that change the YouTube connection are reachable only from your own computer (not through the tunnel or from other websites).</p>
+
 <h2>4. YouTube channel on the card</h2>
 <p>If you add your channel URL to your card, the Cathedral fetches <strong>public</strong> information from YouTube (channel name and latest videos from the public RSS feed) — without signing in and without a token.</p>
 <h2>5. The otakos.wtf website</h2>
