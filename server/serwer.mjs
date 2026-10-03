@@ -30,16 +30,18 @@ const TYPY = {
 const ZAWSZE_SWIEZE = new Set(['/index.html', '/wersja.json', '/V_ZERO_archive.zip', '/sitemap.xml', '/robots.txt']);
 
 let zatwierdzone = [];
+let zarzadca = null;
 function wczytajZatwierdzone() {
     try {
         const d = JSON.parse(fs.readFileSync(PLIK_ZATWIERDZONYCH, 'utf8'));
         zatwierdzone = (Array.isArray(d?.katedry) ? d.katedry : []).filter((z) => z && typeof z.nick === 'string' && typeof z.klucz === 'string');
-    } catch { zatwierdzone = []; }
+        zarzadca = d?.zarzadca && typeof d.zarzadca.nick === 'string' && typeof d.zarzadca.klucz === 'string' ? d.zarzadca : null;
+    } catch { zatwierdzone = []; zarzadca = null; }
 }
 wczytajZatwierdzone();
 setInterval(wczytajZatwierdzone, 60_000).unref();
 
-const rejestr = utworzRejestr({ zatwierdzone: () => zatwierdzone });
+const rejestr = utworzRejestr({ zatwierdzone: () => zatwierdzone, zarzadca: () => zarzadca });
 
 function json(res, status, dane) {
     res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
@@ -86,6 +88,15 @@ export const serwer = http.createServer(async (req, res) => {
             const w = await rejestr.meldunek(cialo);
             return json(res, w.status, { wiadomosc: w.wiadomosc });
         }
+        // Zatwierdzanie przez Stół: Katedra zarządcy czyta oczekujące i wysyła podpisaną listę zatwierdzonych.
+        if (url.pathname === '/api/katedry/oczekujace' && req.method === 'GET') return json(res, 200, { oczekujace: rejestr.oczekujace(), ...rejestr.stanZarzadcy() });
+        if (url.pathname === '/api/katedry/zarzadca' && req.method === 'GET') return json(res, 200, rejestr.stanZarzadcy());
+        if (url.pathname === '/api/katedry/zarzadca' && req.method === 'POST') {
+            let cialo;
+            try { cialo = await cialoJson(req, 64 * 1024); } catch (e) { return json(res, 400, { wiadomosc: `Lista: ${e.message}.` }); }
+            const w = rejestr.ustawZatwierdzone(cialo);
+            return json(res, w.status, { wiadomosc: w.wiadomosc });
+        }
         if (url.pathname.startsWith('/api/')) return json(res, 404, { wiadomosc: 'Nie ma takiej trasy.' });
         if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); return res.end(); }
         return plikStatyczny(req, res, url.pathname);
@@ -96,5 +107,5 @@ export const serwer = http.createServer(async (req, res) => {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
     const port = Number(process.env.PORT) || 8080;
-    serwer.listen(port, () => console.log(`otakos.wtf na :${port} · zatwierdzonych Katedr: ${zatwierdzone.length}`));
+    serwer.listen(port, () => console.log(`otakos.wtf na :${port} · zatwierdzonych Katedr w pliku: ${zatwierdzone.length} · zarządca: ${zarzadca?.nick ?? 'brak'}`));
 }
