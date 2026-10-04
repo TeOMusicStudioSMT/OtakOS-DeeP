@@ -47,6 +47,7 @@ import NodeSphere from './components/NodeSphere';
 import UpdatesSection from './components/UpdatesSection';
 import AdTowerSection from './components/AdTowerSection';
 import ArchitectWord from './components/ArchitectWord';
+import PodcastPremiera from './components/PodcastPremiera';
 import AetherArena from './components/AetherArena';
 import SlowoSuwerena from './components/SlowoSuwerena';
 import Katedry from './katedry/Katedry';
@@ -1081,6 +1082,11 @@ export default function App() {
             </div>
           </div>
         </motion.div>
+      </section>
+
+      {/* 2.35 PREMIERA — film z Podcastowego Studia Katedry */}
+      <section className="py-8 max-w-4xl mx-auto px-4 z-10 relative">
+        <PodcastPremiera lang={lang} />
       </section>
 
       {/* 2.4 SŁOWO OD ARCHITEKTA */}
