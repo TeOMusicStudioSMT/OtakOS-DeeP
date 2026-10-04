@@ -37,6 +37,16 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-04",
+    sector: "web",
+    title: "📦 Strona mówi prawdę o Katedrze — koniec z wymyślonymi specyfikacjami",
+    desc: "Karty „7.8 MB VRAM”, „2.4 SEKUNDY”, „UNIWERSALNY USB 2.0+” i losowa „ENTROPIA” w nagłówku były wymyślone. Teraz: rozmiar i numer paczki z wersja.json (tej samej, którą sprawdza Aktualizator), dane lokalnie (chmura tylko na życzenie), silnik Ollama z gemma4 i prawdziwe wymagania: Node.js 20+ i Ollama. W nagłówku zamiast entropii — wersja paczki.",
+    en: {
+      title: "📦 The site tells the truth about the Cathedral — no more made-up specs",
+      desc: "The “7.8 MB VRAM”, “2.4 SECONDS”, “UNIVERSAL USB 2.0+” cards and the random “ENTROPY” in the header were invented. Now: package size and number from wersja.json (the same file the Updater checks), data stays local (cloud only on request), Ollama engine with gemma4 and the real requirements: Node.js 20+ and Ollama. The header shows the package version instead of entropy.",
+    },
+  },
+  {
+    date: "2026-10-04",
     sector: "grv",
     title: "⚡ Giełda mocy (TeOkoP GRV) — etap 1: prawdziwe oferty zamiast wymyślonego licznika",
     desc: "Zdjęliśmy ze strony głównej licznik „18 mln GB VRAM” i losowych „peerów” — były wymyślone. Teraz Katedra ogłasza w wizytówce, jaką moc udostępnia (VRAM, modele z Ollamy, cena w GRV za 1000 tokenów; Hub → Wystawa → ⚡ Giełda mocy), rejestr niesie tę ofertę, a strona i inne Katedry pokazują tylko to, co Katedry online naprawdę ogłosiły. Licznik PEERS w nagłówku = Katedry online w rejestrze. Etap 1 to ogłoszenia: zlecanie zadań i rozliczenie w GRV przyjdą później.",

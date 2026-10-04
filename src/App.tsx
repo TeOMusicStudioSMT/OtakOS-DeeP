@@ -244,7 +244,14 @@ export default function App() {
 
   // Real-time metadata values for command terminal appearance
   const [localTimeStr, setLocalTimeStr] = useState<string>('');
-  const [systemEntropy, setSystemEntropy] = useState<number>(0.0031);
+  // 📦 Prawdziwa paczka z /wersja.json (pisze ją Miniaturyzator) — zamiast losowej „entropii” i wymyślonych specyfikacji.
+  const [paczka, setPaczka] = useState<{ numer: string; bajtow: number | null } | null | 'brak'>(null);
+  useEffect(() => {
+    fetch('/wersja.json', { cache: 'no-store' })
+      .then((r) => (r.ok && !(r.headers.get('content-type') || '').includes('text/html') ? r.json() : Promise.reject()))
+      .then((w) => setPaczka(w?.numer ? { numer: String(w.numer), bajtow: Number.isFinite(Number(w.bajtow)) ? Number(w.bajtow) : null } : 'brak'))
+      .catch(() => setPaczka('brak'));
+  }, []);
   const [vramIgnited, setVramIgnited] = useState<boolean>(true);
   const [activePeers, setActivePeers] = useState<number | null>(null);   // Katedry online w rejestrze (null = nie wiem)
   const [identity, setIdentity] = useState<NodeIdentity | null>(null);
@@ -273,16 +280,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Soft fluctuate entropy and peers
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSystemEntropy(prev => {
-        const delta = (Math.random() - 0.5) * 0.0004;
-        return parseFloat(Math.max(0.0010, Math.min(0.0089, prev + delta)).toFixed(4));
-      });
-    }, 4500);
-    return () => clearInterval(interval);
-  }, []);
 
   // Fetch sovereign node identity from backend or localStorage
   useEffect(() => {
@@ -705,7 +702,7 @@ export default function App() {
             </div>
             <div className="flex items-center space-x-1.5">
               <span className="text-zinc-500">{t.header.entropy}</span>
-              <span className={`${activeSkin.textGlow} font-mono`}>{systemEntropy} G</span>
+              <span className={`${activeSkin.textGlow} font-mono`}>{paczka && paczka !== 'brak' ? paczka.numer : '—'}</span>
             </div>
             <div className="hidden md:block text-zinc-400 font-mono">
               {localTimeStr}
@@ -880,7 +877,9 @@ export default function App() {
         {/* Cyber system specs banner layout */}
         <div key={`specs-${lang}`} className="w-full mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl">
           {[
-            { label: t.hero.spec1, value: t.hero.spec1Val, icon: Cpu, comment: t.hero.spec1Comment },
+            { label: t.hero.spec1, icon: Cpu,
+              value: t.hero.spec1Val.replace('{rozmiar}', paczka && paczka !== 'brak' && paczka.bajtow ? `${(paczka.bajtow / 1e6).toLocaleString(lang === 'pl' ? 'pl-PL' : 'en-US', { maximumFractionDigits: 1 })} MB` : '—'),
+              comment: paczka && paczka !== 'brak' ? t.hero.spec1Comment.replace('{numer}', paczka.numer) : (paczka === 'brak' ? (lang === 'pl' ? 'brak wersja.json na stronie' : 'no wersja.json on the site') : '…') },
             { label: t.hero.spec2, value: t.hero.spec2Val, icon: FileText, comment: t.hero.spec2Comment },
             { label: t.hero.spec3, value: t.hero.spec3Val, icon: Terminal, comment: t.hero.spec3Comment },
             { label: t.hero.spec4, value: t.hero.spec4Val, icon: Layers, comment: t.hero.spec4Comment }
