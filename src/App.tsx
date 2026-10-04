@@ -252,7 +252,6 @@ export default function App() {
       .then((w) => setPaczka(w?.numer ? { numer: String(w.numer), bajtow: Number.isFinite(Number(w.bajtow)) ? Number(w.bajtow) : null } : 'brak'))
       .catch(() => setPaczka('brak'));
   }, []);
-  const [vramIgnited, setVramIgnited] = useState<boolean>(true);
   const [activePeers, setActivePeers] = useState<number | null>(null);   // Katedry online w rejestrze (null = nie wiem)
   const [identity, setIdentity] = useState<NodeIdentity | null>(null);
   const [copiedIdentity, setCopiedIdentity] = useState<boolean>(false);
@@ -683,22 +682,6 @@ export default function App() {
             <div className="flex items-center space-x-1.5" title="Decentralized peers connected">
               <span className="text-zinc-500">{t.header.peers}</span>
               <span className="text-zinc-300 font-bold">{activePeers ?? '—'}</span>
-            </div>
-            <div className="flex items-center space-x-1.5" title="Local workstation VRAM Status">
-              <span className="text-zinc-500">{t.header.vram}</span>
-              <button 
-                onClick={() => {
-                  setVramIgnited(!vramIgnited);
-                  synth.beep(vramIgnited ? 350 : 750, 'sawtooth', 0.1, 0.05);
-                }} 
-                className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-tight transition-all cursor-pointer ${
-                  vramIgnited 
-                    ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-500/30' 
-                    : 'bg-zinc-900 text-zinc-500 border border-zinc-700/50'
-                }`}
-              >
-                {vramIgnited ? t.header.ignited : t.header.standby}
-              </button>
             </div>
             <div className="flex items-center space-x-1.5">
               <span className="text-zinc-500">{t.header.entropy}</span>
@@ -1677,19 +1660,8 @@ export default function App() {
 
       {/* 5. SPECIFICATION HARDENING DETAILS */}
       <section className="py-16 max-w-7xl mx-auto px-4 z-10 relative border-t border-zinc-900">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-xs font-mono">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-xs font-mono">
           
-          <div className="space-y-2">
-            <div className="text-zinc-500 uppercase font-bold text-[10px] tracking-wider">
-              {lang === 'pl' ? '[PROTOKOŁY SKARBCÓW PANIKI]' : '[PANIC SECURE PROTOCOLS]'}
-            </div>
-            <p className="text-zinc-400 font-sans leading-relaxed">
-              {lang === 'pl' 
-                ? 'Wyciągnięcie fizycznego Live-USB aktywuje ekstremalny awaryjny cykl czyszczenia pamięci podręcznej. Natychmiastowo rozmagnesowuje ulotne rejestry pamięci przy użyciu wysokiej entropii.'
-                : 'Pulling the physical Live-USB activates the extreme emergency cache wipe cycle. Instantly degausses transient registers using high-entropy memory corruption.'}
-            </p>
-          </div>
-
           <div className="space-y-2">
             <div className="text-zinc-500 uppercase font-bold text-[10px] tracking-wider">
               {lang === 'pl' ? '[ROZRUCH ODPORNY KWANTOWO]' : '[QUANTUM RESISTANT BOOT]'}

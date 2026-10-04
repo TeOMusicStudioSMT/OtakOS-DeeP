@@ -38,6 +38,16 @@ export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-04",
     sector: "web",
+    title: "🧹 Bez „IGNITED” i bez obietnicy wtyczki USB",
+    desc: "Zdjęty przełącznik „LOKALNY_VRAM: ZAPALONY” w nagłówku (niczego nie włączał) i karta „Protokoły skarbców paniki”, która obiecywała, że wyciągnięcie USB wymaże rejestry — Katedra tego nie robi.",
+    en: {
+      title: "🧹 No more “IGNITED” and no USB-plug promise",
+      desc: "Removed the “LOCAL_VRAM: IGNITED” toggle in the header (it switched nothing on) and the “Panic secure protocols” card promising that pulling the USB wipes registers — the Cathedral does not do that.",
+    },
+  },
+  {
+    date: "2026-10-04",
+    sector: "web",
     title: "📦 Strona mówi prawdę o Katedrze — koniec z wymyślonymi specyfikacjami",
     desc: "Karty „7.8 MB VRAM”, „2.4 SEKUNDY”, „UNIWERSALNY USB 2.0+” i losowa „ENTROPIA” w nagłówku były wymyślone. Teraz: rozmiar i numer paczki z wersja.json (tej samej, którą sprawdza Aktualizator), dane lokalnie (chmura tylko na życzenie), silnik Ollama z gemma4 i prawdziwe wymagania: Node.js 20+ i Ollama. W nagłówku zamiast entropii — wersja paczki.",
     en: {
