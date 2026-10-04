@@ -1664,23 +1664,23 @@ export default function App() {
           
           <div className="space-y-2">
             <div className="text-zinc-500 uppercase font-bold text-[10px] tracking-wider">
-              {lang === 'pl' ? '[ROZRUCH ODPORNY KWANTOWO]' : '[QUANTUM RESISTANT BOOT]'}
+              {lang === 'pl' ? '[TWOJA MASZYNA, TWOJE DANE]' : '[YOUR MACHINE, YOUR DATA]'}
             </div>
             <p className="text-zinc-400 font-sans leading-relaxed">
               {lang === 'pl'
-                ? 'Całkowicie omija sieci publiczne przy użyciu lokalnych tuneli peer-to-peer. Wszystkie procesy modeli AI pozostają ściśle odizolowane w warstwach pamięci podręcznej L3.'
-                : 'Bypasses public networks entirely using localized peer-to-peer tunnels. All AI model processes remain isolated strictly within your system L3 cache layers.'}
+                ? 'Modele AI pracują na Twoim komputerze przez Ollamę, a pliki, księga GRV i tożsamość leżą na Twoim dysku. Do sieci Katedra wychodzi tylko wtedy, gdy sam to włączysz — np. tunel Cloudflare dla telefonu i wizytówki na otakos.wtf.'
+                : 'AI models run on your own computer through Ollama; your files, GRV ledger and identity stay on your disk. The Cathedral goes online only when you switch it on — e.g. a Cloudflare tunnel for your phone and your card on otakos.wtf.'}
             </p>
           </div>
 
           <div className="space-y-2">
             <div className="text-zinc-500 uppercase font-bold text-[10px] tracking-wider">
-              {lang === 'pl' ? '[ZOBOWIĄZANIE ZERO EMISJI TOKENÓW]' : '[ZERO TOKENS COMMITMENT]'}
+              {lang === 'pl' ? '[ZERO OPŁAT ZA TOKENY]' : '[NO TOKEN FEES]'}
             </div>
             <p className="text-zinc-400 font-sans leading-relaxed">
               {lang === 'pl'
-                ? 'OtakOS nie korzysta z centralnych węzłów API. Uruchamiaj głębokie wagi modeli na aktywnej lokalnej pamięci VRAM bez centralnych limitów i opłat chmurowych.'
-                : 'OtakOS does not use central API nodes. Run deep model weights on your active local hardware VRAM with absolutely no central quotas or monetization chokes.'}
+                ? 'Domyślny silnik to lokalna Ollama — nie płacisz za tokeny ani abonament, limitem jest tylko Twoja karta. Modele w chmurze to opcja: tylko z Twoim własnym kontem albo kluczem, jeśli sam ich zechcesz.'
+                : 'The default engine is local Ollama — no token fees, no subscription; your GPU is the only limit. Cloud models are optional: only with your own account or key, if you want them.'}
             </p>
           </div>
 

@@ -38,11 +38,11 @@ export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-04",
     sector: "web",
-    title: "🧹 Bez „IGNITED” i bez obietnicy wtyczki USB",
-    desc: "Zdjęty przełącznik „LOKALNY_VRAM: ZAPALONY” w nagłówku (niczego nie włączał) i karta „Protokoły skarbców paniki”, która obiecywała, że wyciągnięcie USB wymaże rejestry — Katedra tego nie robi.",
+    title: "🧹 Bez „IGNITED”, bez obietnicy wtyczki USB, prawdziwe opisy",
+    desc: "Zdjęty przełącznik „LOKALNY_VRAM: ZAPALONY” w nagłówku (niczego nie włączał) i karta „Protokoły skarbców paniki”, która obiecywała, że wyciągnięcie USB wymaże rejestry — Katedra tego nie robi. Karty „Rozruch odporny kwantowo” (pamięć L3, „omija sieci publiczne”) i „Zero emisji tokenów” zastąpione prawdą: modele i dane na Twojej maszynie, sieć tylko na Twoje życzenie (tunel Cloudflare), lokalna Ollama bez opłat, chmura tylko z własnym kluczem.",
     en: {
-      title: "🧹 No more “IGNITED” and no USB-plug promise",
-      desc: "Removed the “LOCAL_VRAM: IGNITED” toggle in the header (it switched nothing on) and the “Panic secure protocols” card promising that pulling the USB wipes registers — the Cathedral does not do that.",
+      title: "🧹 No “IGNITED”, no USB-plug promise, honest descriptions",
+      desc: "Removed the “LOCAL_VRAM: IGNITED” toggle in the header (it switched nothing on) and the “Panic secure protocols” card promising that pulling the USB wipes registers — the Cathedral does not do that. The “Quantum resistant boot” (L3 cache, “bypasses public networks”) and “Zero tokens” cards now tell the truth: models and data on your machine, network only when you want it (Cloudflare tunnel), local Ollama with no fees, cloud only with your own key.",
     },
   },
   {
