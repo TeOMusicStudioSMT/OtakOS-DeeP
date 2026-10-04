@@ -37,6 +37,16 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-04",
+    sector: "grv",
+    title: "⚡ Giełda mocy (TeOkoP GRV) — etap 1: prawdziwe oferty zamiast wymyślonego licznika",
+    desc: "Zdjęliśmy ze strony głównej licznik „18 mln GB VRAM” i losowych „peerów” — były wymyślone. Teraz Katedra ogłasza w wizytówce, jaką moc udostępnia (VRAM, modele z Ollamy, cena w GRV za 1000 tokenów; Hub → Wystawa → ⚡ Giełda mocy), rejestr niesie tę ofertę, a strona i inne Katedry pokazują tylko to, co Katedry online naprawdę ogłosiły. Licznik PEERS w nagłówku = Katedry online w rejestrze. Etap 1 to ogłoszenia: zlecanie zadań i rozliczenie w GRV przyjdą później.",
+    en: {
+      title: "⚡ Power exchange (TeOkoP GRV) — stage 1: real offers instead of a made-up counter",
+      desc: "The “18 million GB VRAM” counter and random “peers” are gone from the home page — they were invented. A Cathedral now announces in its card what power it offers (VRAM, Ollama models, price in GRV per 1000 tokens; Hub → Exhibition → ⚡ Power exchange), the registry carries the offer, and the site and other Cathedrals show only what Cathedrals online actually announced. The PEERS counter in the header = Cathedrals online in the registry. Stage 1 is announcements: running jobs and GRV settlement come later.",
+    },
+  },
+  {
+    date: "2026-10-04",
     sector: "web",
     title: "🎙️ Premiera z Podcastowego Studia Katedry na stronie głównej",
     desc: "Pierwszy odcinek zrobiony w całości w nowym Studiu Podcastu Katedry („What is a Cathedral… and why is it the greatest invention since rolling papers?”) — scenariusz, głosy, kadry i montaż lokalnie. Ramka YouTube ładuje się dopiero po kliknięciu (youtube-nocookie).",

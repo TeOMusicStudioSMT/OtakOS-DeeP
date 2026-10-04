@@ -44,6 +44,7 @@ import { translations } from './translations';
 import { IdentityService, NodeIdentity } from './services/IdentityService';
 import NeuralMap from './components/NeuralMap';
 import NodeSphere from './components/NodeSphere';
+import { GieldaMocy } from './components/GieldaMocy';
 import UpdatesSection from './components/UpdatesSection';
 import AdTowerSection from './components/AdTowerSection';
 import ArchitectWord from './components/ArchitectWord';
@@ -215,19 +216,8 @@ export default function App() {
 
   const t = useMemo(() => translations[lang], [lang]);
 
-  // Global VRAM counters and sliders
-  const [globalVramCount, setGlobalVramCount] = useState<number>(18342948.33);
+  // ⚡ Giełda mocy: liczby z rejestru Katedr (GieldaMocy) — dawny licznik „18 mln GB VRAM” i losowi peerzy byli wymyśleni.
   const [sphereOpen, setSphereOpen] = useState<boolean>(false);
-  const [userVramSlider, setUserVramSlider] = useState<number>(16); // default 16GB
-  const [userVramContributed, setUserVramContributed] = useState<boolean>(false);
-
-  // Dynamic localized VRAM status message
-  const vramStatusMsg = useMemo(() => {
-    if (userVramContributed) {
-      return t.vramWidget.statusInjected.replace('{0}', userVramSlider.toString());
-    }
-    return t.vramWidget.statusDefault;
-  }, [userVramContributed, userVramSlider, t]);
 
   // Download simulation variables
   const [showInstaller, setShowInstaller] = useState<boolean>(false);
@@ -256,7 +246,7 @@ export default function App() {
   const [localTimeStr, setLocalTimeStr] = useState<string>('');
   const [systemEntropy, setSystemEntropy] = useState<number>(0.0031);
   const [vramIgnited, setVramIgnited] = useState<boolean>(true);
-  const [activePeers, setActivePeers] = useState<number>(1024);
+  const [activePeers, setActivePeers] = useState<number | null>(null);   // Katedry online w rejestrze (null = nie wiem)
   const [identity, setIdentity] = useState<NodeIdentity | null>(null);
   const [copiedIdentity, setCopiedIdentity] = useState<boolean>(false);
   const [grvBalance, setGrvBalance] = useState<string>('0.00');
@@ -290,23 +280,8 @@ export default function App() {
         const delta = (Math.random() - 0.5) * 0.0004;
         return parseFloat(Math.max(0.0010, Math.min(0.0089, prev + delta)).toFixed(4));
       });
-      setActivePeers(prev => {
-        const delta = Math.random() > 0.6 ? (Math.random() > 0.5 ? 1 : -1) : 0;
-        return Math.max(980, prev + delta);
-      });
     }, 4500);
     return () => clearInterval(interval);
-  }, []);
-
-  // Soft increment the global VRAM cluster count
-  useEffect(() => {
-    const vramInt = setInterval(() => {
-      setGlobalVramCount(prev => {
-        const delta = Math.random() * 2.14 + 0.12;
-        return parseFloat((prev + delta).toFixed(2));
-      });
-    }, 1500);
-    return () => clearInterval(vramInt);
   }, []);
 
   // Fetch sovereign node identity from backend or localStorage
@@ -406,17 +381,6 @@ export default function App() {
     setTimeout(() => {
       setCopiedCmd(false);
     }, 2000);
-  };
-
-  // Spark User VRAM contribution
-  const igniteVramContribution = () => {
-    if (userVramContributed) {
-      synth.beep(330, 'triangle', 0.12, 0.05);
-      return;
-    }
-    setUserVramContributed(true);
-    setGlobalVramCount(prev => prev + userVramSlider);
-    synth.chord([440, 554.37, 659.25, 880], 'sawtooth', 0.22);
   };
 
   // Start co-host voice log simulation
@@ -721,7 +685,7 @@ export default function App() {
           <div className="flex items-center space-x-5 flex-wrap gap-y-1">
             <div className="flex items-center space-x-1.5" title="Decentralized peers connected">
               <span className="text-zinc-500">{t.header.peers}</span>
-              <span className="text-zinc-300 font-bold">{activePeers}</span>
+              <span className="text-zinc-300 font-bold">{activePeers ?? '—'}</span>
             </div>
             <div className="flex items-center space-x-1.5" title="Local workstation VRAM Status">
               <span className="text-zinc-500">{t.header.vram}</span>
@@ -941,147 +905,8 @@ export default function App() {
           ))}
         </div>
 
-        {/* Dynamic global VRAM Unleashed widget */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="w-full mt-10 p-6 bg-[#040407] border border-zinc-800/80 rounded-xl max-w-5xl text-left font-mono relative overflow-hidden"
-        >
-          {/* Glowing subtle background grids */}
-          <div className="absolute inset-0 bg-radial-gradient from-emerald-500/5 to-transparent select-none pointer-events-none" />
-          
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 relative z-10">
-            {/* Left part: Live Tally & Slider description */}
-            <div className="md:col-span-7 space-y-4">
-              <div className="flex items-center space-x-2">
-                <Cpu className={`h-4 w-4 animate-pulse ${
-                  activeThemeId === 'kawaii' ? 'text-pink-400' : 'text-emerald-400'
-                }`} />
-                <span className="text-[10px] tracking-widest text-zinc-500 uppercase font-bold">{t.vramWidget.title}</span>
-              </div>
-              
-              <div className="space-y-1">
-                <h3 className="text-sm font-bold text-zinc-300 uppercase">
-                  {t.vramWidget.resonanceLabel}
-                </h3>
-                <button onClick={() => setSphereOpen(true)} title={lang === 'pl' ? 'Kliknij — szklana sieć 3D węzłów' : 'Click — glass 3D node network'}
-                  className="flex items-baseline space-x-2 group cursor-pointer hover:scale-[1.02] transition-transform origin-left">
-                  <span className={`text-2xl sm:text-3xl font-bold tracking-tight ${
-                    activeThemeId === 'kawaii' ? 'text-pink-400 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)]' : 'text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-                  }`}>
-                    {globalVramCount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
-                  <span className="text-zinc-500 text-xs">GB VRAM</span>
-                  <span className="text-[10px] text-emerald-500/0 group-hover:text-emerald-400/80 transition-colors">🔮 {lang === 'pl' ? 'sieć 3D' : '3D net'}</span>
-                </button>
-                <p className="text-[11px] text-zinc-500 font-sans leading-relaxed">
-                  {t.vramWidget.desc}
-                </p>
-              </div>
-
-              {/* Slider Input Row */}
-              <div className="space-y-3 bg-[#08080f]/90 border border-zinc-900 rounded-lg p-4">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-zinc-400 font-bold">{t.vramWidget.sliderLabel}</span>
-                  <span className={`text-xs font-bold font-mono px-2 py-0.5 rounded ${
-                    activeThemeId === 'kawaii' ? 'bg-pink-950/80 text-pink-300' : 'bg-emerald-950/80 text-emerald-300'
-                  }`}>
-                    {userVramSlider} GB
-                  </span>
-                </div>
-
-                <div className="relative pt-1">
-                  <input
-                    type="range"
-                    min="4"
-                    max="128"
-                    step="4"
-                    value={userVramSlider}
-                    onChange={(e) => {
-                      setUserVramSlider(parseInt(e.target.value));
-                      synth.beep(400 + parseInt(e.target.value) * 6, 'sine', 0.05);
-                    }}
-                    className={`w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-current ${
-                      activeThemeId === 'kawaii' ? 'text-pink-500' : 'text-emerald-500'
-                    }`}
-                  />
-                  <div className="flex justify-between text-[9px] text-zinc-600 mt-1 font-mono">
-                    <span>4GB ({t.vramWidget.tier1})</span>
-                    <span>16GB ({t.vramWidget.tier2})</span>
-                    <span>24GB ({t.vramWidget.tier3})</span>
-                    <span>48GB ({t.vramWidget.tier4})</span>
-                    <span>128GB ({t.vramWidget.tier5})</span>
-                  </div>
-                </div>
-
-                {/* Ignite Button & Status message */}
-                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                  <button
-                    onClick={igniteVramContribution}
-                    className={`px-4 py-2 rounded text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer select-none text-black ${
-                      userVramContributed 
-                        ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-transparent' 
-                        : activeThemeId === 'kawaii' 
-                          ? 'bg-pink-400 hover:bg-pink-300 active:scale-[0.98]' 
-                          : 'bg-emerald-400 hover:bg-emerald-300 active:scale-[0.98]'
-                    }`}
-                  >
-                    {userVramContributed ? t.vramWidget.btnCommitted : t.vramWidget.btnIgnite}
-                  </button>
-                  <div className="text-[10px] text-zinc-400 truncate flex-1 flex items-center space-x-1.5 bg-black/40 p-2 rounded border border-zinc-950">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                    <span className="truncate">{vramStatusMsg}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right part: Peer Simulation Grid Graphics mapping */}
-            <div className="md:col-span-5 flex flex-col justify-between p-4 bg-[#07070b] border border-zinc-900 rounded-lg text-xs relative">
-              <div className="absolute top-2 right-2 flex items-center space-x-1 text-[9px] text-zinc-600">
-                <span className="h-1 w-1 bg-emerald-500 rounded-full animate-ping" />
-                <span>ACTIVE PEERS: {activePeers}</span>
-              </div>
-              
-              <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider border-b border-zinc-900 pb-2 mb-2">
-                Decentralized Resonance Map
-              </div>
-
-              {/* Grid drawing illustrating local-node alignment */}
-              <div className="grid grid-cols-8 gap-1.5 py-2.5 flex-1 items-center justify-items-center">
-                {Array.from({ length: 32 }).map((_, nodeI) => {
-                  const isUserActiveNode = nodeI === 14;
-                  const intensity = Math.sin(nodeI * 0.15 + globalVramCount * 0.05);
-                  let bgCol = "bg-zinc-900";
-                  if (isUserActiveNode && userVramContributed) {
-                    bgCol = activeThemeId === 'kawaii' ? "bg-pink-400 border border-pink-300/50 shadow-[0_0_8px_rgba(244,63,94,0.8)]" : "bg-emerald-400 border border-emerald-300/50 shadow-[0_0_8px_rgba(16,185,129,0.8)]";
-                  } else if (intensity > 0.4) {
-                    bgCol = activeThemeId === 'kawaii' ? "bg-pink-950 text-pink-500/80 border border-pink-900" : "bg-emerald-950 text-emerald-500/80 border border-emerald-900";
-                  } else if (intensity > -0.1) {
-                    bgCol = "bg-zinc-805 text-zinc-700";
-                  }
-                  return (
-                    <div 
-                      key={nodeI} 
-                      className={`h-3 w-3 rounded-sm transition-all duration-700 ${bgCol}`} 
-                      title={`Node Cluster_${nodeI} (Weights: ${12 + (nodeI % 5) * 8} GB)`}
-                    />
-                  );
-                })}
-              </div>
-
-              <div className="text-[9px] text-zinc-500 leading-relaxed font-sans mt-2 pt-2 border-t border-zinc-900 flex justify-between items-center">
-                <span>RESONANCE COEFFICIENT:</span>
-                <span className={`font-mono font-bold ${
-                  activeThemeId === 'kawaii' ? 'text-pink-400' : 'text-emerald-400'
-                }`}>
-                  {userVramContributed ? (0.852 + userVramSlider * 0.0014).toFixed(3) : '0.852'} MATCH
-                </span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        {/* ⚡ Giełda mocy — prawdziwe oferty Katedr online z rejestru (dawny wymyślony licznik VRAM zdjęty) */}
+        <GieldaMocy lang={lang} kawaii={activeThemeId === 'kawaii'} onSiec={() => setSphereOpen(true)} onOnline={setActivePeers} />
       </section>
 
       {/* 2.35 PREMIERA — film z Podcastowego Studia Katedry */}

@@ -20,7 +20,9 @@ export interface Produkt { id: string; tytul: string; opis: string; dzial: strin
 export interface Kanal { id: string; nazwa: string; adres: string; playlista: string; filmy: { id: string; tytul: string }[] }
 export interface Link { nazwa: string; url: string }
 export interface Wizytowka { nick: string; motto: string; opis: string; adres: string; filmy: Film[]; utwory: Utwor[]; suno: Suno[]; produkty: Produkt[]; kanal: Kanal | null; linki: Link[] }
-export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; widziano: string }
+/** ⚡ Oferta mocy z wizytówki Katedry (Giełda mocy, etap 1 = ogłoszenia; rejestr oczyszcza ją w server/rejestr.mjs). */
+export interface MocKatedry { vramGB: number; gpu: string; modele: string[]; cenaGRV: number; jednostka: string; godziny: string; opis: string }
+export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; widziano: string }
 
 const tekst = (x: unknown, max = 300) => (typeof x === 'string' ? x.slice(0, max) : '');
 const https = (x: unknown) => (typeof x === 'string' && /^https:\/\/[^\s"'<>]+$/.test(x) ? x : null);
