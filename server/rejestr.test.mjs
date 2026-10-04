@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
-import { utworzRejestr, adresDozwolony, trescMeldunku } from './rejestr.mjs';
+import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki } from './rejestr.mjs';
 
 const para = crypto.generateKeyPairSync('ed25519');
 const KLUCZ = para.publicKey.export({ format: 'der', type: 'spki' }).toString('base64');
@@ -149,4 +149,16 @@ test('nazwany tunel: zarządca melduje się ze stałej domeny od razu; inna Kate
     await r.meldunek(meldunek({ klucz: obcyKlucz, prywatny: obca.privateKey }));
     assert.equal(r.stanKatedry('teo-center').meldunek.ok, true);
     assert.equal(r.stanKatedry('ZŁY'), null);
+});
+
+test('⚡ Giełda mocy: oferta z wizytówki idzie na listę oczyszczona; śmieci i brak modeli = bez oferty', async () => {
+    assert.equal(mocZWizytowki(null), null);
+    assert.equal(mocZWizytowki({ vramGB: 24, modele: [] }), null, 'bez modelu nie ma oferty');
+    assert.equal(mocZWizytowki({ vramGB: 'dużo', modele: ['gemma4'], cenaGRV: 1 }), null);
+    assert.deepEqual(mocZWizytowki({ vramGB: 9999, gpu: ' RTX  4090 ', modele: ['gemma4', '<script>', 'gemma4'], cenaGRV: 1.234, sekret: 'x' }),
+        { vramGB: 512, gpu: 'RTX 4090', modele: ['gemma4'], cenaGRV: 1.23, jednostka: '1000 tokenów', godziny: '', opis: '' });
+    const moc = { vramGB: 12, gpu: 'RTX 4070', modele: ['gemma4'], cenaGRV: 1, jednostka: '1000 tokenów', godziny: 'wieczorem', opis: 'pl' };
+    const { r } = rejestr({ wizytowka: { nick: 'teo-center', klucz: KLUCZ, motto: 'm', moc } });
+    assert.equal((await r.meldunek(meldunek())).status, 200);
+    assert.deepEqual(r.lista()[0].moc, moc);
 });

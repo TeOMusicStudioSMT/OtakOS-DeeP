@@ -46,6 +46,25 @@ export function adresDozwolony(adres, domena) {
     return !!domena && h === String(domena).toLowerCase();
 }
 
+/**
+ * ⚡ Giełda mocy, etap 1 (2026-10-04): oferta mocy z wizytówki Katedry (`moc`: VRAM, karta, modele, cena GRV za jednostkę)
+ * → bezpieczna postać do listy, albo null. Tylko OGŁOSZENIE — rejestr niczego nie zleca i nie liczy GRV.
+ */
+const MODEL = /^[a-zA-Z0-9._:/-]{1,80}$/;
+export function mocZWizytowki(moc) {
+    if (!moc || typeof moc !== 'object' || Array.isArray(moc)) return null;
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const liczba = (v, min, max) => { const x = Number(v); return Number.isFinite(x) ? Math.min(max, Math.max(min, x)) : null; };
+    const modele = [...new Set((Array.isArray(moc.modele) ? moc.modele : []).map((m) => String(m).trim()).filter((m) => MODEL.test(m)))].slice(0, 12);
+    const vramGB = liczba(moc.vramGB, 1, 512);
+    const cenaGRV = liczba(moc.cenaGRV, 0, 1_000_000);
+    if (!modele.length || vramGB === null || cenaGRV === null) return null;
+    return {
+        vramGB: Math.round(vramGB), gpu: tekst(moc.gpu, 80), modele, cenaGRV: Math.round(cenaGRV * 100) / 100,
+        jednostka: tekst(moc.jednostka, 30) || '1000 tokenów', godziny: tekst(moc.godziny, 60), opis: tekst(moc.opis, 300),
+    };
+}
+
 async function pobierzWizytowke(fetchFn, adres) {
     const r = await fetchFn(`${adres}/api/wizytowka`, { redirect: 'error', signal: AbortSignal.timeout(8_000), headers: { 'User-Agent': 'otakos.wtf-rejestr' } });
     if (!r.ok) throw new Error(`wizytówka odpowiedziała HTTP ${r.status}`);
@@ -63,7 +82,7 @@ async function pobierzWizytowke(fetchFn, adres) {
  *     na dłużej niż do jej następnego wysłania.
  */
 export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, fetch: fetchFn = fetch, teraz = () => Date.now() } = {}) {
-    const online = new Map();   // nick → { nick, adres, motto, widziano, sprawdzono }
+    const online = new Map();   // nick → { nick, adres, motto, moc, widziano, sprawdzono }
     const oczekujace = new Map();   // nick → { nick, klucz, kiedy, powod }
     const ostatnie = new Map();   // nick → { kiedy, ok, wiadomosc } — ostatni meldunek z WŁAŚCIWYM kluczem (powód „offline” dla strony)
     let odZarzadcy = { czas: 0, katedry: [] };
@@ -158,7 +177,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
             catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, klucz, widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -177,7 +196,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, widziano }) => ({ nick, adres, motto, klucz, widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };
