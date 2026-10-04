@@ -72,7 +72,9 @@ const KanalBlok: React.FC<{ k: Kanal; pl: boolean }> = ({ k, pl }) => {
         <span className="truncate text-sm font-bold text-slate-100">{k.nazwa || 'YouTube'}</span>
         <a href={k.adres} target="_blank" rel="noreferrer" className="ml-auto text-[10px] text-slate-500 hover:text-red-200">{pl ? 'kanał na YouTube →' : 'channel on YouTube →'}</a>
       </div>
-      <div className="grid md:grid-cols-[2fr_1fr]">
+      {/* minmax(0,…): bez tego lista (15 filmów) podnosiła wiersz, odtwarzacz 16:9 rósł do jego wysokości (~1400 px szerokości),
+          a lista dostawała 0 px — „ramka się rozjeżdża”. Lista na szerokim ekranie przewija się w wysokości odtwarzacza. */}
+      <div className="grid md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="relative aspect-video bg-black">
           {src ? <iframe key={src} src={src} title={k.nazwa} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen className="absolute inset-0 h-full w-full" />
             : <button onClick={() => setGra('kanal')} className="group absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-red-950/50 to-black">
@@ -81,7 +83,8 @@ const KanalBlok: React.FC<{ k: Kanal; pl: boolean }> = ({ k, pl }) => {
               </button>}
         </div>
         {k.filmy.length > 0 && (
-          <ol className="max-h-[22rem] divide-y divide-white/5 overflow-y-auto md:max-h-none">
+          <div className="relative min-h-0">
+          <ol className="max-h-[22rem] divide-y divide-white/5 overflow-y-auto md:absolute md:inset-0 md:max-h-none">
             {k.filmy.map((f) => (
               <li key={f.id}><button onClick={() => setGra(f.id)} className={`flex w-full items-center gap-2 px-3 py-2 text-left text-[11px] hover:bg-white/5 ${gra === f.id ? 'text-red-200' : 'text-slate-300'}`}>
                 <img src={`https://i.ytimg.com/vi/${f.id}/mqdefault.jpg`} alt="" loading="lazy" className="h-9 w-16 shrink-0 rounded object-cover" />
@@ -89,6 +92,7 @@ const KanalBlok: React.FC<{ k: Kanal; pl: boolean }> = ({ k, pl }) => {
               </button></li>
             ))}
           </ol>
+          </div>
         )}
       </div>
     </section>
