@@ -39,10 +39,10 @@ export const UPDATES: UpdateEntry[] = [
     date: "2026-10-04",
     sector: "web",
     title: "🧹 Bez „IGNITED”, bez obietnicy wtyczki USB, prawdziwe opisy",
-    desc: "Zdjęty przełącznik „LOKALNY_VRAM: ZAPALONY” w nagłówku (niczego nie włączał) i karta „Protokoły skarbców paniki”, która obiecywała, że wyciągnięcie USB wymaże rejestry — Katedra tego nie robi. Karty „Rozruch odporny kwantowo” (pamięć L3, „omija sieci publiczne”) i „Zero emisji tokenów” zastąpione prawdą: modele i dane na Twojej maszynie, sieć tylko na Twoje życzenie (tunel Cloudflare), lokalna Ollama bez opłat, chmura tylko z własnym kluczem.",
+    desc: "Zdjęty przełącznik „LOKALNY_VRAM: ZAPALONY” w nagłówku (niczego nie włączał) i karta „Protokoły skarbców paniki”, która obiecywała, że wyciągnięcie USB wymaże rejestry — Katedra tego nie robi. Karty „Rozruch odporny kwantowo” (pamięć L3, „omija sieci publiczne”) i „Zero emisji tokenów” zastąpione prawdą: modele i dane na Twojej maszynie, sieć tylko na Twoje życzenie (tunel Cloudflare), lokalna Ollama bez opłat, chmura tylko z własnym kluczem. Przy wsparciu zamiast „adresy Web3 monitorowane kwantowo” i „preferowane Monero”: przyjmujemy każde krypto w sieciach podanych przy adresie (wsparcie w GRV w przyszłości).",
     en: {
       title: "🧹 No “IGNITED”, no USB-plug promise, honest descriptions",
-      desc: "Removed the “LOCAL_VRAM: IGNITED” toggle in the header (it switched nothing on) and the “Panic secure protocols” card promising that pulling the USB wipes registers — the Cathedral does not do that. The “Quantum resistant boot” (L3 cache, “bypasses public networks”) and “Zero tokens” cards now tell the truth: models and data on your machine, network only when you want it (Cloudflare tunnel), local Ollama with no fees, cloud only with your own key.",
+      desc: "Removed the “LOCAL_VRAM: IGNITED” toggle in the header (it switched nothing on) and the “Panic secure protocols” card promising that pulling the USB wipes registers — the Cathedral does not do that. The “Quantum resistant boot” (L3 cache, “bypasses public networks”) and “Zero tokens” cards now tell the truth: models and data on your machine, network only when you want it (Cloudflare tunnel), local Ollama with no fees, cloud only with your own key. In the support section, instead of “quantum-monitored Web3 addresses” and “preferred Monero”: we accept any crypto on the networks listed with the address (GRV support in the future).",
     },
   },
   {
