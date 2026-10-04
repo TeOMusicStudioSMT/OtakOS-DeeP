@@ -2,12 +2,9 @@ export interface TranslationSet {
   header: {
     node: string;
     peers: string;
-    vram: string;
     entropy: string;
     soundOn: string;
     soundOff: string;
-    ignited: string;
-    standby: string;
   };
   hero: {
     tag: string;
@@ -18,7 +15,6 @@ export interface TranslationSet {
     fileMeta: string;
     requirement: string;
     license: string;
-    panicVault: string;
     spec1: string;
     spec1Val: string;
     spec1Comment: string;
@@ -135,12 +131,9 @@ export const translations: Record<'pl' | 'en', TranslationSet> = {
     header: {
       node: "WĘZEŁ :",
       peers: "RÓWNORZĘDNE (PEERS):",
-      vram: "LOKALNY_VRAM:",
       entropy: "WERSJA:",
       soundOn: "DŹWIĘK_WŁ",
       soundOff: "WYCISZ",
-      ignited: "ZAPALONY",
-      standby: "OCZEKIWANIE",
     },
     hero: {
       tag: "INICJALIZACJA CYBER-SCHRONU ZABEZPIECZONA",
@@ -151,7 +144,6 @@ export const translations: Record<'pl' | 'en', TranslationSet> = {
       fileMeta: "PLIK: V_ZERO_archive.zip",
       requirement: "WYMAGA: Node.js 20+ i Ollama",
       license: "GNU AGNOSTYCZNY",
-      panicVault: "100% lokalna inteligencja. Wyciągnij wtyczkę USB, aby natychmiast wymazać każdy rejestr. Ostateczny kryptograficzny skarbiec paniki.",
       spec1: "PACZKA STARTOWA",
       spec1Val: "{rozmiar}",
       spec1Comment: "wersja {numer} · suma SHA-256 w wersja.json",
@@ -276,12 +268,9 @@ export const translations: Record<'pl' | 'en', TranslationSet> = {
     header: {
       node: "NODE :",
       peers: "PEERS CONNECTED:",
-      vram: "LOCAL_VRAM:",
       entropy: "VERSION:",
       soundOn: "SOUND_ON",
       soundOff: "MUTED",
-      ignited: "IGNITED",
-      standby: "STBY",
     },
     hero: {
       tag: "CYBER-SCHRON INITIALIZATION SECURED",
@@ -292,7 +281,6 @@ export const translations: Record<'pl' | 'en', TranslationSet> = {
       fileMeta: "FILE: V_ZERO_archive.zip",
       requirement: "REQUIRES: Node.js 20+ and Ollama",
       license: "GNU AGNOSTIC",
-      panicVault: "100% Local Intelligence. Pull the USB plug to erase every register instantly. The ultimate cryptographic panic-vault.",
       spec1: "STARTER PACKAGE",
       spec1Val: "{rozmiar}",
       spec1Comment: "version {numer} · SHA-256 in wersja.json",
