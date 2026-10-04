@@ -36,6 +36,13 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-04",
+    sector: "web",
+    title: "🎙️ Premiera z Podcastowego Studia Katedry na stronie głównej",
+    desc: "Pierwszy odcinek zrobiony w całości w nowym Studiu Podcastu Katedry („What is a Cathedral… and why is it the greatest invention since rolling papers?”) — scenariusz, głosy, kadry i montaż lokalnie. Ramka YouTube ładuje się dopiero po kliknięciu (youtube-nocookie).",
+    en: { title: "🎙️ Premiere from the Cathedral Podcast Studio on the home page", desc: "The first episode made entirely in the Cathedral's new Podcast Studio (“What is a Cathedral… and why is it the greatest invention since rolling papers?”) — script, voices, shots and editing, all local. The YouTube frame loads only after a click (youtube-nocookie)." },
+  },
+  {
     date: "2026-10-03",
     sector: "web",
     title: "Strona aplikacji TeO Hub OtakOS, polityka prywatności i warunki",
