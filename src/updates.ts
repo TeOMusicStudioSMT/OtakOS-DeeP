@@ -37,6 +37,16 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-06",
+    sector: "grv",
+    title: "⚡ Giełda Master Flow — nowa nazwa i zlecenia: Katedry mówią też, czego szukają",
+    desc: "Giełda mocy nazywa się teraz Giełda Master Flow (TeOkoP GRV). Oprócz ofert mocy Katedra może ogłosić zlecenie: jedno zadanie z planu gry albo cały projekt (TeO Games Studio → Reżyser i GDD → „⚡ na Giełdę”), z potrzebnym modelem i budżetem w GRV. Zlecenie jedzie w wizytówce, rejestr je niesie, a strona i inne Katedry je widzą. W Katedrze model z cudzej oferty, którego nie masz, jednym kliknięciem trafia do Twojego Zwiadowcy — pobiera się dopiero po Twoim „Przyjmij”. Uczciwie: to wciąż ogłoszenia — wykonywanie zleceń między Katedrami i rozliczenie w GRV przyjdą w etapie 2.",
+    en: {
+      title: "⚡ Master Flow Exchange — new name and jobs: Cathedrals say what they need",
+      desc: "The Power exchange is now called the Master Flow Exchange (TeOkoP GRV). Besides power offers, a Cathedral can post a job: a single task from a game plan or a whole project (TeO Games Studio → Director & GDD → “⚡ to the Exchange”), with the model it needs and a GRV budget. The job travels in the Cathedral card, the registry carries it, and the site and other Cathedrals see it. In the Cathedral, a model from someone else's offer that you lack goes to your Scout with one click — it downloads only after your “Accept”. Honestly: still announcements — running jobs between Cathedrals and GRV settlement come in stage 2.",
+    },
+  },
+  {
+    date: "2026-10-06",
     sector: "mesh",
     title: "🌍 Teterhia — wspólny świat Katedr (MRPG) po lewej stronie",
     desc: "Lustro strumienia Katedr: przesuń w prawo (albo zakładka „Teterhia” przy lewej krawędzi) i otwiera się wspólna mapa Teterhii. Każda kraina to prawdziwa Katedra online z rejestru otakos.wtf; jej żywioł (Ogień, Woda, Ziemia, Powietrze, Eter) wynika z nicka, tak samo jak świat w grze TGS. Klik w krainę prowadzi do wizytówki Katedry. Uczciwie: gra dla jednego gracza rośnie dziś w Katedrze (TeO Games Studio: Reżyser → Dyrygent → Obrazy → Assety 3D → Ruch → Krajobrazy → Kodeks, saga „Teterhia — Wieczna Saga”); wspólnej rozgrywki (rajdy, wymiana) jeszcze nie ma.",

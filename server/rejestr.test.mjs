@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
-import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki } from './rejestr.mjs';
+import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki, zleceniaZWizytowki } from './rejestr.mjs';
 
 const para = crypto.generateKeyPairSync('ed25519');
 const KLUCZ = para.publicKey.export({ format: 'der', type: 'spki' }).toString('base64');
@@ -161,4 +161,16 @@ test('⚡ Giełda mocy: oferta z wizytówki idzie na listę oczyszczona; śmieci
     const { r } = rejestr({ wizytowka: { nick: 'teo-center', klucz: KLUCZ, motto: 'm', moc } });
     assert.equal((await r.meldunek(meldunek())).status, 200);
     assert.deepEqual(r.lista()[0].moc, moc);
+});
+
+test('zlecenia Giełdy Master Flow z wizytówki: tylko poprawne, najwyżej 10, budżet w granicach', () => {
+    const z = zleceniaZWizytowki([
+        { id: 'zl-abc1', rodzaj: 'projekt', tytul: '  Teterhia —  Wieczna Saga ', opis: 'RPG', modele: ['qwen3-coder:30b', 'zły model!'], budzetGRV: 2e9, od: '2026-10-06T07:00:00Z', projekt: 'tajny' },
+        { id: 'x', rodzaj: 'zadanie', tytul: 'krótkie id' },
+        { id: 'zl-def2', rodzaj: 'hack', tytul: 'zły rodzaj' },
+        'śmieć',
+    ]);
+    assert.deepEqual(z, [{ id: 'zl-abc1', rodzaj: 'projekt', tytul: 'Teterhia — Wieczna Saga', opis: 'RPG', modele: ['qwen3-coder:30b'], budzetGRV: 1_000_000, od: '2026-10-06T07:00:00Z' }]);
+    assert.deepEqual(zleceniaZWizytowki(null), []);
+    assert.equal(zleceniaZWizytowki(Array.from({ length: 15 }, (_, i) => ({ id: `zl-x${i}aa`, rodzaj: 'zadanie', tytul: `Zadanie ${i}` }))).length, 10);
 });
