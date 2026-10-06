@@ -47,7 +47,7 @@ export function adresDozwolony(adres, domena) {
 }
 
 /**
- * ⚡ Giełda mocy, etap 1 (2026-10-04): oferta mocy z wizytówki Katedry (`moc`: VRAM, karta, modele, cena GRV za jednostkę)
+ * ⚡ Giełda Master Flow (dawniej „Giełda mocy”), etap 1 (2026-10-04): oferta mocy z wizytówki Katedry (`moc`: VRAM, karta, modele, cena GRV za jednostkę)
  * → bezpieczna postać do listy, albo null. Tylko OGŁOSZENIE — rejestr niczego nie zleca i nie liczy GRV.
  */
 const MODEL = /^[a-zA-Z0-9._:/-]{1,80}$/;
@@ -63,6 +63,27 @@ export function mocZWizytowki(moc) {
         vramGB: Math.round(vramGB), gpu: tekst(moc.gpu, 80), modele, cenaGRV: Math.round(cenaGRV * 100) / 100,
         jednostka: tekst(moc.jednostka, 30) || '1000 tokenów', godziny: tekst(moc.godziny, 60), opis: tekst(moc.opis, 300),
     };
+}
+
+/**
+ * 📋 Giełda Master Flow (2026-10-06): zlecenia z wizytówki — czego Katedra SZUKA (zadanie albo projekt, potrzebne modele,
+ * budżet GRV). Tylko OGŁOSZENIE, jak oferty: rejestr niczego nie zleca. Śmieci odpadają, najwyżej 10.
+ */
+export function zleceniaZWizytowki(lista) {
+    if (!Array.isArray(lista)) return [];
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    return lista.slice(0, 10).map((z) => {
+        if (!z || typeof z !== 'object') return null;
+        const id = String(z.id ?? ''), rodzaj = z.rodzaj, tytul = tekst(z.tytul, 120);
+        if (!/^[a-z0-9-]{4,24}$/.test(id) || !['zadanie', 'projekt'].includes(rodzaj) || tytul.length < 3) return null;
+        const budzet = Number(z.budzetGRV);
+        return {
+            id, rodzaj, tytul, opis: tekst(z.opis, 600),
+            modele: [...new Set((Array.isArray(z.modele) ? z.modele : []).map((m) => String(m).trim()).filter((m) => MODEL.test(m)))].slice(0, 6),
+            budzetGRV: Number.isFinite(budzet) ? Math.round(Math.min(1_000_000, Math.max(0, budzet)) * 100) / 100 : 0,
+            od: typeof z.od === 'string' ? z.od.slice(0, 40) : null,
+        };
+    }).filter(Boolean);
 }
 
 async function pobierzWizytowke(fetchFn, adres) {
@@ -177,7 +198,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
             catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -196,7 +217,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };
