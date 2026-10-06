@@ -13,6 +13,7 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import KartaKatedry from './KartaKatedry';
+import { gestSwiezy, oznaczGest } from '../mrpg/Teterhia';
 import { katedryOnline, stanKatedry, twojaWizytowka, wizytowkaZ, type KatedraOnline, type StanKatedry, type Wizytowka } from './wizytowka';
 
 const czyKatedry = () => /^#katedry([/?]|$)/.test(window.location.hash);
@@ -191,10 +192,10 @@ export const Katedry: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
   const idzDo = (i: number) => { const el = pozioma.current; if (el) el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' }); };
 
   // Na stronie: przesunięcie palcem w lewo otwiera Katedry.
-  const gestStrony = useCallback((dx: number) => { if (!otwarte && dx < 0) otworz(); }, [otwarte, otworz]);
+  const gestStrony = useCallback((dx: number) => { if (!otwarte && dx < 0 && !/^#teterhia/.test(window.location.hash) && !gestSwiezy()) { oznaczGest(); otworz(); } }, [otwarte, otworz]);
   useGestPoziomy(null, gestStrony);
   // W Katedrach: przesunięcie w prawo na pierwszym panelu wraca na stronę.
-  const gestKatedr = useCallback((dx: number) => { if (dx > 0 && (pozioma.current?.scrollLeft ?? 0) < 8) zamknij(); }, [zamknij]);
+  const gestKatedr = useCallback((dx: number) => { if (dx > 0 && (pozioma.current?.scrollLeft ?? 0) < 8) { oznaczGest(); zamknij(); } }, [zamknij]);
   useGestPoziomy(pozioma, gestKatedr);
 
   if (!otwarte) {

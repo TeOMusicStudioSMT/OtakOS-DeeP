@@ -36,6 +36,16 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-06",
+    sector: "mesh",
+    title: "🌍 Teterhia — wspólny świat Katedr (MRPG) po lewej stronie",
+    desc: "Lustro strumienia Katedr: przesuń w prawo (albo zakładka „Teterhia” przy lewej krawędzi) i otwiera się wspólna mapa Teterhii. Każda kraina to prawdziwa Katedra online z rejestru otakos.wtf; jej żywioł (Ogień, Woda, Ziemia, Powietrze, Eter) wynika z nicka, tak samo jak świat w grze TGS. Klik w krainę prowadzi do wizytówki Katedry. Uczciwie: gra dla jednego gracza rośnie dziś w Katedrze (TeO Games Studio: Reżyser → Dyrygent → Obrazy → Assety 3D → Ruch → Krajobrazy → Kodeks, saga „Teterhia — Wieczna Saga”); wspólnej rozgrywki (rajdy, wymiana) jeszcze nie ma.",
+    en: {
+      title: "🌍 Teterhia — shared world of Cathedrals (MRPG) on the left",
+      desc: "A mirror of the Cathedral stream: swipe right (or the “Teterhia” tab at the left edge) to open the shared Teterhia map. Every land is a real Cathedral online in the otakos.wtf registry; its element (Fire, Water, Earth, Air, Ether) comes from the nick, just like the world in the TGS game. Clicking a land opens the Cathedral's card. Honestly: the single-player game grows in the Cathedral today (TeO Games Studio: Director → Conductor → Images → 3D Assets → Motion → Landscapes → Codex, saga “Teterhia — Eternal Saga”); shared play (raids, trade) does not exist yet.",
+    },
+  },
+  {
     date: "2026-10-04",
     sector: "web",
     title: "🧹 Bez „IGNITED”, bez obietnicy wtyczki USB, prawdziwe opisy",
