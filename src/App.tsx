@@ -52,6 +52,7 @@ import PodcastPremiera from './components/PodcastPremiera';
 import AetherArena from './components/AetherArena';
 import SlowoSuwerena from './components/SlowoSuwerena';
 import Katedry from './katedry/Katedry';
+import Teterhia from './mrpg/Teterhia';
 
 // 🔓 Pobieranie ODBLOKOWANE — startowa Katedra V_ZERO (32MB) jest publiczna.
 // (Historycznie: przed oficjalnym startem wstrzymane, każda kopia = NODE.)
@@ -1940,6 +1941,8 @@ export default function App() {
 
       {/* 🧭 Katedry w sieci — wizytówki (przesuń w lewo albo zakładka przy prawej krawędzi) */}
       <Katedry lang={lang} />
+      {/* 🌍 Teterhia — wspólny świat Katedr (MRPG): przesuń w prawo albo zakładka przy lewej krawędzi */}
+      <Teterhia lang={lang} />
 
     </div>
   );
