@@ -36,6 +36,94 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-08",
+    ref: "0d7828c",
+    sector: "core",
+    title: "⚖️ Jev — sędzia semantyczny w Katedrze (opcja chmury z własnym kluczem)",
+    desc: "Jev (TypeSafe) nie odpowiada tekstem, tylko prawdopodobieństwem: „czy to prawda?”, „który wybór?”, „ile punktów?”. Katedra pyta go tam, gdzie lokalny model zgadywał. Kodeks sprawdza, czy zmiana naprawdę robi zadanie, zanim runda przejdzie. Recenzent łapie atrapy i regresje przed buildem. Sędzia Projektu Stada ocenia Biblię z rubryki i każde założenie wizji osobno. Dyrygent dobiera model każdemu TeOgochi i podaje pewność. Tarcza Prawdy dostaje drugi głos (szkoda, wyciek, ukrycie, atrapa), a Delegat rozpoznaje, o które narzędzie prosisz — ciężkie idą tylko na wyraźne życzenie. Klucz trafia do mostu dopiero po „Udostępnij mostowi” w Kiblu. Bez klucza wszystko działa jak dawniej: na regułach i lokalnych modelach.",
+    en: {
+      title: "⚖️ Jev — a semantic judge in the Cathedral (cloud option with your own key)",
+      desc: "Jev (TypeSafe) answers with a probability instead of text: “is this true?”, “which choice?”, “how many points?”. The Cathedral asks it where a local model used to guess. The Codex checks whether a change really does the task before a round passes. The Reviewer catches fakes and regressions before the build. The Herd Project Judge scores the Bible against a rubric and each assumption of the vision separately. The Conductor picks a model for every TeOgochi and states its confidence. The Shield of Truth gets a second voice (harm, leak, concealment, fake), and the Delegate recognises which tool you are asking for — heavy ones run only when you say so explicitly. The key reaches the bridge only after “Share with the bridge” in the Kibel. Without a key everything works as before: on rules and local models.",
+    },
+  },
+  {
+    date: "2026-10-08",
+    ref: "9563753",
+    sector: "core",
+    title: "☁️ Tryb Katedry — jeden przełącznik CLOUD / JusT dla całej Katedry",
+    desc: "Dotąd CLOUD/JusT działał tylko w kilku modułach. Teraz przełącznik w nagłówku Huba ustawia most: w trybie chmury generowanie i czat modeli idą do Claude albo Gemini z Twojego klucza i wracają w tym samym kształcie co z Ollamy, więc każdy moduł działa bez zmian. Obrazy, narzędzia i embeddingi zostają lokalnie, a gdy chmura padnie — praca wraca na lokalny model. Obok licznik tokenów dnia i limit. Domyślnie nadal lokalnie.",
+    en: {
+      title: "☁️ Cathedral Mode — one CLOUD / JusT switch for the whole Cathedral",
+      desc: "Until now CLOUD/JusT worked in only a few modules. Now the switch in the Hub header sets the bridge: in cloud mode model generation and chat go to Claude or Gemini with your key and come back in the same shape as from Ollama, so every module works unchanged. Images, tools and embeddings stay local, and if the cloud fails the work falls back to the local model. Next to it: today's token counter and a limit. Local remains the default.",
+    },
+  },
+  {
+    date: "2026-10-08",
+    ref: "2a10172",
+    sector: "core",
+    title: "🗣️ Głos nie milknie, gdy VoiceStudio śpi",
+    desc: "Gdy VoiceStudio padnie, kwestia mówi się tym samym głosem przez klon Katedry — z próbki o nazwie profilu albo z kopii nagrania referencyjnego. Nagranie wywiadu czy odcinka nie staje w pół.",
+    en: {
+      title: "🗣️ The voice keeps going when VoiceStudio is asleep",
+      desc: "If VoiceStudio fails, the line is spoken in the same voice by the Cathedral's clone — from a sample named after the profile or a copy of the reference recording. Recording an interview or an episode no longer stops halfway.",
+    },
+  },
+  {
+    date: "2026-10-07",
+    ref: "702ff65",
+    sector: "web",
+    title: "💍 Pierścień apek — studia Katedry w jednym oknie",
+    desc: "Music, Story, Fashion, Game Studio i Świat otwierają się w oknie Huba jako warstwy żyjące w tle. Koło po lewej przełącza między nimi (Alt+PageUp/PageDown), a „+” budzi narzędzia: ComfyUI i VoiceStudio. Most, UI i studia startują jako zakładki jednego terminala zamiast stosu okien. ComfyUI nie otwiera już własnej przeglądarki ani konsoli. Pamięć Katedry rozpoznaje procesy (silnik głosu, głębia, usta, Demucs) i mówi, czy można je zamknąć, czy przerwie to pracę.",
+    en: {
+      title: "💍 App Ring — the Cathedral's studios in one window",
+      desc: "Music, Story, Fashion, Game Studio and the World open inside the Hub window as layers that live in the background. A wheel on the left switches between them (Alt+PageUp/PageDown), and “+” wakes tools: ComfyUI and VoiceStudio. The bridge, UI and studios start as tabs of one terminal instead of a pile of windows. ComfyUI no longer opens its own browser or console. The Cathedral's Memory recognises its processes (voice engine, depth, lips, Demucs) and says whether closing them is safe or will interrupt work.",
+    },
+  },
+  {
+    date: "2026-10-07",
+    ref: "9d2fd89",
+    sector: "core",
+    title: "🧱 Game Studio: klocki przed budową",
+    desc: "Kodeks budował z klocków, których jeszcze nie było, i nie znał tych, które zrobiłeś sam. Teraz plan GDD zna warsztat: obrazy, bryły z Assetów 3D i koncepty. Każde zadanie niesie swoje klocki z rolą, a zadanie bez klocka czeka („czeka na klocek”, skrót do Pracowni) zamiast iść do Kodeksa. Reszta kamienia nie buduje się od tyłu. Przy każdej bryle jest „✨ Upiększ lokalnie” (to samo źródło w 1024 i z większą liczbą ścian, stara bryła zostaje). Pod produkcją widać, co robi Kodeks (runda, znaki, recenzent, build), a „Przerwij teraz” zrywa bieżącą rundę od razu. Pracownia obrazów i Assety 3D same budzą ComfyUI.",
+    en: {
+      title: "🧱 Game Studio: building blocks before building",
+      desc: "The Codex was building from blocks that did not exist yet and did not know the ones you made yourself. Now the GDD plan knows the workshop: images, 3D Asset meshes and concepts. Each task carries its blocks with a role, and a task without its block waits (“waiting for a block”, a shortcut to the Workshop) instead of going to the Codex. The rest of the milestone is not built backwards. Every mesh has “✨ Beautify locally” (the same source at 1024 with more faces; the old mesh stays). Under the production you can see what the Codex is doing (round, characters, reviewer, build), and “Stop now” ends the current round at once. The Image Workshop and 3D Assets wake ComfyUI on their own.",
+    },
+  },
+  {
+    date: "2026-10-06",
+    ref: "9de1ae3",
+    sector: "core",
+    title: "🔗 Chmura widoczna w Game Studio, żywe listy modeli i zapasowe modele",
+    desc: "Klucze z Kibla żyły tylko w przeglądarce, więc Game Studio ich nie widziało. Teraz w Kiblu jest „🔗 Udostępnij mostowi” (cofnięcie jednym kliknięciem; most nigdy nie oddaje całego klucza). Nazwy modeli Claude i Gemini przychodzą z Twojego konta zamiast być wpisane na sztywno, a odrzucony klucz mówi, że jest odrzucony. Lista silników pokazuje każdy model z Ollamy z ostrzeżeniem (⚠ mały, ⚠ zgnieciony). Zwiadowca nie proponuje już kwantyzacji poniżej 3 bitów — model 30B wciśnięty w 6 GB oddawał puste pliki. Produkcja gry ma „↻ Zapasowe”: zadanie, które padło, próbuje następnego modelu. Kibel przyjmuje klucze Gemini dowolnej długości i w nowym formacie AQ. Uwaga: klucz API to osobny rachunek za tokeny, nie abonament.",
+    en: {
+      title: "🔗 Cloud visible in Game Studio, live model lists and fallback models",
+      desc: "Kibel keys lived only in the browser, so Game Studio could not see them. Now the Kibel has “🔗 Share with the bridge” (undone with one click; the bridge never returns the full key). Claude and Gemini model names come from your account instead of being hard-coded, and a rejected key says it was rejected. The engine list shows every Ollama model with a warning (⚠ small, ⚠ over-compressed). The Scout no longer suggests quantisations below 3 bits — a 30B model squeezed into 6 GB produced empty files. Game production has “↻ Fallbacks”: a task that failed tries the next model. The Kibel accepts Gemini keys of any length and in the new AQ. format. Note: an API key is billed per token, separately from a subscription.",
+    },
+  },
+  {
+    date: "2026-10-06",
+    ref: "27df428",
+    sector: "core",
+    title: "👻 Nagrania nie wiszą po restarcie, błędy modeli po ludzku",
+    desc: "Po restarcie mostu Studio Podcastu, Wywiady i Sceny potrafiły pokazywać „nagrywa” bez końca. Teraz takie nagranie zamienia się w błąd z powodem i da się nagrać ponownie (gotowe kwestie nie liczą się drugi raz). Surowe błędy Ollamy („System message must be at the beginning… try again”) dostają wyjaśnienie: to szablon czatu modelu, ponawianie nie pomoże — wybierz inny model. Gdy produkcja gry pada na małym modelu, Katedra radzi, by Dyrygent dał większy.",
+    en: {
+      title: "👻 Recordings no longer hang after a restart, model errors in plain words",
+      desc: "After a bridge restart the Podcast Studio, Interviews and Scenes could show “recording” forever. Now such a recording turns into an error with a reason and can be recorded again (finished lines are not computed twice). Raw Ollama errors (“System message must be at the beginning… try again”) get an explanation: it is the model's chat template, retrying will not help — pick another model. When game production fails on a small model, the Cathedral advises letting the Conductor assign a bigger one.",
+    },
+  },
+  {
+    date: "2026-10-06",
+    ref: "db76542",
+    sector: "core",
+    title: "🎼 Dyrygent jako TeOgochi i droga gry w Game Studio",
+    desc: "Dyrygent został TeOgochi: gra na wybranym modelu, dobiera modele jako pierwszy przy Stole i zna bazę silników Katedry (wideo, muzyka, głos, obraz, 3D, ruch ust, stemy). Dla celu — Stół, film, podcast, gra, fashion, muzyka — mówi, co gotowe, czego brakuje i co znalazł Zwiadowca. Game Studio ma drogę: Galeria → To Get Sauce → Reżyser i GDD → Dyrygent → Obrazy → Assety 3D → Ruch → Krajobrazy → Kodeks. Pracownia obrazów rysuje z gałęzi świata (FLUX.2 klein), bryła powstaje z zaznaczonego wycinka, Blender nadaje bryłom ruch (obrót, lewitacja, kołysanie, oddech, podskok), a saga „Teterhia — Wieczna Saga” startuje jako gotowy projekt. Każdą bryłę można wysłać na Stół do ulepszenia przez stado.",
+    en: {
+      title: "🎼 The Conductor as a TeOgochi and the game path in Game Studio",
+      desc: "The Conductor became a TeOgochi: it plays on a chosen model, assigns models first at the Table and knows the Cathedral's engine base (video, music, voice, image, 3D, lip sync, stems). For a goal — Table, film, podcast, game, fashion, music — it says what is ready, what is missing and what the Scout found. Game Studio has a path: Gallery → To Get Sauce → Director & GDD → Conductor → Images → 3D Assets → Motion → Landscapes → Codex. The Image Workshop draws from the world's branches (FLUX.2 klein), a mesh is made from a selected crop, Blender gives meshes motion (spin, levitation, sway, breath, bounce), and the saga “Teterhia — Eternal Saga” starts as a ready project. Any mesh can be sent to the Table to be improved by the herd.",
+    },
+  },
+  {
     date: "2026-10-06",
     sector: "grv",
     title: "⚡ Giełda Master Flow — nowa nazwa i zlecenia: Katedry mówią też, czego szukają",
@@ -53,6 +141,61 @@ export const UPDATES: UpdateEntry[] = [
     en: {
       title: "🌍 Teterhia — shared world of Cathedrals (MRPG) on the left",
       desc: "A mirror of the Cathedral stream: swipe right (or the “Teterhia” tab at the left edge) to open the shared Teterhia map. Every land is a real Cathedral online in the otakos.wtf registry; its element (Fire, Water, Earth, Air, Ether) comes from the nick, just like the world in the TGS game. Clicking a land opens the Cathedral's card. Honestly: the single-player game grows in the Cathedral today (TeO Games Studio: Director → Conductor → Images → 3D Assets → Motion → Landscapes → Codex, saga “Teterhia — Eternal Saga”); shared play (raids, trade) does not exist yet.",
+    },
+  },
+  {
+    date: "2026-10-05",
+    ref: "cf37718",
+    sector: "core",
+    title: "📦 Składnica Katedry — wspólne postacie, sceny i bryły",
+    desc: "Jeden katalog _OtakOs_Assety dla wszystkich studiów: postacie, sceny, rekwizyty, kreacje i bryły z kartą (imię, rola, kolor, głos). Czerpią z niego i dokładają do niego: Aktorzy w Story Studio, Sceny dialogowe, Studio Podcastu, Assety 3D, Fashion, Studio Gier, Reżyser i Music Studio (utwór jako motyw postaci). Import obsady i całych katalogów z dysku robi kopie, oryginały zostają; usuwanie idzie do kosza. W Hubie: menu „•••” → Świat → Składnica.",
+    en: {
+      title: "📦 The Cathedral Storehouse — shared characters, scenes and meshes",
+      desc: "One _OtakOs_Assety folder for all studios: characters, scenes, props, outfits and meshes with a card (name, role, colour, voice). Taking from it and adding to it: Actors in Story Studio, Dialogue Scenes, the Podcast Studio, 3D Assets, Fashion, Game Studio, the Director and Music Studio (a track as a character's theme). Importing the cast and whole folders from disk makes copies, the originals stay; deleting goes to a bin. In the Hub: “•••” menu → World → Storehouse.",
+    },
+  },
+  {
+    date: "2026-10-05",
+    ref: "c54e09b",
+    sector: "core",
+    title: "👄 Aktorzy ruszają ustami, ujęcia ożywają w 3D",
+    desc: "W Studiu Podcastu karta mówiącego rusza ustami pod jego głos: MuseTalk 1.5 (licencja MIT, ~4 GB VRAM), bez parsera twarzy z zakazem komercji. Płaskie najazdy na zdjęcia ustąpiły ożywionym ujęciom: mapa głębi z kadru (Depth Anything V2, Apache-2.0) i Blender robią z panoramy studio 2.5D z ruchem kamery. Uczciwie: to 2.5D z głębią względną, a jakość z prawdziwymi wagami sprawdza się na sprzęcie Suwerena.",
+    en: {
+      title: "👄 Actors move their lips, shots come alive in 3D",
+      desc: "In the Podcast Studio the speaker's card moves its lips to their voice: MuseTalk 1.5 (MIT licence, ~4 GB VRAM), without the face parser whose licence forbids commercial use. Flat zooms on photos gave way to living shots: a depth map from the frame (Depth Anything V2, Apache-2.0) and Blender turn a panorama into a 2.5D studio with camera motion. Honestly: it is 2.5D with relative depth, and quality with the real weights is checked on the Sovereign's hardware.",
+    },
+  },
+  {
+    date: "2026-10-05",
+    ref: "7f4f593",
+    sector: "core",
+    title: "🎙️ Głos Katedry: Chatterbox (MIT), Głosy Stada i sampler",
+    desc: "Silnik klonu głosu jest teraz w kodzie Katedry i instaluje się jednym przyciskiem: domyślnie Chatterbox Multilingual (MIT — wolno na tym zarabiać, 23 języki z polskim), XTTS tylko za zgodą na licencję niekomercyjną. TeOgochi mówią barwami z wywiadów, a tekst przed mową traci markdown, emoji i ukryte znaki. Sampler głosu bierze próbkę z dowolnego nagrania (nagranie ekranu mp4, wideo, mp3, mikrofon) z falą i odsłuchem, a Demucs wyjmie sam wokal. Studio Podcastu dostało style rozmowy, 🌀 Pralkę (temperatura), dogrywkę, wiele studiów i wstęp po angielsku.",
+    en: {
+      title: "🎙️ The Cathedral's voice: Chatterbox (MIT), Herd Voices and a sampler",
+      desc: "The voice-clone engine now lives in the Cathedral's code and installs with one button: Chatterbox Multilingual by default (MIT — you may earn with it, 23 languages including Polish), XTTS only with consent to its non-commercial licence. TeOgochi speak with voices from the interviews, and text loses markdown, emoji and hidden characters before speech. The voice sampler takes a sample from any recording (mp4 screen capture, video, mp3, microphone) with a waveform and preview, and Demucs can isolate the vocals. The Podcast Studio got conversation styles, the 🌀 Washer (temperature), extra rounds, multiple studios and an English intro.",
+    },
+  },
+  {
+    date: "2026-10-04",
+    ref: "263d79d",
+    sector: "core",
+    title: "💬 Sceny dialogowe filmu",
+    desc: "Silnik Studia Podcastu dla filmu: 2–4 postacie z obsady, kadry projektu jako tła (ujęcie–przeciwujęcie), napisy kinowe i głosy aktorów dają gotową scenę w Montażowni. Z planu odcinka Reżysera Katedra proponuje sceny, Ty wybierasz, a gotowy dialog trafia do Rękopisu jako szkic. Story Loom jest podpięty pod serial, bez dawnych atrap.",
+    en: {
+      title: "💬 Film dialogue scenes",
+      desc: "The Podcast Studio engine for film: 2–4 characters from the cast, project frames as backgrounds (shot–reverse shot), cinema subtitles and the actors' voices give a finished scene in the Editing Room. From the Director's episode plan the Cathedral proposes scenes, you choose, and the finished dialogue goes to the Manuscript as a draft. Story Loom is connected to the series, without the old fakes.",
+    },
+  },
+  {
+    date: "2026-10-04",
+    ref: "15e2871",
+    sector: "grv",
+    title: "🪪 Każda Katedra ma własny skarbiec i właściciela",
+    desc: "Nowa Katedra nie kopiuje już „TeO” i „Mistrza Arkadiusza”: zakłada unikalny skarbiec, a właściciela zakładasz Ty, swoim imieniem, przy pierwszym wejściu („Jak masz na imię?”). Z kodem zaproszenia nowy węzeł startuje z 12 345 GRV zamiast 1000. Imię zmienisz w Domu TeOgochi → Bilans; klucz i saldo zostają.",
+    en: {
+      title: "🪪 Every Cathedral has its own treasury and owner",
+      desc: "A new Cathedral no longer copies “TeO” and “Master Arkadiusz”: it creates a unique treasury, and you create the owner with your own name on first entry (“What is your name?”). With an invitation code a new node starts with 12,345 GRV instead of 1,000. You can change the name in the TeOgochi Home → Balance; the key and balance stay.",
     },
   },
   {
@@ -94,6 +237,17 @@ export const UPDATES: UpdateEntry[] = [
   },
   {
     date: "2026-10-03",
+    ref: "836ff3a",
+    sector: "core",
+    title: "🎭 TeOgochi Aktor — obsada i wywiad o filmie",
+    desc: "Obsada filmu (postać, rola, zdjęcie lub klip, kolor, głos) i nagrany wywiad o nim: aktorzy mówią swoimi głosami na podstawie faktów projektu (kanon, odcinki, publikacja YouTube), a prowadzi Kronikarz. Scenariusz poprawiasz przed nagraniem; jest wersja po angielsku z tłumaczeniem dialogu, podkład pod rozmową i plik prosto do Montażowni i publikacji.",
+    en: {
+      title: "🎭 The Actor TeOgochi — a cast and an interview about the film",
+      desc: "A film's cast (character, role, photo or clip, colour, voice) and a recorded interview about it: the actors speak in their own voices from the project's facts (canon, episodes, YouTube release), hosted by the Chronicler. You edit the script before recording; there is an English version with a translated dialogue, a music bed under the talk and a file going straight to the Editing Room and publishing.",
+    },
+  },
+  {
+    date: "2026-10-03",
     sector: "web",
     title: "Strona aplikacji TeO Hub OtakOS, polityka prywatności i warunki",
     desc: "Nowe stałe strony /teo-hub/, /privacy/ i /terms/ (po polsku i angielsku): czym jest TeO Hub OtakOS, do czego i w jakim zakresie używa YouTube, gdzie są dane (tylko na komputerze twórcy) i jak cofnąć dostęp. Potrzebne do weryfikacji aplikacji w Google. W stopce linki zastąpiły wymyśloną sumę SHA256.",
@@ -120,6 +274,28 @@ export const UPDATES: UpdateEntry[] = [
     en: {
       title: "Cathedrals with a fixed address on the network + “offline” says why",
       desc: "The registry used to accept only quick tunnel addresses (*.trycloudflare.com), so a Cathedral on a named tunnel (a fixed address on its own domain) stayed offline. Now the registry steward's fixed address works right away, and any other Cathedral's fixed domain lands on the steward's Table and, once approved, is checked like a quick tunnel — the registry still never calls unapproved addresses. When your Cathedral is offline, the “Yours” panel shows the registry's latest reply to its check-in instead of just “offline”.",
+    },
+  },
+  {
+    date: "2026-10-02",
+    ref: "92c58ff",
+    sector: "mesh",
+    title: "💬 TOST między Katedrami — wiadomości szyfrowane od końca do końca",
+    desc: "Katedry online z rejestru otakos.wtf stają się kontaktami. Wiadomość jedzie w kopercie X25519 + AES-256-GCM, podpisana kluczem wizytówki i sprawdzana kluczem nadawcy z rejestru. Gdy odbiorca jest offline, czeka w Twojej Katedrze i ponawia się co minutę (do 7 dni). W Hubie: TOST → „🏛️ Katedry”, na telefonie: StoL → TOST. Uczciwie: szyfr chroni drogę, a rozmowy leżą na dysku Twojej Katedry jawnie.",
+    en: {
+      title: "💬 TOST between Cathedrals — end-to-end encrypted messages",
+      desc: "Cathedrals online in the otakos.wtf registry become contacts. A message travels in an X25519 + AES-256-GCM envelope, signed with the card key and checked against the sender's key from the registry. If the recipient is offline, it waits in your Cathedral and is retried every minute (up to 7 days). In the Hub: TOST → “🏛️ Cathedrals”, on the phone: StoL → TOST. Honestly: the encryption protects the route, while conversations sit on your Cathedral's disk unencrypted.",
+    },
+  },
+  {
+    date: "2026-10-02",
+    ref: "f6f16ca",
+    sector: "web",
+    title: "🌍 Katedra w dowolnym języku",
+    desc: "Katedra pisana po polsku tłumaczy ekran na wybrany język lokalnym modelem i pamięta tłumaczenia na dysku. Rozmowy z agentami i pola do pisania zostają nietknięte. Uczciwie: jakość zależy od lokalnego modelu, a pierwsze wejście w nowy język pokazuje polski, zanim się przełączy.",
+    en: {
+      title: "🌍 The Cathedral in any language",
+      desc: "The Cathedral, written in Polish, translates the screen into the chosen language with a local model and remembers translations on disk. Conversations with agents and input fields are left untouched. Honestly: quality depends on the local model, and the first visit in a new language shows Polish before it switches.",
     },
   },
   {
