@@ -86,6 +86,39 @@ export function zleceniaZWizytowki(lista) {
     }).filter(Boolean);
 }
 
+/**
+ * 🏛️ Globalny Klub Mistrzów (2026-10-09, Suweren: „robimy rejestr na otakos.wtf”): przedstawicielstwo Katedry z wizytówki
+ * (`mistrz`, teo-app-hub services/KlubMistrzow.js) — etap JaJa Mistrza, event dnia Teterhii, turnieje globalne, które
+ * Katedra ogłasza, i jej wyniki. Rejestr niesie to w /api/katedry, strona pokazuje Klub i rankingi, a Katedry nie muszą
+ * pukać do każdej wizytówki. Wyniki DEKLARUJE Katedra (tożsamość potwierdza meldunek) — strona mówi to wprost.
+ */
+export const ETAPY_JAJA = ['jajo', 'drży', 'pęka', 'wykluty'];
+export const DZIEDZINY = ['takt', 'zwinnosc', 'spryt', 'urok'];
+const DATA = /^\d{4}-\d{2}-\d{2}$/;
+export function mistrzZWizytowki(m, teraz = Date.now()) {
+    if (!m || typeof m !== 'object' || Array.isArray(m)) return null;
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const calk = (v, min, max) => { const x = Math.round(Number(v)); return Number.isFinite(x) ? Math.min(max, Math.max(min, x)) : min; };
+    const dzis = new Date(teraz).toISOString().slice(0, 10);
+    const eventy = (Array.isArray(m.eventy) ? m.eventy : []).slice(0, 3).map((e) => {
+        if (!e || typeof e !== 'object' || !/^g-[0-9a-f]{8}$/.test(String(e.id)) || e.typ !== 'turniej' || !DZIEDZINY.includes(e.dziedzina)) return null;
+        const od = String(e.od ?? ''), do_ = String(e.do ?? '');
+        if (!DATA.test(od) || !DATA.test(do_) || od > do_ || do_ < dzis) return null;
+        return { id: e.id, typ: 'turniej', dziedzina: e.dziedzina, opis: tekst(e.opis, 200), od, do: do_ };
+    }).filter(Boolean);
+    const wyniki = (Array.isArray(m.wyniki) ? m.wyniki : []).slice(0, 10).map((w) => {
+        if (!w || typeof w !== 'object' || !/^[a-z0-9][a-z0-9-]{2,31}:g-[0-9a-f]{8}$/.test(String(w.event)) || Number(w.starc) !== 3) return null;
+        const wygrane = Math.round(Number(w.wygrane));
+        if (!(wygrane >= 0 && wygrane <= 3)) return null;
+        return { event: w.event, wygrane, starc: 3, kiedy: tekst(w.kiedy, 30), mini: (Array.isArray(w.mini) ? w.mini : []).map((x) => tekst(x, 30)).filter(Boolean).slice(0, 3) };
+    }).filter(Boolean);
+    return {
+        etap: ETAPY_JAJA.includes(m.etap) ? m.etap : 'jajo',
+        obserwacji: calk(m.obserwacji, 0, 1_000_000), zasad: calk(m.zasad, 0, 15),
+        teterhia: tekst(m.teterhia, 80) || null, eventy, wyniki,
+    };
+}
+
 async function pobierzWizytowke(fetchFn, adres) {
     const r = await fetchFn(`${adres}/api/wizytowka`, { redirect: 'error', signal: AbortSignal.timeout(8_000), headers: { 'User-Agent': 'otakos.wtf-rejestr' } });
     if (!r.ok) throw new Error(`wizytówka odpowiedziała HTTP ${r.status}`);
@@ -198,7 +231,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
             catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -217,7 +250,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };

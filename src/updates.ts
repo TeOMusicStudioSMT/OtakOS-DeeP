@@ -37,6 +37,16 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-09",
+    sector: "mesh",
+    title: "🏛️ Globalny Klub Mistrzów — Mistrzowie Katedr na otakos.wtf",
+    desc: "Każda Katedra przedstawia w sieci swojego JaJa Mistrza: jego etap, dzisiejszy event jej Teterhii, turnieje globalne, które ogłosiła, i swoje wyniki. Rejestr Katedr niesie to razem z wizytówką (filtruje każde pole), a strona pokazuje Klub i rankingi turniejów. Turniej ogłaszasz w swojej Katedrze (Inkubator → Klub Mistrzów), a gracze każdej Katedry grają go w swojej Teterhii — Mistrz Gry każdej z nich orzeka po swojemu, wynik wraca do Klubu. Uczciwie: wyniki deklarują Katedry (tożsamość potwierdza podpisany meldunek, liczb nikt nie sprawdza niezależnie) i za udział nie płyną GRV — to etap 1.",
+    en: {
+      title: "🏛️ Global Masters’ Club — Cathedral Masters on otakos.wtf",
+      desc: "Every Cathedral now represents its Master’s Egg on the network: its stage, today’s event in its Teterhia, the global tournaments it announced and its results. The Cathedral registry carries this with the card (every field filtered) and the site shows the Club and tournament rankings. You announce a tournament in your Cathedral (Incubator → Masters’ Club) and players of every Cathedral play it in their own Teterhia — each one’s Game Master referees in its own way, and the result returns to the Club. Honestly: results are declared by the Cathedrals (identity is confirmed by a signed check-in, numbers are not independently verified) and no GRV changes hands — this is stage 1.",
+    },
+  },
+  {
+    date: "2026-10-09",
     ref: "32df2f6",
     sector: "core",
     title: "🥚 JaJo Mistrza — Katedra uczy się Twojego stylu",
