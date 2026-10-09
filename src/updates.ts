@@ -37,6 +37,61 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-09",
+    ref: "96887a2",
+    sector: "mesh",
+    title: "🏆 Mistrz Gry Teterhii i Globalny Klub Mistrzów",
+    desc: "Mistrz Gry orzeka ton czynu gracza (Jev albo model, z zamkniętej listy), ogłasza event dnia odbijający prawdziwy fakt z Katedry i zapisuje turnieje. JaJo przedstawia Katedrę w publicznej wizytówce i czyta Mistrzów innych Katedr z rejestru otakos.wtf: eventy globalne i rankingi. Turnieje Klubu grane są w Teterhii każdej Katedry.",
+    en: {
+      title: "🏆 The Teterhia Game Master and the Global Masters' Club",
+      desc: "The Game Master judges the tone of a player's deed (Jev or a model, from a closed list), announces an event of the day reflecting a real fact from the Cathedral and records tournaments. The Egg represents the Cathedral in its public card and reads other Cathedrals' Masters from the otakos.wtf registry: global events and rankings. Club tournaments are played in every Cathedral's Teterhia.",
+    },
+  },
+  {
+    date: "2026-10-09",
+    ref: "d91c662",
+    sector: "core",
+    title: "🧍 Własna postać Katedry w MRPG i bohaterowie startowi",
+    desc: "Katedra może mieć własną postać w świecie gry — z opisu albo zdjęcia, z riggiem, publikowaną do gry i do wizytówki. Gra ma bohaterów startowych (trzy kobiety, trzech mężczyzn): obraz, bryła, rig i chód. Nowy styl obrazu „Postać do riga” (dwie nogi, A-poza) idzie prosto do 3D, a Reżyser proponuje postacie pod szkielet.",
+    en: {
+      title: "🧍 Your Cathedral's own character in the MRPG and starter heroes",
+      desc: "A Cathedral can have its own character in the game world — from a description or a photo, rigged, published to the game and the card. The game has starter heroes (three women, three men): image, mesh, rig and walk. A new image style “Character for rigging” (two legs, A-pose) goes straight to 3D, and the Director proposes characters suited to a skeleton.",
+    },
+  },
+  {
+    date: "2026-10-09",
+    ref: "1f8c9d4",
+    sector: "core",
+    title: "🧸 Meshy: Image-to-3D z chodem i Pracownia merchu",
+    desc: "Przez Meshy (z Twoim kluczem i zgodą na koszt) obraz staje się bryłą z riggiem i animacjami chodu, biegu i akcji. Pracownia merchu robi z bryły figurkę, brelok albo magnes: analiza pod druk, plik 3MF, Wystawa i Marketplace. Retekstura bierze styl ze zdjęcia bryły, a tekstury modelu są ograniczone do 2K (8K czerniło Hub).",
+    en: {
+      title: "🧸 Meshy: Image-to-3D with walking and a merch workshop",
+      desc: "Through Meshy (with your key and consent to the cost) an image becomes a mesh with a rig and walk, run and action animations. The merch workshop turns a mesh into a figurine, keychain or magnet: print analysis, a 3MF file, the Exhibition and the Marketplace. Retexturing takes its style from a photo of the mesh, and model textures are capped at 2K (8K blacked out the Hub).",
+    },
+  },
+  {
+    date: "2026-10-09",
+    ref: "887e584",
+    sector: "core",
+    title: "🎬 Cutscenki i intro gry, taniec w rytm",
+    desc: "Reżyser Gry zleca cutscenki i intro: Wan 2.2 liczy je lokalnie, plik trafia do gry, a gra odtwarza film przy zdarzeniu. Rytm utworu (BPM i uderzenia) Katedra liczy lokalnie z dźwięku, a Mistrz Gry zapisuje tańce TeOgochi.",
+    en: {
+      title: "🎬 Game cutscenes and intro, dancing to the beat",
+      desc: "The Game Director commissions cutscenes and an intro: Wan 2.2 renders them locally, the file goes into the game and the game plays the film on an event. The Cathedral computes a track's rhythm (BPM and beats) locally from the audio, and the Game Master records TeOgochi dances.",
+    },
+  },
+  {
+    date: "2026-10-09",
+    ref: "e303cd3",
+    sector: "core",
+    title: "👁️ Oczy Katedry z modelu, który naprawdę widzi, i podpowiedzi JaJa dla Kodeksa",
+    desc: "Zadania z obrazem idą do modelu, który Ollama ma i który widzi — koniec błędów 404 przez brakujący model. Katedra zapisuje użycia modeli z oceną Jev. Od 3. rundy Kodeks dostaje radę Mistrza zebraną ze wszystkich prób zadania, także tych na innych modelach z łańcucha zapasowych. Recenzent wykrywa martwy moduł po grafie importów.",
+    en: {
+      title: "👁️ The Cathedral's eyes from a model that can really see, and the Egg's hints for the Codex",
+      desc: "Image tasks go to a model that Ollama has and that can see — no more 404 errors from a missing model. The Cathedral records model usage with a Jev rating. From round 3 the Codex gets the Master's advice gathered from every attempt at the task, including those on other models in the fallback chain. The Reviewer detects a dead module from the import graph.",
+    },
+  },
+  {
+    date: "2026-10-09",
     sector: "mesh",
     title: "🏛️ Postać Katedry przy jej wyspie",
     desc: "Rejestr niesie postać, którą Suweren opublikował w swojej Katedrze: imię, płeć, żywioł, drogę i opis. Plik 3D przechodzi tylko jako /wizytowka/postac.glb spod sprawdzonego adresu tej Katedry, nic innego. W Teterhii i strumieniu Katedr postać stoi przy wyspie, a podgląd 3D (z chodem, gdy jest rig) wczytuje się dopiero na kliknięcie: jeden naraz, a po zamknięciu karta graficzna jest zwalniana. Postać pokazuje się tylko przy Katedrze online, która ją opublikowała.",
