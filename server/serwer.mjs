@@ -4,7 +4,7 @@
  * Zastępuje samego nginx (2026-10-02): strona dalej jest statyczna, a jedyny kawałek „żywy"
  * to /api/katedry — kto jest online. Bez zależności, sam Node. Cloud Run podaje PORT (8080).
  *
- *   GET  /api/katedry           → { katedry: [{ nick, adres, motto, widziano }] }
+ *   GET  /api/katedry           → { katedry: [{ nick, adres, motto, klucz, moc?, zlecenia?, mistrz?, postac?, widziano }] }
  *   POST /api/katedry/meldunek  → meldunek Katedry (podpisany ed25519, patrz rejestr.mjs)
  *   GET  /api/katedry/stan/:nick → { online, meldunek: { kiedy, ok, wiadomosc } } — powód „offline”
  *   reszta                      → pliki z dist/, nieznane ścieżki → index.html (SPA)

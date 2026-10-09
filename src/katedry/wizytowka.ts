@@ -27,7 +27,9 @@ export interface ZlecenieKatedry { id: string; rodzaj: 'zadanie' | 'projekt'; ty
 export interface EventKlubu { id: string; typ: 'turniej'; dziedzina: string; opis: string; od: string; do: string }
 export interface WynikKlubu { event: string; wygrane: number; starc: number; kiedy: string; mini: string[] }
 export interface MistrzKatedry { etap: string; obserwacji: number; zasad: number; teterhia: string | null; eventy: EventKlubu[]; wyniki: WynikKlubu[] }
-export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; widziano: string }
+/** 🏛️ Postać Katedry (avatar Suwerena w Teterhii; rejestr oczyszcza w server/rejestr.mjs `postacZWizytowki`). */
+export interface PostacKatedry { imie: string; plec: 'kobieta' | 'mezczyzna' | 'inna'; zywiol: string; droga: string; opis: string; ruch: 'chod' | 'bieg' | null; glb: string }
+export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; widziano: string }
 
 const tekst = (x: unknown, max = 300) => (typeof x === 'string' ? x.slice(0, max) : '');
 const https = (x: unknown) => (typeof x === 'string' && /^https:\/\/[^\s"'<>]+$/.test(x) ? x : null);
@@ -73,6 +75,20 @@ async function json(url: string, ms: number): Promise<any> {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return await r.json();
     } finally { clearTimeout(t); }
+}
+
+/** Postać z rejestru — drugi raz na stronie: plik TYLKO spod adresu tej Katedry i tylko /wizytowka/postac.glb?v=…; inaczej brak. */
+export function postacZ(k: KatedraOnline): PostacKatedry | null {
+    const p: any = k.postac;
+    if (!p || typeof p !== 'object' || typeof p.glb !== 'string') return null;
+    let origin: string;
+    try { origin = new URL(k.adres).origin; } catch { return null; }
+    const przed = `${origin}/wizytowka/postac.glb?v=`;
+    if (!origin.startsWith('https://') || !p.glb.startsWith(przed) || !/^\d{1,16}(&ruch=(chod|bieg))?$/.test(p.glb.slice(przed.length))) return null;
+    return {
+        imie: tekst(p.imie, 24), plec: ['kobieta', 'mezczyzna'].includes(p.plec) ? p.plec : 'inna', zywiol: tekst(p.zywiol, 20), droga: tekst(p.droga, 20),
+        opis: tekst(p.opis, 600), ruch: p.ruch === 'chod' || p.ruch === 'bieg' ? p.ruch : null, glb: p.glb,
+    };
 }
 
 /** Kto jest online — z rejestru tej domeny. null = rejestr nieosiągalny (np. strona bez serwera). */

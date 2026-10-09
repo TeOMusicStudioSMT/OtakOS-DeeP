@@ -14,7 +14,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import KartaKatedry from './KartaKatedry';
 import { gestSwiezy, oznaczGest } from '../mrpg/Teterhia';
-import { katedryOnline, stanKatedry, twojaWizytowka, wizytowkaZ, type KatedraOnline, type StanKatedry, type Wizytowka } from './wizytowka';
+import { KartaPostaci } from './PostacKatedry';
+import { katedryOnline, postacZ, stanKatedry, twojaWizytowka, wizytowkaZ, type KatedraOnline, type StanKatedry, type Wizytowka } from './wizytowka';
 
 const czyKatedry = () => /^#katedry([/?]|$)/.test(window.location.hash);
 const nickZHasha = () => window.location.hash.match(/^#katedry\/([a-z0-9-]{3,32})$/)?.[1] ?? null;
@@ -119,6 +120,7 @@ const KartaSieci: React.FC<{ k: KatedraOnline; pl: boolean; aktywna: boolean }> 
         className={`absolute right-3 top-3 z-10 rounded-full border px-2.5 py-0.5 font-mono text-[10px] ${moja ? 'border-amber-300/60 bg-amber-400/20 text-amber-100' : 'border-white/15 text-slate-500 hover:text-slate-200'}`}>
         {moja ? (pl ? '⭐ moja' : '⭐ mine') : (pl ? '☆ to moja' : '☆ this is mine')}
       </button>
+      {postacZ(k) && <div className="mx-auto max-w-md px-4 pt-14"><KartaPostaci p={postacZ(k)!} pl={pl} nick={k.nick} /></div>}
       {w && w !== 'laduje' && w !== 'blad' ? <KartaKatedry w={w} pl={pl} /> : (
         <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
           <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">∴ Katedra ∴</div>
