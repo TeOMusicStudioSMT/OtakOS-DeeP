@@ -36,6 +36,83 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-09",
+    ref: "32df2f6",
+    sector: "core",
+    title: "🥚 JaJo Mistrza — Katedra uczy się Twojego stylu",
+    desc: "Katedra zbiera pary „co napisał model → jak to poprawiłeś” z dialogów i publikacji, a do tego Twoje decyzje przy Stole. Z nich składa lekcję zasad, każdą z dowodami, oraz dane do treningu (SFT i DPO) dla Kuźni Soup. Kodeks dokłada swoje rundy „źle → dobrze”: przegrane i przyjęte. JaJo odzywa się przez Orbitę — o swoim etapie, nowej lekcji, wygranej Kodeksa po porażkach. Panel jest w Inkubatorze. Uczciwie: to etap 1 — JaJo zbiera i porządkuje; własny model z tych danych wykuwa Kuźnia dopiero na Twoje życzenie.",
+    en: {
+      title: "🥚 The Master's Egg — the Cathedral learns your style",
+      desc: "The Cathedral collects pairs of “what the model wrote → how you corrected it” from dialogues and publications, plus your decisions at the Table. From them it builds a lesson of rules, each with evidence, and training data (SFT and DPO) for the Soup Forge. The Codex adds its “wrong → right” rounds: the failed and the accepted ones. The Egg speaks through the Orbit — about its stage, a new lesson, a Codex win after failures. The panel is in the Incubator. Honestly: this is stage 1 — the Egg collects and organises; the Forge makes your own model from this data only when you ask.",
+    },
+  },
+  {
+    date: "2026-10-09",
+    ref: "d41fc73",
+    sector: "core",
+    title: "☁️ Bryły dopracowane w chmurze (Meshy) — najpierw wycena, potem Twoja zgoda",
+    desc: "Bryłę z Assetów 3D można wysłać do Meshy: nowa tekstura (styl, 2K–8K, PBR) albo gęstsza siatka (100–300 tys. ścian). Przed wysłaniem Katedra pokazuje wycenę z cennika, saldo konta i rozmiar pliku — zlecenie wychodzi tylko z potwierdzoną kwotą. Wynik wraca jako nowa wersja obok starej. Zwiadowca szuka w sieci promocji i kodów rabatowych takich usług — pokazuje tylko znaleziska ze źródłem, niczego nie wpisuje i nie płaci. Klucz Meshy idzie przez Kibel i „Udostępnij mostowi”. Produkcja gry ma też „chmurę po chmurze”: gdy model chmury padnie, spróbuje innej chmury przed lokalnym.",
+    en: {
+      title: "☁️ Meshes refined in the cloud (Meshy) — a quote first, then your consent",
+      desc: "A mesh from 3D Assets can be sent to Meshy: a new texture (style, 2K–8K, PBR) or a denser mesh (100–300k faces). Before sending, the Cathedral shows a price from the price list, the account balance and the file size — the job goes out only with a confirmed amount. The result comes back as a new version next to the old one. The Scout searches the web for promotions and discount codes for such services — it shows only findings with a source, enters nothing and pays nothing. The Meshy key goes through the Kibel and “Share with the bridge”. Game production also gets “cloud after cloud”: if a cloud model fails, it tries another cloud before the local one.",
+    },
+  },
+  {
+    date: "2026-10-08",
+    ref: "9ff03f8",
+    sector: "core",
+    title: "🎼 Dyrygent: równe szanse modeli, reguły ról i partytury genialnych wykonań",
+    desc: "Każdy model bez karty dostaje kartę z faktów, a oceny liczą się tylko od Sędziego-Jev — stare, zawyżone oceny przestały przyciągać wybór. Role mają wymagania (Kodeks: model do kodu albo ≥ 7B, Wektor i Strażnik ≥ 8B). Jev zawęża do trzech kandydatów, a większy model lokalny rozstrzyga z uzasadnieniem. Partytury zapisują układ produkcji (cele, modele, silniki, grafy ComfyUI, skille); wykonanie ocenione przez Sędziego na ≥ 9 zapisuje się samo i Dyrygent podpowiada je przy kolejnym doborze. Straż modeli: gdy przydzielony model zniknie z Ollamy, wchodzi zastępca według reguł roli, a oryginał wraca sam. Jev ma też tryb lokalny na embeddingach (wybór); tak/nie i skala zostają w chmurze.",
+    en: {
+      title: "🎼 Conductor: equal chances for models, role rules and scores of brilliant performances",
+      desc: "Every model without a card gets a card built from facts, and ratings count only from the Jev Judge — old, inflated ratings no longer pull the choice. Roles have requirements (Codex: a code model or ≥ 7B, Vector and Guardian ≥ 8B). Jev narrows to three candidates and a bigger local model decides with a justification. Scores record a production setup (goals, models, engines, ComfyUI graphs, skills); a performance the Judge rates ≥ 9 saves itself and the Conductor suggests it next time. Model guard: when an assigned model disappears from Ollama, a substitute steps in by the role's rules and the original comes back on its own. Jev also has a local mode on embeddings (choice); yes/no and scale stay in the cloud.",
+    },
+  },
+  {
+    date: "2026-10-08",
+    ref: "b280179",
+    sector: "core",
+    title: "🎨 Bryły poprawiane w sekundy, bez GPU: kolor, gęstszy fragment, świecące oko",
+    desc: "Kolor bryły na żywo: jasność, kontrast, nasycenie, odcień, czerń i auto-poziomy. Zaznaczony fragment (np. twarz) dostaje własny budżet ścian, reszta swój. Świecące oko: jasny fragment w zaznaczeniu dostaje materiał emisyjny (próg, moc, barwa, przód / tył / na wylot), a gra dostaje przepis na światło w tym miejscu. Każda poprawka to nowa wersja obok starej i przechodzi na kolejne wersje (upiększanie, upraszczanie, „Do gry”).",
+    en: {
+      title: "🎨 Meshes adjusted in seconds, no GPU: colour, a denser region, a glowing eye",
+      desc: "Live mesh colour: brightness, contrast, saturation, hue, blacks and auto-levels. A selected region (e.g. a face) gets its own face budget, the rest its own. Glowing eye: a bright part of the selection gets an emissive material (threshold, strength, colour, front / back / through), and the game gets a recipe for a light at that spot. Every adjustment is a new version next to the old one and carries over to later versions (beautify, simplify, “To game”).",
+    },
+  },
+  {
+    date: "2026-10-08",
+    ref: "b41f464",
+    sector: "core",
+    title: "🎞️ Wideo nie zrywa się po 45 minutach",
+    desc: "Ujęcie 121 klatek dekodowało się w ComfyUI ~40 minut, bo zwykły dekoder nie mieścił się w 6 GB, a kolejka po 45 minutach uznawała je za błąd, choć plik powstawał. Teraz grafy wideo dekodują kafelkami (VAEDecodeTiled), a stan zlecenia mówi, czy ComfyUI liczy, trzyma w kolejce, czy zgubił zadanie. Termin przesuwa się, dopóki liczy (sufit 4 h).",
+    en: {
+      title: "🎞️ Video no longer gets cut off after 45 minutes",
+      desc: "A 121-frame shot took ~40 minutes to decode in ComfyUI because the plain decoder did not fit in 6 GB, and the queue marked it as failed after 45 minutes even though the file was being made. Now video graphs decode in tiles (VAEDecodeTiled), and the job status says whether ComfyUI is computing it, holding it in the queue or has lost it. The deadline moves while it computes (4 h ceiling).",
+    },
+  },
+  {
+    date: "2026-10-08",
+    ref: "ed7ca51",
+    sector: "core",
+    title: "🎭 TeOgochi w roli — scena z Teterhii w rozmowie",
+    desc: "Rozmowa z TeOgochi może nieść scenę z gry: karta roli, kim jest i gdzie stoi. Postać nie wychodzi z roli, odpowiada krótko i nie dostaje żadnych narzędzi — np. Aktor gra stworka w Teterhii. Scena zostaje w rozmowie na kolejne tury.",
+    en: {
+      title: "🎭 TeOgochi in character — a Teterhia scene in the conversation",
+      desc: "A conversation with a TeOgochi can carry a scene from the game: a role card, who it is and where it stands. The character stays in role, answers briefly and gets no tools — e.g. the Actor plays a creature in Teterhia. The scene stays in the conversation for the following turns.",
+    },
+  },
+  {
+    date: "2026-10-08",
+    ref: "ab6f419",
+    sector: "web",
+    title: "⚡ Hub i Montażownia szybciej",
+    desc: "Montażownia opisywała filmy dekodując każdy w całości — materiał 291 filmów liczył się 247 s, a Story Studio pokazywało zero. Teraz czyta nagłówek (ffprobe, ~0,4 s na plik), pamięta opisy i czyta po 6 naraz: 12 s za pierwszym razem, 0,1 s potem. Hub nie wraca do Bramy przy każdym przeładowaniu (wyjście to 🚪 w nagłówku), sprawdza most do skutku co 3 s i nie obserwuje katalogów danych (~126 tys. plików), więc odpowiada od razu. Reżyser zna limit planu i nie mówi „zapisałem”, zanim przyjmiesz propozycję.",
+    en: {
+      title: "⚡ Faster Hub and Editing Room",
+      desc: "The Editing Room described films by decoding each one in full — a set of 291 films took 247 s and Story Studio showed zero. Now it reads the header (ffprobe, ~0.4 s per file), remembers descriptions and reads 6 at a time: 12 s the first time, 0.1 s afterwards. The Hub no longer returns to the Gate on every reload (the exit is 🚪 in the header), checks the bridge every 3 s until it answers and no longer watches data folders (~126k files), so it responds at once. The Director knows the plan limit and does not say “saved” before you accept a proposal.",
+    },
+  },
+  {
     date: "2026-10-08",
     ref: "0d7828c",
     sector: "core",
