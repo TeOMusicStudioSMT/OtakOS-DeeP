@@ -119,6 +119,29 @@ export function mistrzZWizytowki(m, teraz = Date.now()) {
     };
 }
 
+/**
+ * 🏛️ Postać Katedry w MRPG (2026-10-09, teo-app-hub services/PostacKatedry.js → `publiczna()`): avatar Suwerena
+ * przy jego wyspie. Rejestr przepuszcza TYLKO znane pola i TYLKO plik `/wizytowka/postac.glb?v=<liczba>[&ruch=chod|bieg]`
+ * spod adresu tej Katedry, który sam sprawdził przy meldunku — żadnego innego adresu, ścieżki ani parametru.
+ */
+export const PLCIE = ['kobieta', 'mezczyzna', 'inna'];
+export const ZYWIOLY = ['ogien', 'woda', 'ziemia', 'powietrze', 'eter'];
+export const DROGI = ['tworca', 'opiekun', 'wedrowiec', 'badacz'];
+const GLB_POSTACI = /^\/wizytowka\/postac\.glb\?v=(\d{1,16})(?:&ruch=(chod|bieg))?$/;
+export function postacZWizytowki(p, adres) {
+    if (!p || typeof p !== 'object' || Array.isArray(p) || typeof p.glb !== 'string') return null;
+    if (!hostAdresu(adres)) return null;
+    const g = p.glb.match(GLB_POSTACI);
+    if (!g) return null;
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const z = (v, lista, dom) => (lista.includes(v) ? v : dom);
+    return {
+        imie: tekst(p.imie, 24), plec: z(p.plec, PLCIE, 'inna'), zywiol: z(p.zywiol, ZYWIOLY, 'eter'), droga: z(p.droga, DROGI, 'wedrowiec'),
+        opis: tekst(p.opis, 600), ruch: g[2] ?? null,
+        glb: `${new URL(adres).origin}/wizytowka/postac.glb?v=${g[1]}${g[2] ? `&ruch=${g[2]}` : ''}`,
+    };
+}
+
 async function pobierzWizytowke(fetchFn, adres) {
     const r = await fetchFn(`${adres}/api/wizytowka`, { redirect: 'error', signal: AbortSignal.timeout(8_000), headers: { 'User-Agent': 'otakos.wtf-rejestr' } });
     if (!r.ok) throw new Error(`wizytówka odpowiedziała HTTP ${r.status}`);
@@ -231,7 +254,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
             catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -250,7 +273,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };

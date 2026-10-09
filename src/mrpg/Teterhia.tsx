@@ -11,7 +11,8 @@
  * Saga: „Teterhia — Wieczna Saga” (Katedra → Game Studio → Reżyser i GDD).
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { katedryOnline, type KatedraOnline } from '../katedry/wizytowka';
+import { katedryOnline, postacZ, type KatedraOnline } from '../katedry/wizytowka';
+import { KartaPostaci, ZNAK_PLCI } from '../katedry/PostacKatedry';
 
 /** Ten sam hash co w grze TGS (src/gra/rdzen.ts, FNV-1a 32-bit). */
 function hash(s: string): number {
@@ -144,6 +145,7 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
                     <polygon points={ksztalt(kr)} fill={`hsl(${kr.zywiol.hue} 55% ${zazn ? 42 : 30}%)`} stroke={`hsl(${kr.zywiol.hue} 80% ${zazn ? 75 : 55}%)`} strokeWidth={zazn ? 1.4 : 0.6} />
                     <circle cx={kr.x} cy={kr.y} r={1.6} fill="#fef3c7" />
                     <text x={kr.x} y={kr.y + kr.r + 6} textAnchor="middle" fontSize={5} fontFamily="monospace" fill={zazn ? '#ecfdf5' : '#a7f3d0'}>{kr.k.nick}</text>
+                    {postacZ(kr.k) && <text x={kr.x} y={kr.y - 3} textAnchor="middle" fontSize={5.5} fill="#fde68a">{ZNAK_PLCI[postacZ(kr.k)!.plec]} {postacZ(kr.k)!.imie}</text>}
                     {kr.k.moc && <text x={kr.x + kr.r * 0.7} y={kr.y - kr.r * 0.6} fontSize={6}>⚡</text>}
                   </g>
                 );
@@ -159,6 +161,7 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
               <h3 className="font-mono text-2xl font-black text-white">{biezaca.k.nick}</h3>
               {biezaca.k.motto && <p className="text-xs italic text-amber-200/90">„{biezaca.k.motto}”</p>}
               <p className="text-xs text-slate-300">{pl ? 'Żywioł' : 'Element'}: <b style={{ color: `hsl(${biezaca.zywiol.hue} 80% 70%)` }}>{pl ? biezaca.zywiol.pl : biezaca.zywiol.en}</b> — {pl ? biezaca.zywiol.opis.pl : biezaca.zywiol.opis.en}</p>
+              {postacZ(biezaca.k) && <KartaPostaci p={postacZ(biezaca.k)!} pl={pl} nick={biezaca.k.nick} />}
               {biezaca.k.moc && <p className="text-xs text-slate-300">⚡ {pl ? 'Kuźnia mocy' : 'Power forge'}: {biezaca.k.moc.vramGB} GB VRAM · {biezaca.k.moc.modele.slice(0, 3).join(', ')}</p>}
               <a href={`#katedry/${biezaca.k.nick}`} className="inline-block rounded-lg border border-fuchsia-400/40 px-3 py-1 text-xs text-fuchsia-200 hover:bg-fuchsia-900/30">{pl ? 'Odwiedź wizytówkę Katedry →' : 'Visit the Cathedral card →'}</a>
             </div>
@@ -175,6 +178,7 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
             <p className="font-semibold text-slate-200">{pl ? 'Gdzie jesteśmy — uczciwie' : 'Where we are — honestly'}</p>
             <p className="text-emerald-300">✓ {pl ? 'Gra dla jednego gracza rośnie w Katedrze: TeO Games Studio (Reżyser → Dyrygent → Obrazy → 3D → Ruch → Krajobrazy → Kodeks).' : 'The single-player game grows in the Cathedral: TeO Games Studio (Director → Conductor → Images → 3D → Motion → Landscapes → Codex).'}</p>
             <p className="text-emerald-300">✓ {pl ? 'Wspólna mapa: krainy to prawdziwe Katedry online.' : 'Shared map: lands are real Cathedrals online.'}</p>
+            <p className="text-emerald-300">✓ {pl ? 'Postać Katedry przy jej wyspie (gdy Suweren ją opublikował) — podgląd 3D prosto z tunelu, na kliknięcie.' : 'The Cathedral’s character by its island (when its Sovereign published one) — 3D preview straight from the tunnel, on click.'}</p>
             <p className="text-amber-300">… {pl ? 'Wspólna rozgrywka (wędrówka między krainami, rajdy na Zgrzyt, wymiana) — jeszcze nie ma.' : 'Shared play (travel between lands, raids on the Grind, trade) — not yet.'}</p>
           </div>
           <div className="space-y-1 rounded-xl border border-white/10 p-3 text-xs text-slate-400">

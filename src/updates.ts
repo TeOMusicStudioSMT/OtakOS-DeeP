@@ -38,6 +38,13 @@ export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-09",
     sector: "mesh",
+    title: "🏛️ Postać Katedry przy jej wyspie",
+    desc: "Rejestr niesie postać, którą Suweren opublikował w swojej Katedrze: imię, płeć, żywioł, drogę i opis. Plik 3D przechodzi tylko jako /wizytowka/postac.glb spod sprawdzonego adresu tej Katedry, nic innego. W Teterhii i strumieniu Katedr postać stoi przy wyspie, a podgląd 3D (z chodem, gdy jest rig) wczytuje się dopiero na kliknięcie: jeden naraz, a po zamknięciu karta graficzna jest zwalniana. Postać pokazuje się tylko przy Katedrze online, która ją opublikowała.",
+    en: { title: "🏛️ Cathedral character by its island", desc: "The registry carries the character a Sovereign published in their Cathedral: name, gender, element, path and description. The 3D file passes only as /wizytowka/postac.glb from that Cathedral's verified address, nothing else. In Teterhia and the Cathedral stream the character stands by its island; the 3D preview (walking, when rigged) loads only on click, one at a time, and closing it frees the graphics card. A character shows only for an online Cathedral that published one." },
+  },
+  {
+    date: "2026-10-09",
+    sector: "mesh",
     title: "🏛️ Globalny Klub Mistrzów — Mistrzowie Katedr na otakos.wtf",
     desc: "Każda Katedra przedstawia w sieci swojego JaJa Mistrza: jego etap, dzisiejszy event jej Teterhii, turnieje globalne, które ogłosiła, i swoje wyniki. Rejestr Katedr niesie to razem z wizytówką (filtruje każde pole), a strona pokazuje Klub i rankingi turniejów. Turniej ogłaszasz w swojej Katedrze (Inkubator → Klub Mistrzów), a gracze każdej Katedry grają go w swojej Teterhii — Mistrz Gry każdej z nich orzeka po swojemu, wynik wraca do Klubu. Uczciwie: wyniki deklarują Katedry (tożsamość potwierdza podpisany meldunek, liczb nikt nie sprawdza niezależnie) i za udział nie płyną GRV — to etap 1.",
     en: {

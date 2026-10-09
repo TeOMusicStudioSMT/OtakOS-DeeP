@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
-import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki, zleceniaZWizytowki, mistrzZWizytowki } from './rejestr.mjs';
+import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki, zleceniaZWizytowki, mistrzZWizytowki, postacZWizytowki } from './rejestr.mjs';
 
 const para = crypto.generateKeyPairSync('ed25519');
 const KLUCZ = para.publicKey.export({ format: 'der', type: 'spki' }).toString('base64');
@@ -201,4 +201,34 @@ test('🏛️ Klub Mistrzów: rejestr niesie mistrza w /api/katedry, Katedra bez
     const bez = rejestr();
     await bez.r.meldunek(meldunek());
     assert.equal('mistrz' in bez.r.lista()[0], false);
+});
+
+test('🏛️ Postać Katedry: znane pola, enumy, glb tylko /wizytowka/postac.glb?v=… spod adresu Katedry', () => {
+    const p = postacZWizytowki({
+        imie: '  Arkadiusz   Wędrowiec z bardzo długim imieniem ', plec: 'mezczyzna', zywiol: 'woda', droga: 'smok', opis: 'x'.repeat(900),
+        ruch: 'taniec', glb: '/wizytowka/postac.glb?v=1760000000000&ruch=chod', wlam: '<script>',
+    }, ADRES);
+    assert.deepEqual(p, { imie: 'Arkadiusz Wędrowiec z ba', plec: 'mezczyzna', zywiol: 'woda', droga: 'wedrowiec', opis: 'x'.repeat(600), ruch: 'chod',
+        glb: `${ADRES}/wizytowka/postac.glb?v=1760000000000&ruch=chod` });
+    assert.equal(postacZWizytowki({ glb: '/wizytowka/postac.glb?v=7' }, ADRES).ruch, null);
+    assert.equal(postacZWizytowki({ glb: '/wizytowka/postac.glb?v=7', plec: 'smok' }, ADRES).plec, 'inna');
+    for (const glb of ['https://zly.pl/postac.glb', '//zly.pl/wizytowka/postac.glb?v=1', '/wizytowka/postac.glb', '/wizytowka/postac.glb?v=1&ruch=taniec',
+        '/wizytowka/postac.glb?v=1&x=1', '/wizytowka/../api/x?v=1', '/wizytowka/postac.glb?v=abc', '/wizytowka/postac.glb?v=1#x', ' /wizytowka/postac.glb?v=1', null]) {
+        assert.equal(postacZWizytowki({ imie: 'A', glb }, ADRES), null, String(glb));
+    }
+    assert.equal(postacZWizytowki({ glb: '/wizytowka/postac.glb?v=1' }, 'http://abc.trycloudflare.com'), null, 'adres nie-https');
+    assert.equal(postacZWizytowki('nie', ADRES), null);
+    assert.equal(postacZWizytowki([], ADRES), null);
+});
+
+test('🏛️ Postać Katedry: rejestr niesie postać w /api/katedry z pełnym adresem pliku, bez postaci — bez pola', async () => {
+    const { r } = rejestr({ wizytowka: { nick: 'teo-center', klucz: KLUCZ, motto: 'x', postac: { imie: 'Iskra', plec: 'kobieta', zywiol: 'ogien', droga: 'tworca', opis: 'artystka', ruch: 'chod', glb: '/wizytowka/postac.glb?v=42&ruch=chod' } } });
+    assert.equal((await r.meldunek(meldunek())).status, 200);
+    assert.deepEqual(r.lista()[0].postac, { imie: 'Iskra', plec: 'kobieta', zywiol: 'ogien', droga: 'tworca', opis: 'artystka', ruch: 'chod', glb: `${ADRES}/wizytowka/postac.glb?v=42&ruch=chod` });
+    const zla = rejestr({ wizytowka: { nick: 'teo-center', klucz: KLUCZ, postac: { imie: 'Zły', glb: 'https://evil.example/x.glb' } } });
+    await zla.r.meldunek(meldunek());
+    assert.equal('postac' in zla.r.lista()[0], false);
+    const bez = rejestr();
+    await bez.r.meldunek(meldunek());
+    assert.equal('postac' in bez.r.lista()[0], false);
 });
