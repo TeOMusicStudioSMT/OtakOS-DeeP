@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
-import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki, zleceniaZWizytowki } from './rejestr.mjs';
+import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki, zleceniaZWizytowki, mistrzZWizytowki } from './rejestr.mjs';
 
 const para = crypto.generateKeyPairSync('ed25519');
 const KLUCZ = para.publicKey.export({ format: 'der', type: 'spki' }).toString('base64');
@@ -173,4 +173,32 @@ test('zlecenia Giełdy Master Flow z wizytówki: tylko poprawne, najwyżej 10, b
     assert.deepEqual(z, [{ id: 'zl-abc1', rodzaj: 'projekt', tytul: 'Teterhia — Wieczna Saga', opis: 'RPG', modele: ['qwen3-coder:30b'], budzetGRV: 1_000_000, od: '2026-10-06T07:00:00Z' }]);
     assert.deepEqual(zleceniaZWizytowki(null), []);
     assert.equal(zleceniaZWizytowki(Array.from({ length: 15 }, (_, i) => ({ id: `zl-x${i}aa`, rodzaj: 'zadanie', tytul: `Zadanie ${i}` }))).length, 10);
+});
+
+test('🏛️ Klub Mistrzów: mistrz z wizytówki — znane pola, trwające turnieje, wyniki 0–3 z 3', () => {
+    const t = Date.parse('2026-10-09T12:00:00Z');
+    const m = mistrzZWizytowki({
+        etap: 'pęka', obserwacji: 42.7, zasad: 99, teterhia: 'Turniej: Takt', wlam: '<script>',
+        eventy: [
+            { id: 'g-0a1b2c3d', typ: 'turniej', dziedzina: 'takt', od: '2026-10-08', do: '2026-10-10', opis: '  Kto   upadł, wstaje  ' },
+            { id: 'g-11112222', typ: 'turniej', dziedzina: 'takt', od: '2026-10-01', do: '2026-10-02' },   // skończony
+            { id: '../../x', typ: 'turniej', dziedzina: 'takt', od: '2026-10-08', do: '2026-10-10' },
+            { id: 'g-33334444', typ: 'wojna', dziedzina: 'takt', od: '2026-10-08', do: '2026-10-10' },
+        ],
+        wyniki: [{ event: 'wyspa-ola:g-11112222', wygrane: 3, starc: 3, kiedy: '2026-10-09T11:00:00Z', mini: ['Iskra'] }, { event: 'x:g-1', wygrane: 9, starc: 3 }],
+    }, t);
+    assert.deepEqual(m, { etap: 'pęka', obserwacji: 43, zasad: 15, teterhia: 'Turniej: Takt',
+        eventy: [{ id: 'g-0a1b2c3d', typ: 'turniej', dziedzina: 'takt', opis: 'Kto upadł, wstaje', od: '2026-10-08', do: '2026-10-10' }],
+        wyniki: [{ event: 'wyspa-ola:g-11112222', wygrane: 3, starc: 3, kiedy: '2026-10-09T11:00:00Z', mini: ['Iskra'] }] });
+    assert.equal(mistrzZWizytowki('nie'), null);
+    assert.equal(mistrzZWizytowki({ etap: 'smok' }).etap, 'jajo');
+});
+
+test('🏛️ Klub Mistrzów: rejestr niesie mistrza w /api/katedry, Katedra bez mistrza — bez pola', async () => {
+    const { r } = rejestr({ wizytowka: { nick: 'teo-center', klucz: KLUCZ, motto: 'x', mistrz: { etap: 'drży', obserwacji: 21, eventy: [], wyniki: [] } } });
+    assert.equal((await r.meldunek(meldunek())).status, 200);
+    assert.deepEqual(r.lista()[0].mistrz, { etap: 'drży', obserwacji: 21, zasad: 0, teterhia: null, eventy: [], wyniki: [] });
+    const bez = rejestr();
+    await bez.r.meldunek(meldunek());
+    assert.equal('mistrz' in bez.r.lista()[0], false);
 });
