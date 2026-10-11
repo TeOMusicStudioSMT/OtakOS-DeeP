@@ -37,6 +37,14 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-11",
+    ref: "3cadb98",
+    sector: "mesh",
+    title: "🎮 Zagraj na cudzej wyspie — gra liczy się u grającego",
+    desc: "Katedra udostępnia grę jako podpisaną paczkę (zip + manifest ed25519). Przy krainie online w Teterhii przycisk „🎮 Zagraj na tej wyspie” — gra przychodzi z tunelu tej Katedry jako pliki, w trybie gościa (też telefon: joystick i przyciski), bez wywołań jej mostu; limit gości chroni jej komputer. Inna Katedra może grę zainstalować (podpis kluczem z rejestru i SHA-256), a na wyspie gospodarza widzi jego postać, bohaterów i otoczenie. Płatność GRV między Katedrami — na razie ręcznie (etap 4).",
+    en: { title: "🎮 Play on someone else's island — the game runs on the player's side", desc: "A Cathedral shares its game as a signed package (zip + ed25519 manifest). Next to an online land in Teterhia: “🎮 Play on this island” — the game comes from that Cathedral's tunnel as files, in guest mode (phones too: joystick and buttons), with no calls to its bridge; a guest limit protects its computer. Another Cathedral can install the game (signature checked with the registry key, SHA-256) and on the host's island sees its character, heroes and scenery. GRV payment between Cathedrals — manual for now (stage 4)." },
+  },
+  {
+    date: "2026-10-11",
     sector: "mesh",
     title: "📜 Plan Teterhii na żywo i 🤝 wspólne dokończenie",
     desc: "Każda Katedra publikuje w wizytówce postęp swojej gry: kamienie planu i ile zadań gotowych. Rejestr niesie to dalej, a strona Teterhii pokazuje plan sama, bez ręcznych wpisów. Zadania, które wiszą w błędzie dłużej niż 3 dni, pojawiają się jak oferta „do wspólnego dokończenia” — inna Katedra może się odezwać przez TOST. Do sieci idą tylko tytuły i treści zadań; pliki i odpowiedzi modeli zostają w Katedrze. Przy okazji strona przestała mówić o „schronie” — jest Katedra i wyspa.",
