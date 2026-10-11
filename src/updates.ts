@@ -37,6 +37,14 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-11",
+    ref: "e839367",
+    sector: "mesh",
+    title: "👥 Plac obecności — widzicie się na wyspie",
+    desc: "Gracze na tej samej wyspie Katedry widzą się nawzajem: gospodarz przy komputerze, gość z telefonu przez „🎮 Zagraj na tej wyspie” i gracz z innej Katedry. Gra dalej liczy się u grającego — Katedra gospodarza tylko przekazuje, kto gdzie stoi (w pamięci, z limitem graczy), bez modeli i bez zapisu.",
+    en: { title: "👥 Presence square — you see each other on the island", desc: "Players on the same Cathedral island see each other: the host at the computer, a phone guest via “🎮 Play on this island” and a player from another Cathedral. The game still runs on the player's side — the host Cathedral only relays who stands where (in memory, with a player limit), no models, no saving." },
+  },
+  {
+    date: "2026-10-11",
     ref: "3cadb98",
     sector: "mesh",
     title: "🎮 Zagraj na cudzej wyspie — gra liczy się u grającego",
