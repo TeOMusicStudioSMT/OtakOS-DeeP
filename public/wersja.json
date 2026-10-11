@@ -1,10 +1,30 @@
 {
     "wersja":  "V_ZERO",
-    "numer":  "2026.10.11.1925",
-    "data":  "2026-10-11T17:25:56Z",
-    "commit":  "46f20e3",
+    "numer":  "2026.10.11.2113",
+    "data":  "2026-10-11T19:13:19Z",
+    "commit":  "9ddc21d",
     "katalogWPaczce":  "TeO_Genesis_V_ZERO",
     "zmiany":  [
+                   {
+                       "data":  "2026-10-11",
+                       "ref":  "9ddc21d",
+                       "tytul":  "feat(wizytowka): plan gry w wizytówce — postęp kamieni Teterhii i zadania wiszące ≥ 3 dni do wspólnego dokończenia"
+                   },
+                   {
+                       "data":  "2026-10-11",
+                       "ref":  "ec75092",
+                       "tytul":  "feat(trust): TeO Trust każdej Katedry — Beneficjent z księgi GRV, całe stado TeOgochi w Art. II, Gwarant The Eternal One (prawo naturalne każdego Suwerena)"
+                   },
+                   {
+                       "data":  "2026-10-11",
+                       "ref":  "11bcb84",
+                       "tytul":  "feat(teo-sim): menu mózgu Katedry — Koherencja zamiast Reasoning Monitora (pasek na głównej), Oczy Suwerena, Impresario i MCP w TeO-Sim, TOST w menu z własnym znakiem, Pralka pod 🎙️, Skarbiec ze stacjami Impresariatu i kluczami mostu; fix: Mapa Sieci nie kłamie o offline"
+                   },
+                   {
+                       "data":  "2026-10-11",
+                       "ref":  "0bdbcd4",
+                       "tytul":  "feat(mozg): Mózg Katedry — jedno miejsce na modele w TeO-Sim; most bierze model roli TeOgochi zamiast gemma4:e2b na sztywno"
+                   },
                    {
                        "data":  "2026-10-11",
                        "ref":  "46f20e3",
@@ -109,29 +129,9 @@
                        "data":  "2026-10-09",
                        "ref":  "c6d3468",
                        "tytul":  "feat(klub-mistrzow): zwiad bierze Mistrza z rejestru otakos.wtf, wizytówka tylko jako zapas"
-                   },
-                   {
-                       "data":  "2026-10-09",
-                       "ref":  "37bbb69",
-                       "tytul":  "feat(klub-mistrzow): Globalny Klub Mistrzów — przedstawicielstwo w wizytówce, eventy globalne, rankingi"
-                   },
-                   {
-                       "data":  "2026-10-09",
-                       "ref":  "96887a2",
-                       "tytul":  "feat(mistrz-gry): Mistrz Gry Teterhii — kwestie, event dnia z faktów Katedry, turnieje"
-                   },
-                   {
-                       "data":  "2026-10-09",
-                       "ref":  "391461e",
-                       "tytul":  "feat(mistrz): kanał Mistrza w Orbicie i rundy Kodeksa „źle → dobrze”"
-                   },
-                   {
-                       "data":  "2026-10-09",
-                       "ref":  "32df2f6",
-                       "tytul":  "feat(mistrz): JaJo Mistrza etap 1 — uczy się stylu Suwerena z jego poprawek i decyzji"
                    }
                ],
     "paczka":  "V_ZERO_archive.zip",
-    "sha256":  "32429dc8eb5c3c088bbc02a763469112a355eeab8fac3317b820aefeb8688a89",
-    "bajtow":  38509769
+    "sha256":  "9355458a27d8698bd3e7d2b38dc05574493360434d09842a7d2c61d7049cc9ac",
+    "bajtow":  38531209
 }
