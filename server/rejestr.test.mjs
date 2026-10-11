@@ -232,3 +232,14 @@ test('🏛️ Postać Katedry: rejestr niesie postać w /api/katedry z pełnym a
     await bez.r.meldunek(meldunek());
     assert.equal('postac' in bez.r.lista()[0], false);
 });
+
+test('plan gry z wizytówki: tylko znane pola, liczby w granicach, wiszące zadania przycięte', async () => {
+    const { graZWizytowki } = await import('./rejestr.mjs');
+    const g = graZWizytowki({ tytul: 'Teterhia', kamienie: [{ tytul: 'Brama', gotowe: 9, razem: 3, sekret: 'x' }, { tytul: '', razem: 2 }], wisi: [{ kamien: 'Mistrz', zadanie: 'z'.repeat(400), stan: 'cos', od: 'zle', plik: '/etc' }] });
+    assert.deepEqual(g.kamienie, [{ tytul: 'Brama', gotowe: 3, razem: 3 }]);
+    assert.equal(g.wisi[0].zadanie.length, 160);
+    assert.equal(g.wisi[0].stan, 'blad');
+    assert.equal(g.wisi[0].od, null);
+    assert.ok(!('plik' in g.wisi[0]));
+    assert.equal(graZWizytowki({ kamienie: 'nie' }), null);
+});

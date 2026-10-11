@@ -37,6 +37,13 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-11",
+    sector: "mesh",
+    title: "📜 Plan Teterhii na żywo i 🤝 wspólne dokończenie",
+    desc: "Każda Katedra publikuje w wizytówce postęp swojej gry: kamienie planu i ile zadań gotowych. Rejestr niesie to dalej, a strona Teterhii pokazuje plan sama, bez ręcznych wpisów. Zadania, które wiszą w błędzie dłużej niż 3 dni, pojawiają się jak oferta „do wspólnego dokończenia” — inna Katedra może się odezwać przez TOST. Do sieci idą tylko tytuły i treści zadań; pliki i odpowiedzi modeli zostają w Katedrze. Przy okazji strona przestała mówić o „schronie” — jest Katedra i wyspa.",
+    en: { title: "📜 Teterhia's live plan and 🤝 finishing together", desc: "Every Cathedral publishes its game progress in its card: plan milestones and how many tasks are done. The registry carries it on and the Teterhia page shows the plan by itself, with no manual entries. Tasks stuck in error for more than 3 days appear like an offer to “help finish together” — another Cathedral can reach out via TOST. Only task titles and texts go out to the network; files and model replies stay in the Cathedral. The site also stopped talking about a “shelter” — it is a Cathedral and an island." },
+  },
+  {
+    date: "2026-10-11",
     sector: "core",
     title: "📜 Teterhia — Etap 1 ukończony: Księga FLOOM w 3D, taniec, Mistrz Gry w świecie, koszulka z walki",
     desc: "Wszystkie 12 kamieni pierwszego etapu gry są zamknięte. Księga FLOOM (klawisz P) to teraz księga 3D: bryła z Meshy opada przed wędrowca, okładka odchyla się na grzbiecie, kartki przewraca się strzałkami. Pięć rozkładówek: starcia, armia i trzy komendy (Naprzód, Osłoń, Specjalny), wyzwania (Taniec do bitu Katedry, turnieje), produkty i karta postaci z rigiem, Mistrz w świecie. Mistrz Gry wędruje po wyspie, a podejście z E otwiera event dnia i rozmowę w roli. Wygrany taniec daje projekt koszulki (paleta świata, motyw, reklama), PNG i wystawienie w sklepie Katedry; gdy most milczy — paczka do ręcznego wystawienia.",

@@ -1,6 +1,6 @@
 {
   "name": "Katedra OtakOS: V_ZERO",
-  "description": "A high-end, cyberpunk sovereign command terminal landing page for V_ZERO: Your entire sovereign AI & Cyber-Schron ecosystem compressed into a 27MB Live-USB.",
+  "description": "A high-end, cyberpunk sovereign command terminal landing page for V_ZERO: Your own sovereign AI Cathedral and an island in Teterhia — a local, Live-USB class ecosystem.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

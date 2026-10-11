@@ -11,7 +11,7 @@
  * Saga: „Teterhia — Wieczna Saga” (Katedra → Game Studio → Reżyser i GDD).
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { katedryOnline, postacZ, type KatedraOnline } from '../katedry/wizytowka';
+import { katedryOnline, postacZ, graZ, type KatedraOnline } from '../katedry/wizytowka';
 import { KartaPostaci, ZNAK_PLCI } from '../katedry/PostacKatedry';
 
 /** Ten sam hash co w grze TGS (src/gra/rdzen.ts, FNV-1a 32-bit). */
@@ -179,8 +179,11 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
             <p className="text-emerald-300">✓ {pl ? 'Gra dla jednego gracza rośnie w Katedrze: TeO Games Studio (Reżyser → Dyrygent → Obrazy → 3D → Ruch → Krajobrazy → Kodeks).' : 'The single-player game grows in the Cathedral: TeO Games Studio (Director → Conductor → Images → 3D → Motion → Landscapes → Codex).'}</p>
             <p className="text-emerald-300">✓ {pl ? 'Wspólna mapa: krainy to prawdziwe Katedry online.' : 'Shared map: lands are real Cathedrals online.'}</p>
             <p className="text-emerald-300">✓ {pl ? 'Postać Katedry przy jej wyspie (gdy Suweren ją opublikował) — podgląd 3D prosto z tunelu, na kliknięcie.' : 'The Cathedral’s character by its island (when its Sovereign published one) — 3D preview straight from the tunnel, on click.'}</p>
+            <p className="text-emerald-300">✓ {pl ? 'Etap 1 gry ukończony: Księga FLOOM w 3D (starcia, komendy armii, wyzwania), taniec do bitu Katedry, wędrowny Mistrz Gry, koszulka i reklama z wygranego tańca, roślinność i muzyka Katedry na wyspie.' : 'Game stage 1 complete: the FLOOM Book in 3D (battles, army commands, challenges), dance to the Cathedral beat, a wandering Game Master, a T-shirt and ad from a won dance, vegetation and the Cathedral’s music on the island.'}</p>
+            <p className="text-emerald-300">✓ {pl ? 'Bohaterowie startowi (kobiety i mężczyźni) i własna postać Katedry z chodem, biegiem i tańcem z riga.' : 'Starting heroes (women and men) and the Cathedral’s own character with walk, run and dance from the rig.'}</p>
             <p className="text-amber-300">… {pl ? 'Wspólna rozgrywka (wędrówka między krainami, rajdy na Zgrzyt, wymiana) — jeszcze nie ma.' : 'Shared play (travel between lands, raids on the Grind, trade) — not yet.'}</p>
           </div>
+          <PlanNaZywo lista={Array.isArray(lista) ? lista : []} pl={pl} />
           <div className="space-y-1 rounded-xl border border-white/10 p-3 text-xs text-slate-400">
             <p className="font-semibold text-slate-200">{pl ? 'Jak dodać swoją krainę' : 'How to add your land'}</p>
             <p>{pl ? 'Katedra OtakOS → Kwantowy Tunel → meldunek w karcie Wystawy → zatwierdzenie przez Stół zarządcy rejestru. Twoja Katedra pojawi się wtedy na mapie, gdy będzie online.' : 'OtakOS Cathedral → Quantum Tunnel → check-in in the Wystawa card → approval by the registry steward’s Table. Your Cathedral appears on the map whenever it is online.'}</p>
@@ -190,5 +193,47 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
     </div>
   );
 };
+
+/**
+ * 📜 Plan na żywo — z pola `gra` wizytówek Katedr online (Katedra publikuje postęp GDD sama, rejestr go niesie).
+ * 🤝 Zadania wiszące ≥ 3 dni pokazują się jak oferta: inne Katedry mogą pomóc dokończyć (odezwij się przez TOST).
+ */
+function PlanNaZywo({ lista, pl }: { lista: KatedraOnline[]; pl: boolean }) {
+  const z = lista.map((k) => ({ k, g: graZ(k) })).filter((x): x is { k: KatedraOnline; g: NonNullable<ReturnType<typeof graZ>> } => !!x.g);
+  if (!z.length) return (
+    <div className="rounded-xl border border-white/10 p-3 text-xs text-slate-500">
+      {pl ? '📜 Plan na żywo pojawi się, gdy Katedra online opublikuje postęp swojej gry (aktualna wersja Katedry robi to sama).' : '📜 The live plan appears once an online Cathedral publishes its game progress (the current Cathedral version does it by itself).'}
+    </div>
+  );
+  return (
+    <>
+      {z.map(({ k, g }) => {
+        const gotowe = g.kamienie.reduce((s, x) => s + x.gotowe, 0), razem = g.kamienie.reduce((s, x) => s + x.razem, 0);
+        return (
+          <div key={k.nick} className="space-y-1.5 rounded-xl border border-emerald-500/20 p-3 text-xs">
+            <p className="font-semibold text-slate-200">📜 {pl ? 'Plan na żywo' : 'Live plan'} · {g.tytul || 'Teterhia'} <span className="text-slate-500">— {k.nick}</span></p>
+            <p className="text-slate-400">{pl ? `${gotowe}/${razem} zadań · ${g.kamienie.filter((x) => x.gotowe === x.razem).length}/${g.kamienie.length} kamieni` : `${gotowe}/${razem} tasks · ${g.kamienie.filter((x) => x.gotowe === x.razem).length}/${g.kamienie.length} milestones`}</p>
+            {g.kamienie.map((x, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <span className={`w-4 text-center ${x.gotowe === x.razem ? 'text-emerald-300' : 'text-amber-300'}`}>{x.gotowe === x.razem ? '✓' : '…'}</span>
+                <span className="flex-1 truncate text-slate-300" title={x.tytul}>{i + 1}. {x.tytul}</span>
+                <span className="h-1.5 w-16 overflow-hidden rounded bg-white/10"><span className="block h-full bg-emerald-400" style={{ width: `${Math.round((x.gotowe / x.razem) * 100)}%` }} /></span>
+              </div>
+            ))}
+            {g.wisi.length > 0 && (
+              <div className="mt-2 space-y-1 rounded-lg border border-amber-400/30 bg-amber-500/5 p-2">
+                <p className="font-semibold text-amber-200">🤝 {pl ? 'Do wspólnego dokończenia' : 'Help finish together'}</p>
+                {g.wisi.map((w, i) => (
+                  <p key={i} className="text-amber-100/90">• {w.zadanie} <span className="text-slate-500">({w.kamien}{w.od ? `, ${pl ? 'od' : 'since'} ${new Date(w.od).toLocaleDateString(pl ? 'pl-PL' : 'en-GB')}` : ''})</span></p>
+                ))}
+                <p className="text-slate-500">{pl ? `Pomożesz? Ze swojej Katedry: TOST → Katedry → ${k.nick}.` : `Can you help? From your Cathedral: TOST → Cathedrals → ${k.nick}.`}</p>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
+}
 
 export default Teterhia;

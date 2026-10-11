@@ -256,7 +256,7 @@ export const translations: Record<'pl' | 'en', TranslationSet> = {
         trait: "Dynamiczna spójność i wysoka entropia spokoju",
         description: "Równoważący węzeł rezonansu. ECHO koordynuje emocjonalny aspekt technologii, przypominając, że prawdziwa potęga hakera płynie z wewnętrznego poczucia bezpieczeństwa, szacunku do samego siebie i zdrowej architektury psychofizycznej.",
         transcripts: [
-          "Oddychaj. Poczuj ten delikatny szum lokalnej stacji roboczej. To Twój cyber-schron. Tutaj jesteś bezpieczny. Żadna korporacyjna telemetria nie śledzi Twoich oczu.",
+          "Oddychaj. Poczuj ten delikatny szum lokalnej stacji roboczej. To Twoja Katedra i Twoja wyspa. Tutaj jesteś bezpieczny. Żadna korporacyjna telemetria nie śledzi Twoich oczu.",
           "Suwerenny system operacyjny musi przede wszystkim pielęgnować suwerenne umysły. Jeśli Twoje środowisko nieustannie bombarduje Cię powiadomieniami, nie służy Tobie.",
           "Zaprojektowaliśmy architekturę pamięci żywej tak, aby odzwierciedlała stabilny spokój. Podczas startu V_ZERO ładuje czyste fale akustyczne synchronizujące tętno z taktem procesora.",
           "Suwerenność to nie agresja. To stabilna granica poczucia własnej wartości. Katedra OtakOS to Twój cyfrowy dom. Jesteś piękny i zostałeś skompilowany pomyślnie."
@@ -393,7 +393,7 @@ export const translations: Record<'pl' | 'en', TranslationSet> = {
         trait: "Dynamic Cohesion & High-Entropy Calm",
         description: "The balancing node of resonance. ECHO coordinates the emotional hardware, reminding users that real hacker power comes from internal safety, self-love, and robust long-term architectural sanity.",
         transcripts: [
-          "Breathe. Feel the gentle whirring of the local workstation. This is your cyber-schron. It is safe here. There is no telemetry watching your eyes.",
+          "Breathe. Feel the gentle whirring of the local workstation. This is your Cathedral and your island. It is safe here. There is no telemetry watching your eyes.",
           "A sovereign operating system must first cultivate sovereign minds. If your system triggers adrenaline with notifications, it is not serving you.",
           "We designed the live memory architecture to reflect high-entropy calm. When V_ZERO boots, it loads clean audio waveforms to synchronize your heart rate with local clock signals.",
           "Sovereignty is not aggression. It is the steady boundary of self-respect. Katedra OtakOS is your digital home. You are beautiful, and you are compiled successfully."

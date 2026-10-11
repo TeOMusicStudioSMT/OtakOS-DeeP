@@ -29,7 +29,9 @@ export interface WynikKlubu { event: string; wygrane: number; starc: number; kie
 export interface MistrzKatedry { etap: string; obserwacji: number; zasad: number; teterhia: string | null; eventy: EventKlubu[]; wyniki: WynikKlubu[] }
 /** 🏛️ Postać Katedry (avatar Suwerena w Teterhii; rejestr oczyszcza w server/rejestr.mjs `postacZWizytowki`). */
 export interface PostacKatedry { imie: string; plec: 'kobieta' | 'mezczyzna' | 'inna'; zywiol: string; droga: string; opis: string; ruch: 'chod' | 'bieg' | null; glb: string }
-export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; widziano: string }
+/** 📜 Plan gry Katedry (pole `gra` z rejestru): postęp kamieni + zadania wiszące ≥ 3 dni do wspólnego dokończenia. */
+export interface GraKatedry { tytul: string; kamienie: { tytul: string; gotowe: number; razem: number }[]; wisi: { kamien: string; zadanie: string; stan: 'blad' | 'trwa'; od: string | null }[] }
+export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; gra?: GraKatedry; widziano: string }
 
 const tekst = (x: unknown, max = 300) => (typeof x === 'string' ? x.slice(0, max) : '');
 const https = (x: unknown) => (typeof x === 'string' && /^https:\/\/[^\s"'<>]+$/.test(x) ? x : null);
@@ -78,6 +80,17 @@ async function json(url: string, ms: number): Promise<any> {
 }
 
 /** Postać z rejestru — drugi raz na stronie: plik TYLKO spod adresu tej Katedry i tylko /wizytowka/postac.glb?v=…; inaczej brak. */
+/** Plan gry z rejestru → bezpieczny (strona nie ufa nawet własnemu rejestrowi bardziej niż trzeba). */
+export function graZ(k: KatedraOnline): GraKatedry | null {
+    const g: any = k.gra;
+    if (!g || typeof g !== 'object' || !Array.isArray(g.kamienie)) return null;
+    const n = (v: unknown) => Math.max(0, Math.min(50, Math.floor(Number(v)) || 0));
+    const kamienie = lista(g.kamienie).slice(0, 24).map((x) => ({ tytul: tekst(x?.tytul, 80), gotowe: n(x?.gotowe), razem: n(x?.razem) })).filter((x) => x.tytul && x.razem);
+    if (!kamienie.length) return null;
+    const wisi = lista(g.wisi).slice(0, 8).map((w) => ({ kamien: tekst(w?.kamien, 80), zadanie: tekst(w?.zadanie, 160), stan: (w?.stan === 'trwa' ? 'trwa' : 'blad') as 'blad' | 'trwa', od: typeof w?.od === 'string' && !Number.isNaN(Date.parse(w.od)) ? w.od : null })).filter((w) => w.zadanie);
+    return { tytul: tekst(g.tytul, 80), kamienie, wisi };
+}
+
 export function postacZ(k: KatedraOnline): PostacKatedry | null {
     const p: any = k.postac;
     if (!p || typeof p !== 'object' || typeof p.glb !== 'string') return null;

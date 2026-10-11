@@ -142,6 +142,20 @@ export function postacZWizytowki(p, adres) {
     };
 }
 
+/**
+ * 📜 Plan gry Katedry z wizytówki (Teterhia): postęp kamieni + zadania wiszące ≥ 3 dni („🤝 do wspólnego dokończenia”).
+ * Tylko znane pola, liczby w granicach, teksty przycięte — strona Teterhii pokazuje to sama, bez ręcznych wpisów.
+ */
+export function graZWizytowki(g) {
+    if (!g || typeof g !== 'object' || Array.isArray(g) || !Array.isArray(g.kamienie)) return null;
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const liczba = (v, max) => { const n = Math.floor(Number(v)); return Number.isFinite(n) ? Math.min(max, Math.max(0, n)) : 0; };
+    const kamienie = g.kamienie.slice(0, 24).map((k) => { const razem = liczba(k?.razem, 50); return { tytul: tekst(k?.tytul, 80), gotowe: Math.min(razem, liczba(k?.gotowe, 50)), razem }; }).filter((k) => k.tytul && k.razem > 0);
+    if (!kamienie.length) return null;
+    const wisi = (Array.isArray(g.wisi) ? g.wisi : []).slice(0, 8).map((w) => ({ kamien: tekst(w?.kamien, 80), zadanie: tekst(w?.zadanie, 160), stan: w?.stan === 'trwa' ? 'trwa' : 'blad', od: Number.isFinite(Date.parse(w?.od)) ? new Date(Date.parse(w.od)).toISOString() : null })).filter((w) => w.zadanie);
+    return { tytul: tekst(g.tytul, 80), kamienie, wisi };
+}
+
 async function pobierzWizytowke(fetchFn, adres) {
     const r = await fetchFn(`${adres}/api/wizytowka`, { redirect: 'error', signal: AbortSignal.timeout(8_000), headers: { 'User-Agent': 'otakos.wtf-rejestr' } });
     if (!r.ok) throw new Error(`wizytówka odpowiedziała HTTP ${r.status}`);
@@ -254,7 +268,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
             catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), gra: graZWizytowki(w.gra), widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -273,7 +287,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, gra, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), ...(gra ? { gra } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };
