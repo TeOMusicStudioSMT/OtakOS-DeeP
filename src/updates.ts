@@ -36,6 +36,13 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-12",
+    sector: "grv",
+    title: "💳 Przelew GRV między Katedrami — kupujesz grę innej Katedry",
+    desc: "Gra innej Katedry (np. Teterhia za 333 GRV) kupuje się teraz przelewem GRV z pokwitowaniami. Każda Katedra ma własną księgę, więc przelew to dwie połowy: Twoja księga odkłada kwotę i podpisuje zlecenie, księga sprzedającego sprawdza podpis kluczem z rejestru, dopisuje kwotę i odsyła pokwitowanie podpisane swoim kluczem — dopiero wtedy paczka gry. Odrzucone = zwrot, zerwane łącze = GRV czekają na ponowienie, to samo zlecenie nie płaci dwa razy. Gra jako gość na wyspie zostaje darmowa.",
+    en: { title: "💳 GRV transfer between Cathedrals — buy another Cathedral's game", desc: "Another Cathedral's game (e.g. Teterhia for 333 GRV) is now bought with a GRV transfer with receipts. Each Cathedral has its own ledger, so a transfer is two halves: your ledger sets the amount aside and signs the order, the seller's ledger checks the signature with the registry key, credits the amount and sends back a receipt signed with its key — only then the game package. Rejected = refund, dropped connection = GRV wait for a retry, the same order never pays twice. Playing as a guest on the island stays free." },
+  },
+  {
     date: "2026-10-11",
     ref: "e839367",
     sector: "mesh",
