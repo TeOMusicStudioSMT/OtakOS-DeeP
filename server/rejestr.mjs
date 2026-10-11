@@ -156,6 +156,20 @@ export function graZWizytowki(g) {
     return { tytul: tekst(g.tytul, 80), kamienie, wisi };
 }
 
+/**
+ * 🏝️ Paczki gier Katedry (wizytówka: `paczkiGier`, TeO_Genesis services/PaczkiGier.js) — co da się zagrać i zainstalować.
+ * Tylko id/nazwa/wersja/rozmiar; adres gry składa strona sama: `<adres Katedry>/wizytowka/gra/<id>/` (nic z wizytówki).
+ */
+const ID_GRY = /^[a-z0-9][a-z0-9-]{1,47}$/;
+export function paczkiGierZWizytowki(lista) {
+    if (!Array.isArray(lista)) return [];
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    return lista.slice(0, 5).filter((g) => g && ID_GRY.test(String(g.id ?? ''))).map((g) => ({
+        id: g.id, nazwa: tekst(g.nazwa, 80) || g.id, wersja: /^\d{4}\.\d{2}\.\d{2}\.\d{4}$/.test(String(g.wersja)) ? g.wersja : '',
+        bajtow: Math.max(0, Math.min(4e9, Math.floor(Number(g.bajtow)) || 0)),
+    }));
+}
+
 async function pobierzWizytowke(fetchFn, adres) {
     const r = await fetchFn(`${adres}/api/wizytowka`, { redirect: 'error', signal: AbortSignal.timeout(8_000), headers: { 'User-Agent': 'otakos.wtf-rejestr' } });
     if (!r.ok) throw new Error(`wizytówka odpowiedziała HTTP ${r.status}`);
@@ -268,7 +282,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
             catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), gra: graZWizytowki(w.gra), widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), gra: graZWizytowki(w.gra), paczkiGier: paczkiGierZWizytowki(w.paczkiGier), widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -287,7 +301,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, gra, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), ...(gra ? { gra } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, gra, paczkiGier, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), ...(gra ? { gra } : {}), ...(paczkiGier?.length ? { paczkiGier } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };

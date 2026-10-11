@@ -31,7 +31,9 @@ export interface MistrzKatedry { etap: string; obserwacji: number; zasad: number
 export interface PostacKatedry { imie: string; plec: 'kobieta' | 'mezczyzna' | 'inna'; zywiol: string; droga: string; opis: string; ruch: 'chod' | 'bieg' | null; glb: string }
 /** 📜 Plan gry Katedry (pole `gra` z rejestru): postęp kamieni + zadania wiszące ≥ 3 dni do wspólnego dokończenia. */
 export interface GraKatedry { tytul: string; kamienie: { tytul: string; gotowe: number; razem: number }[]; wisi: { kamien: string; zadanie: string; stan: 'blad' | 'trwa'; od: string | null }[] }
-export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; gra?: GraKatedry; widziano: string }
+/** 🏝️ Gra udostępniona przez Katedrę (pole `paczkiGier` z rejestru) — do zagrania jako gość i do instalacji w swojej Katedrze. */
+export interface PaczkaGry { id: string; nazwa: string; wersja: string; bajtow: number }
+export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; gra?: GraKatedry; paczkiGier?: PaczkaGry[]; widziano: string }
 
 const tekst = (x: unknown, max = 300) => (typeof x === 'string' ? x.slice(0, max) : '');
 const https = (x: unknown) => (typeof x === 'string' && /^https:\/\/[^\s"'<>]+$/.test(x) ? x : null);
@@ -89,6 +91,20 @@ export function graZ(k: KatedraOnline): GraKatedry | null {
     if (!kamienie.length) return null;
     const wisi = lista(g.wisi).slice(0, 8).map((w) => ({ kamien: tekst(w?.kamien, 80), zadanie: tekst(w?.zadanie, 160), stan: (w?.stan === 'trwa' ? 'trwa' : 'blad') as 'blad' | 'trwa', od: typeof w?.od === 'string' && !Number.isNaN(Date.parse(w.od)) ? w.od : null })).filter((w) => w.zadanie);
     return { tytul: tekst(g.tytul, 80), kamienie, wisi };
+}
+
+/**
+ * 🎮 Gra do zagrania na wyspie Katedry jako gość z przeglądarki/telefonu: statycznie z JEJ tunelu, w trybie gościa
+ * (gra nie woła /api tej Katedry — Mistrz i modele liczą się w Katedrze grającego). Adres składamy sami z adresu Katedry.
+ */
+export function graDoZagrania(k: KatedraOnline): { nazwa: string; url: string; mb: number } | null {
+    const lista = Array.isArray(k.paczkiGier) ? k.paczkiGier : [];
+    const g = lista.find((x) => /teterhia/.test(String(x?.id))) ?? lista[0];
+    if (!g || !/^[a-z0-9][a-z0-9-]{1,47}$/.test(String(g.id))) return null;
+    let origin: string;
+    try { origin = new URL(k.adres).origin; } catch { return null; }
+    if (!origin.startsWith('https://')) return null;
+    return { nazwa: tekst(g.nazwa, 80) || g.id, url: `${origin}/wizytowka/gra/${g.id}/index.html?katedra=${encodeURIComponent(k.nick)}&gosc=1`, mb: Math.round((Number(g.bajtow) || 0) / 1048576) };
 }
 
 export function postacZ(k: KatedraOnline): PostacKatedry | null {

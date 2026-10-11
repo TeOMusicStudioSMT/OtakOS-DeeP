@@ -243,3 +243,11 @@ test('plan gry z wizytówki: tylko znane pola, liczby w granicach, wiszące zada
     assert.ok(!('plik' in g.wisi[0]));
     assert.equal(graZWizytowki({ kamienie: 'nie' }), null);
 });
+
+test('paczkiGierZWizytowki: tylko id/nazwa/wersja/rozmiar, złe id odpada, ≤ 5', async () => {
+    const { paczkiGierZWizytowki } = await import('./rejestr.mjs');
+    const p = paczkiGierZWizytowki([{ id: 'teterhia-wieczna-saga', nazwa: 'Teterhia', wersja: '2026.10.11.1939', bajtow: 747282559, sciezka: '/etc/passwd' }, { id: '../x' }, { id: 'a', nazwa: 'za krótkie id' }, { id: 'gra-2', wersja: 'zła', bajtow: -5 }]);
+    assert.deepEqual(p, [{ id: 'teterhia-wieczna-saga', nazwa: 'Teterhia', wersja: '2026.10.11.1939', bajtow: 747282559 }, { id: 'gra-2', nazwa: 'gra-2', wersja: '', bajtow: 0 }]);
+    assert.deepEqual(paczkiGierZWizytowki('nie'), []);
+    assert.equal(paczkiGierZWizytowki(Array.from({ length: 9 }, (_, i) => ({ id: `gra-${i}` }))).length, 5);
+});

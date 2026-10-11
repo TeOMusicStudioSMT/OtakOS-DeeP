@@ -11,7 +11,7 @@
  * Saga: „Teterhia — Wieczna Saga” (Katedra → Game Studio → Reżyser i GDD).
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { katedryOnline, postacZ, graZ, type KatedraOnline } from '../katedry/wizytowka';
+import { katedryOnline, postacZ, graZ, graDoZagrania, type KatedraOnline } from '../katedry/wizytowka';
 import { KartaPostaci, ZNAK_PLCI } from '../katedry/PostacKatedry';
 
 /** Ten sam hash co w grze TGS (src/gra/rdzen.ts, FNV-1a 32-bit). */
@@ -163,6 +163,16 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
               <p className="text-xs text-slate-300">{pl ? 'Żywioł' : 'Element'}: <b style={{ color: `hsl(${biezaca.zywiol.hue} 80% 70%)` }}>{pl ? biezaca.zywiol.pl : biezaca.zywiol.en}</b> — {pl ? biezaca.zywiol.opis.pl : biezaca.zywiol.opis.en}</p>
               {postacZ(biezaca.k) && <KartaPostaci p={postacZ(biezaca.k)!} pl={pl} nick={biezaca.k.nick} />}
               {biezaca.k.moc && <p className="text-xs text-slate-300">⚡ {pl ? 'Kuźnia mocy' : 'Power forge'}: {biezaca.k.moc.vramGB} GB VRAM · {biezaca.k.moc.modele.slice(0, 3).join(', ')}</p>}
+              {graDoZagrania(biezaca.k) && (
+                <div className="space-y-1">
+                  <a href={graDoZagrania(biezaca.k)!.url} target="_blank" rel="noopener" className="block rounded-lg border border-emerald-300/60 bg-emerald-700/30 px-3 py-2 text-center text-sm font-bold text-emerald-50 hover:bg-emerald-600/40">
+                    🎮 {pl ? 'Zagraj na tej wyspie' : 'Play on this island'}
+                  </a>
+                  <p className="text-[10px] text-slate-400">{pl
+                    ? `Jako gość, w przeglądarce (też telefon): gra przychodzi z Katedry „${biezaca.k.nick}” jako pliki, liczy się u Ciebie. Mistrz Gry, Kustosz i rozmowy odpowiadają w Twojej Katedrze — tu dostaniesz zapas. Zapis zostaje w tym urządzeniu. Gdy wyspa pełna — spróbuj za chwilę.`
+                    : `As a guest, in the browser (phones too): the game comes from the “${biezaca.k.nick}” Cathedral as files and runs on your device. Game Master, Curator and conversations answer in your own Cathedral — here you get a fallback. Progress stays on this device. If the island is full, try again shortly.`}</p>
+                </div>
+              )}
               <a href={`#katedry/${biezaca.k.nick}`} className="inline-block rounded-lg border border-fuchsia-400/40 px-3 py-1 text-xs text-fuchsia-200 hover:bg-fuchsia-900/30">{pl ? 'Odwiedź wizytówkę Katedry →' : 'Visit the Cathedral card →'}</a>
             </div>
           ) : (
@@ -181,6 +191,7 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
             <p className="text-emerald-300">✓ {pl ? 'Postać Katedry przy jej wyspie (gdy Suweren ją opublikował) — podgląd 3D prosto z tunelu, na kliknięcie.' : 'The Cathedral’s character by its island (when its Sovereign published one) — 3D preview straight from the tunnel, on click.'}</p>
             <p className="text-emerald-300">✓ {pl ? 'Etap 1 gry ukończony: Księga FLOOM w 3D (starcia, komendy armii, wyzwania), taniec do bitu Katedry, wędrowny Mistrz Gry, koszulka i reklama z wygranego tańca, roślinność i muzyka Katedry na wyspie.' : 'Game stage 1 complete: the FLOOM Book in 3D (battles, army commands, challenges), dance to the Cathedral beat, a wandering Game Master, a T-shirt and ad from a won dance, vegetation and the Cathedral’s music on the island.'}</p>
             <p className="text-emerald-300">✓ {pl ? 'Bohaterowie startowi (kobiety i mężczyźni) i własna postać Katedry z chodem, biegiem i tańcem z riga.' : 'Starting heroes (women and men) and the Cathedral’s own character with walk, run and dance from the rig.'}</p>
+            <p className="text-emerald-300">✓ {pl ? 'Gra jako podpisana paczka: Katedra online udostępnia grę — zagrasz jako gość na jej wyspie (przycisk „🎮 Zagraj” przy krainie) albo zainstalujesz ją w swojej Katedrze (Marketplace → 🏝️ Gry; podpis i SHA-256 sprawdzane). Płatność GRV między Katedrami — jeszcze ręcznie (etap 4).' : 'Game as a signed package: an online Cathedral shares its game — play as a guest on its island (“🎮 Play” by the land) or install it in your own Cathedral (Marketplace → 🏝️ Games; signature and SHA-256 checked). GRV payment between Cathedrals — manual for now (stage 4).'}</p>
             <p className="text-amber-300">… {pl ? 'Wspólna rozgrywka (wędrówka między krainami, rajdy na Zgrzyt, wymiana) — jeszcze nie ma.' : 'Shared play (travel between lands, raids on the Grind, trade) — not yet.'}</p>
           </div>
           <PlanNaZywo lista={Array.isArray(lista) ? lista : []} pl={pl} />
