@@ -36,6 +36,48 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-11",
+    sector: "core",
+    title: "📜 Teterhia — Etap 1 ukończony: Księga FLOOM w 3D, taniec, Mistrz Gry w świecie, koszulka z walki",
+    desc: "Wszystkie 12 kamieni pierwszego etapu gry są zamknięte. Księga FLOOM (klawisz P) to teraz księga 3D: bryła z Meshy opada przed wędrowca, okładka odchyla się na grzbiecie, kartki przewraca się strzałkami. Pięć rozkładówek: starcia, armia i trzy komendy (Naprzód, Osłoń, Specjalny), wyzwania (Taniec do bitu Katedry, turnieje), produkty i karta postaci z rigiem, Mistrz w świecie. Mistrz Gry wędruje po wyspie, a podejście z E otwiera event dnia i rozmowę w roli. Wygrany taniec daje projekt koszulki (paleta świata, motyw, reklama), PNG i wystawienie w sklepie Katedry; gdy most milczy — paczka do ręcznego wystawienia.",
+    en: { title: "📜 Teterhia — Stage 1 complete: the FLOOM Book in 3D, dance, a wandering Game Master, a T-shirt from battle", desc: "All 12 milestones of the game's first stage are closed. The FLOOM Book (key P) is now a 3D book: the Meshy model drops before the wanderer, the cover swings open on its spine, pages turn with the arrow keys. Five spreads: battles, the army and three commands (Forward, Guard, Special), challenges (dance to the Cathedral beat, tournaments), products and a rig sheet of characters, the Master in the world. The Game Master wanders the island; walk up and press E for the event of the day and an in-character talk. A won dance yields a T-shirt design (world palette, motif, ad copy), a PNG and a listing in the Cathedral shop; if the bridge is silent, a package to list by hand." },
+  },
+  {
+    date: "2026-10-10",
+    sector: "core",
+    title: "🎬 Filmy gry z Reżyserem Wideo — postacie gry w kadrze, dłuższe ujęcia i dźwięk od Joanny",
+    desc: "Reżyser Wideo zna styl gry i jej obsadę (postać Katedry, bohaterowie, Mini-TeOgochi): kadr rysuje FLUX.2 z ich obrazami jako wzorami, a Wan 2.2 go ożywia — albo sam FLUX z ruchem kamery, albo sam Wan. Film może mieć teraz 2–20 s z kilku ujęć, a Joanna komponuje pod niego muzykę (ACE-Step lokalnie), którą gra odtwarza razem z obrazem. Wszystko liczy się lokalnie na karcie Suwerena.",
+    en: { title: "🎬 Game films with a Video Director — game characters on screen, longer shots and sound by Joanna", desc: "The Video Director knows the game's style and cast (the Cathedral character, heroes, Mini-TeOgochi): FLUX.2 draws the frame with their images as references and Wan 2.2 brings it to life — or FLUX alone with a camera move, or Wan alone. A film can now run 2–20 s across several shots, and Joanna composes music for it (ACE-Step, local), which the game plays with the picture. Everything renders locally on the Sovereign's card." },
+  },
+  {
+    date: "2026-10-10",
+    sector: "web",
+    title: "🌍 Tłumacz Katedry także w apkach Pierścienia",
+    desc: "Język wybrany w Hubie przechodzi do studiów otwartych w Pierścieniu (Games, Story, Music…) i do gry: most podaje wspólny skrypt tłumacza, a Hub przekazuje język każdej apce. Tłumaczy ten sam lokalny model i ten sam słownik co Hub; rozmowy z agentami i pola do pisania zostają nietknięte.",
+    en: { title: "🌍 The Cathedral translator inside Ring apps too", desc: "The language chosen in the Hub now carries into studios opened in the Ring (Games, Story, Music…) and into the game: the bridge serves a shared translator script and the Hub hands the language to each app. The same local model and dictionary as the Hub do the work; agent conversations and input fields stay untouched." },
+  },
+  {
+    date: "2026-10-10",
+    sector: "core",
+    title: "🧝 Bohaterowie, postać Twojej Katedry i rig każdej bryły",
+    desc: "Gra dostała bohaterów startowych (trzy kobiety i trzech mężczyzn) i własną postać Katedry — z opisu albo zdjęcia, z chodem, biegiem, ciosem i tańcem z riga; ta postać idzie też na wizytówkę w sieci. Bryły ponad limit Meshy (300 tys. ścian) przechodzą przez Remesh przed rigiem, akcji można dobrać więcej niż 10 (auto-zestawy), a kolor zmienia się także na bryłach z teksturami. Do bohatera da się podpiąć gotowy obraz albo bryłę.",
+    en: { title: "🧝 Heroes, your Cathedral's character and a rig for every model", desc: "The game gained starting heroes (three women and three men) and the Cathedral's own character — from a description or a photo, with walk, run, attack and dance from the rig; that character also goes onto the network card. Models over the Meshy limit (300k faces) go through Remesh before rigging, more than 10 actions can be picked (auto sets), and colour now changes on textured models too. A ready image or model can be attached to a hero." },
+  },
+  {
+    date: "2026-10-10",
+    sector: "core",
+    title: "🌲 Teterhia żyje: roślinność, wyższe góry, Radio Katedry i Kompozytor na żywo",
+    desc: "Wyspa ma sosny, drzewa liściaste, krzewy, trawę na wietrze i góry ze śniegiem; drzewa przy kamerze robią się ażurowe, więc las nie zasłania gracza. Koncepty krain z Pracowni prowadzą do elementów otoczenia, które gra rozsiewa po biomach. W grze gra muzyka z Twojej Katedry, a lokalny Kompozytor dogrywa się w takt — w walce przejmuje prowadzenie i uczy się Twojego stylu muzycznego.",
+    en: { title: "🌲 Teterhia comes alive: vegetation, taller mountains, Cathedral Radio and a live Composer", desc: "The island has pines, broadleaf trees, shrubs, grass in the wind and snowy mountains; trees near the camera turn see-through, so the forest never hides the player. Land concepts from the Workshop lead to environment pieces the game scatters across biomes. Music from your Cathedral plays in the game, and a local Composer joins in time — in battle it takes the lead and learns your musical style." },
+  },
+  {
+    date: "2026-10-09",
+    sector: "core",
+    title: "🧬 Kodeks uczy się na poprzednikach, 🎲 Mistrz Gry orzeka, 🖨️ merch z brył",
+    desc: "Gdy model w łańcuchu przegrywa zadanie, następny dostaje jego najdalej zaszłe pliki, błędy wszystkich prób i radę JaJa Mistrza — a sędzia martwego modułu czyta cały graf importów (koniec fałszywych odrzuceń). Mistrz Gry Teterhii rozstrzyga czyny, ogłasza event dnia z faktów Katedry i prowadzi turnieje. Pracownia merchu robi z brył figurki, breloki i magnesy (Meshy, po wycenie i zgodzie) oraz plik do druku 3D.",
+    en: { title: "🧬 Kodeks learns from its predecessors, 🎲 the Game Master rules, 🖨️ merch from models", desc: "When a model in the chain fails a task, the next one gets its furthest files, the errors of every attempt and advice from the Master's Egg — and the dead-module judge reads the whole import graph (no more false rejections). Teterhia's Game Master rules on deeds, announces the event of the day from Cathedral facts and runs tournaments. The merch workshop turns models into figures, keychains and magnets (Meshy, after a quote and consent) plus a 3D-print file." },
+  },
+  {
     date: "2026-10-09",
     sector: "mesh",
     title: "🏛️ Postać Katedry przy jej wyspie",
