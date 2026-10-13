@@ -293,3 +293,35 @@ test('🩰 rejestr niesie tance w /api/katedry', async () => {
     assert.equal(r.lista()[0].mistrz.tance.length, 1);
     assert.equal(r.lista()[0].mistrz.tance[0].okres, 'tydzien');
 });
+
+test('gameShowZWizytowki: playlista, tytuł, ≤ 15 filmów z językiem pl|en|null — złe id odpada', async () => {
+    const { gameShowZWizytowki } = await import('./rejestr.mjs');
+    const g = gameShowZWizytowki({
+        playlista: 'PLQHA79g8V0HM', tytul: '  🩰TeO Game Show🩰  ', embed: 'https://zlo.example/',
+        filmy: [
+            { id: 'abcdefghijk', tytul: 'TeO Game Show: Kot Tancerz', kiedy: '2026-10-13T10:00:00+00:00', jezyk: 'en', opis: 'x' },
+            { id: 'abcdefghijk', tytul: 'dubel' },
+            { id: 'ABCDEFGHIJ_', tytul: 'x'.repeat(400), kiedy: 'nie-data', jezyk: 'de' },
+            { id: '"><script>' }, { id: 'krotkie' }, null,
+        ],
+    });
+    assert.deepEqual(g, {
+        playlista: 'PLQHA79g8V0HM', tytul: '🩰TeO Game Show🩰',
+        filmy: [
+            { id: 'abcdefghijk', tytul: 'TeO Game Show: Kot Tancerz', kiedy: '2026-10-13T10:00:00.000Z', jezyk: 'en' },
+            { id: 'ABCDEFGHIJ_', tytul: 'x'.repeat(160), kiedy: null, jezyk: null },
+        ],
+    });
+    assert.equal(gameShowZWizytowki({ playlista: 'zla playlista', filmy: [] }), null);
+    assert.equal(gameShowZWizytowki([]), null);
+    assert.equal(gameShowZWizytowki(null), null);
+    assert.deepEqual(gameShowZWizytowki({ playlista: 'PLQHA79g8V0HM' }).filmy, []);
+    const duzo = gameShowZWizytowki({ playlista: 'PLQHA79g8V0HM', filmy: Array.from({ length: 30 }, (_, i) => ({ id: `film${String(i).padStart(7, '0')}` })) });
+    assert.equal(duzo.filmy.length, 15);
+});
+
+test('rejestr przenosi gameShow z wizytówki do listy', async () => {
+    const { r } = rejestr({ wizytowka: { nick: 'teo-center', klucz: KLUCZ, motto: '', gameShow: { playlista: 'PLQHA79g8V0HM', tytul: 'Show', filmy: [{ id: 'abcdefghijk', tytul: 'Dance', kiedy: '2026-10-13T10:00:00Z', jezyk: 'en' }] } } });
+    assert.equal((await r.meldunek(meldunek())).status, 200);
+    assert.deepEqual(r.lista()[0].gameShow, { playlista: 'PLQHA79g8V0HM', tytul: 'Show', filmy: [{ id: 'abcdefghijk', tytul: 'Dance', kiedy: '2026-10-13T10:00:00.000Z', jezyk: 'en' }] });
+});

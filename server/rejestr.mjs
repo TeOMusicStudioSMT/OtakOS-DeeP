@@ -273,6 +273,30 @@ export function paczkiGierZWizytowki(lista) {
     }));
 }
 
+/**
+ * 🎪 TeO Game Show Katedry (wizytówka: `gameShow`, TeO_Genesis services/KanalYouTube.js → playlista programu):
+ * id playlisty, tytuł i ≤ 15 filmów {id, tytul, kiedy, jezyk}. Język rozpoznała Katedra z tytułu i opisu (bez modelu) —
+ * rejestr przepuszcza tylko 'pl' | 'en' | null. Adres odtwarzacza składa strona sama (youtube-nocookie), nic z wizytówki.
+ */
+const ID_PLAYLISTY = /^[\w-]{10,64}$/;
+const ID_FILMU = /^[\w-]{11}$/;
+export function gameShowZWizytowki(g) {
+    if (!g || typeof g !== 'object' || Array.isArray(g) || !ID_PLAYLISTY.test(String(g.playlista ?? ''))) return null;
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const widziane = new Set();
+    const filmy = (Array.isArray(g.filmy) ? g.filmy : []).filter((f) => {
+        const id = String(f?.id ?? '');
+        if (!ID_FILMU.test(id) || widziane.has(id)) return false;
+        widziane.add(id);
+        return true;
+    }).slice(0, 15).map((f) => ({
+        id: f.id, tytul: tekst(f.tytul, 160),
+        kiedy: Number.isFinite(Date.parse(f.kiedy)) ? new Date(Date.parse(f.kiedy)).toISOString() : null,
+        jezyk: f.jezyk === 'pl' || f.jezyk === 'en' ? f.jezyk : null,
+    }));
+    return { playlista: g.playlista, tytul: tekst(g.tytul, 120), filmy };
+}
+
 async function pobierzWizytowke(fetchFn, adres) {
     const r = await fetchFn(`${adres}/api/wizytowka`, { redirect: 'error', signal: AbortSignal.timeout(8_000), headers: { 'User-Agent': 'otakos.wtf-rejestr' } });
     if (!r.ok) throw new Error(`wizytówka odpowiedziała HTTP ${r.status}`);
@@ -385,7 +409,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
             catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), gra: graZWizytowki(w.gra), paczkiGier: paczkiGierZWizytowki(w.paczkiGier), widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), gra: graZWizytowki(w.gra), paczkiGier: paczkiGierZWizytowki(w.paczkiGier), gameShow: gameShowZWizytowki(w.gameShow), widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -404,7 +428,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, gra, paczkiGier, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), ...(gra ? { gra } : {}), ...(paczkiGier?.length ? { paczkiGier } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, gra, paczkiGier, gameShow, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), ...(gra ? { gra } : {}), ...(paczkiGier?.length ? { paczkiGier } : {}), ...(gameShow ? { gameShow } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };
