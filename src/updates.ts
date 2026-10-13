@@ -37,6 +37,22 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-13",
+    ref: "sklep-mini",
+    sector: "grv",
+    title: "💳🐾 Darowizny i Sklep Mini przez Stripe",
+    desc: "Katedra trzyma klucz Stripe w Skarbcu 0.00G i sama zakłada link darowizn oraz sesje zakupu — strona nie widzi ani kluczy, ani kart. W sklepie pakiety Mini-TeOgochi: bryła z teksturami i szkieletem, ruchy, akcje i trzy warianty do wytworzenia we własnej Katedrze. Ceny z rzadkości: pospolity i rzadki 3 $, epicki 6 $, legendarny i mityczny 9 $. Pakiet wydaje Katedra dopiero po opłacie.",
+    en: { title: "💳🐾 Donations and the Mini Shop via Stripe", desc: "The Cathedral keeps its Stripe key in the 0.00G Vault and creates the donation link and checkout sessions itself — this site never sees keys or cards. The shop offers Mini-TeOgochi packs: a textured, rigged model, moves, actions and three variants to create in your own Cathedral. Prices by rarity: common and rare $3, epic $6, legendary and mythic $9. The Cathedral releases the pack only after payment." },
+  },
+  {
+    date: "2026-10-13",
+    ref: "stado-mini",
+    sector: "core",
+    title: "🌅 Stado codziennie projektuje Mini",
+    desc: "Raz dziennie stado proponuje trzy nowe Mini-TeOgochi (obrazy z Pracowni) i składa pakiet dnia z Mini, który ma już komplet. Plan zasobów pokazuje uczciwie, czego brakuje: modelu Meshy, ruchu, akcji czy obrazów wariantów. Przyjęta propozycja przechodzi całą drogę: bryła lokalnie, Meshy z teksturami, szkielet z ruchami i akcjami, warianty, pakiet — każdy płatny krok tylko w budżecie, na który Suweren dał zgodę.",
+    en: { title: "🌅 The flock designs Minis every day", desc: "Once a day the flock proposes three new Mini-TeOgochi (Workshop images) and builds the pack of the day from a Mini that is already complete. The asset plan honestly shows what is missing: the Meshy model, motion, actions or variant images. An accepted proposal goes all the way: local model, textured Meshy model, rig with moves and actions, variants, pack — every paid step only within the budget the Sovereign approved." },
+  },
+  {
+    date: "2026-10-13",
     ref: "mapa-agi",
     sector: "web",
     title: "🧠 Sieć neuronowa Katedry mówi prawdę",

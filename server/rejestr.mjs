@@ -297,6 +297,38 @@ export function gameShowZWizytowki(g) {
     return { playlista: g.playlista, tytul: tekst(g.tytul, 120), filmy };
 }
 
+/**
+ * 💳🐾 Sklep Katedry (wizytówka: `sklep`, TeO_Genesis services/SklepMini.js + services/Stripe.js): link darowizn Stripe
+ * (tylko buy.stripe.com / donate.stripe.com) i wystawione pakiety Mini-TeOgochi. Zakup idzie do Katedry (`<adres>/wizytowka/
+ * sklep/<id>/kup` — sesję Stripe zakłada jej most, cenę liczy ona), okładkę składamy z adresu Katedry — nic z wizytówki.
+ */
+const LINK_STRIPE = /^https:\/\/(buy|donate)\.stripe\.com\/[A-Za-z0-9_/-]{4,200}$/;
+const ID_PAKIETU = /^pk-[0-9a-f]{8}$/;
+const RZADKOSCI = ['pospolity', 'rzadki', 'epicki', 'legendarny', 'mityczny'];
+const WALUTY = ['usd', 'eur', 'pln'];
+export function sklepZWizytowki(s, adres) {
+    if (!s || typeof s !== 'object' || Array.isArray(s)) return null;
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const liczba = (v, min, max) => { const n = Number(v); return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : min; };
+    const d = s.darowizny;
+    const darowizny = d && typeof d === 'object' && LINK_STRIPE.test(String(d.link ?? ''))
+        ? { link: d.link, waluta: WALUTY.includes(d.waluta) ? d.waluta : 'usd', sugerowana: Math.round(liczba(d.sugerowana, 1, 10_000) * 100) / 100 } : null;
+    const widziane = new Set();
+    const mini = (Array.isArray(s.mini) ? s.mini : []).filter((m) => {
+        const id = String(m?.id ?? '');
+        if (!ID_PAKIETU.test(id) || widziane.has(id) || !RZADKOSCI.includes(m?.rzadkosc)) return false;
+        widziane.add(id);
+        return true;
+    }).slice(0, 24).map((m) => ({
+        id: m.id, nazwa: tekst(m.nazwa, 40) || m.id, rzadkosc: m.rzadkosc, cena: Math.round(liczba(m.cena, 0.5, 999) * 100) / 100,
+        waluta: WALUTY.includes(m.waluta) ? m.waluta : 'usd', opis: tekst(m.opis, 300),
+        klipow: Math.floor(liczba(m.klipow, 0, 500)), obrazow: Math.floor(liczba(m.obrazow, 0, 10)), bajtow: Math.floor(liczba(m.bajtow, 0, 4e9)),
+        obraz: m.obraz === `/wizytowka/sklep/${m.id}/okladka.png` ? `${adres}${m.obraz}` : null,
+    }));
+    if (!darowizny && !mini.length) return null;
+    return { ...(darowizny ? { darowizny } : {}), ...(mini.length ? { mini } : {}), tryb: s.tryb === 'live' ? 'live' : s.tryb === 'test' ? 'test' : null };
+}
+
 async function pobierzWizytowke(fetchFn, adres) {
     const r = await fetchFn(`${adres}/api/wizytowka`, { redirect: 'error', signal: AbortSignal.timeout(8_000), headers: { 'User-Agent': 'otakos.wtf-rejestr' } });
     if (!r.ok) throw new Error(`wizytówka odpowiedziała HTTP ${r.status}`);
@@ -409,7 +441,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
             catch (e) { return odp(502, `Rejestr nie dostał wizytówki spod ${adres}/api/wizytowka (${e.message}).`, nick); }
             if (w?.nick !== nick || w?.klucz !== klucz) return odp(409, 'Pod adresem jest wizytówka innej Katedry.', nick);
             motto = String(w.motto ?? '').slice(0, 140);
-            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), gra: graZWizytowki(w.gra), paczkiGier: paczkiGierZWizytowki(w.paczkiGier), gameShow: gameShowZWizytowki(w.gameShow), widziano: teraz(), sprawdzono: teraz() });
+            online.set(nick, { nick, adres, motto, klucz, moc: mocZWizytowki(w.moc), zlecenia: zleceniaZWizytowki(w.zlecenia), mistrz: mistrzZWizytowki(w.mistrz, teraz()), postac: postacZWizytowki(w.postac, adres), gra: graZWizytowki(w.gra), paczkiGier: paczkiGierZWizytowki(w.paczkiGier), gameShow: gameShowZWizytowki(w.gameShow), sklep: sklepZWizytowki(w.sklep, adres), widziano: teraz(), sprawdzono: teraz() });
         } else {
             online.set(nick, { ...byl, widziano: teraz() });
         }
@@ -428,7 +460,7 @@ export function utworzRejestr({ zatwierdzone = () => [], zarzadca = () => null, 
         const granica = teraz() - ZYWOTNOSC_MS;
         const dozwolone = new Map(wszystkieZatwierdzone().map((z) => [z.nick, z.klucz]));
         for (const [nick, w] of online) if (w.widziano < granica || dozwolone.get(nick) !== w.klucz) online.delete(nick);
-        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, gra, paczkiGier, gameShow, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), ...(gra ? { gra } : {}), ...(paczkiGier?.length ? { paczkiGier } : {}), ...(gameShow ? { gameShow } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
+        return [...online.values()].sort((a, b) => a.nick.localeCompare(b.nick)).map(({ nick, adres, motto, klucz, moc, zlecenia, mistrz, postac, gra, paczkiGier, gameShow, sklep, widziano }) => ({ nick, adres, motto, klucz, ...(moc ? { moc } : {}), ...(zlecenia?.length ? { zlecenia } : {}), ...(mistrz ? { mistrz } : {}), ...(postac ? { postac } : {}), ...(gra ? { gra } : {}), ...(paczkiGier?.length ? { paczkiGier } : {}), ...(gameShow ? { gameShow } : {}), ...(sklep ? { sklep } : {}), widziano: new Date(widziano).toISOString() }));   // klucz: TOST sprawdza nim nadawcę
     }
 
     return { meldunek, lista, oczekujace: listaOczekujacych, ustawZatwierdzone, stanZarzadcy, stanKatedry };
