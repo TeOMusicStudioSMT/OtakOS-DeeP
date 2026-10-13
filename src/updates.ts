@@ -36,6 +36,38 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-14",
+    ref: "80c7276",
+    sector: "core",
+    title: "🎬 Filmy gry domyślnie na FLUX",
+    desc: "Nowe filmy do Teterhii (cutscenki, intro) powstają domyślnie z kadru FLUX z ruchem kamery — szybko nawet na 6 GB. Wan 2.2 i FLUX→Wan zostają do wyboru, a istniejące filmy zachowują swój silnik.",
+    en: { title: "🎬 Game films default to FLUX", desc: "New Teterhia films (cutscenes, intros) now default to a FLUX frame with camera motion — fast even on 6 GB. Wan 2.2 and FLUX→Wan remain as options, and existing films keep their engine." },
+  },
+  {
+    date: "2026-10-14",
+    ref: "d5bd3bc",
+    sector: "core",
+    title: "🎨 Qwen-Image-Edit w Pracowni obrazów",
+    desc: "Pracownia obrazów ma drugi silnik: Qwen-Image-Edit 2511 z LoRA Lightning (4 kroki) rysuje od zera — zmierzone 25 s na ciepło na 6 GB. FLUX zostaje domyślny i jest zapasem, gdy Qwen padnie.",
+    en: { title: "🎨 Qwen-Image-Edit in the Image Workshop", desc: "The Image Workshop has a second engine: Qwen-Image-Edit 2511 with the Lightning LoRA (4 steps) draws from scratch — measured 25 s warm on 6 GB. FLUX stays the default and the fallback when Qwen fails." },
+  },
+  {
+    date: "2026-10-14",
+    ref: "85fbec0",
+    sector: "core",
+    title: "🎪 Intro TeO Game Show na FLUX",
+    desc: "Intro odcinka TeO Game Show to teraz kadr FLUX.2 klein z obrazem tancerza jako wzorem i najazd kamery — zamiast ~50 minut Wana na 6 GB. Wan 2.2 zostaje opcją, a intro, które na nim padło, ponawia się na FLUX.",
+    en: { title: "🎪 TeO Game Show intro on FLUX", desc: "The TeO Game Show episode intro is now a FLUX.2 klein frame with the dancer image as reference plus a camera push-in — instead of ~50 minutes of Wan on 6 GB. Wan 2.2 stays optional, and an intro that failed on it retries on FLUX." },
+  },
+  {
+    date: "2026-10-13",
+    ref: "5564af4",
+    sector: "core",
+    title: "🎛️ Głos Katedry oddaje kartę renderowi",
+    desc: "Silnik głosu trzymał ~3,3 GB VRAM od pierwszego nagrania i wideo przelewało się do RAM. Teraz model głosu zasypia po bezczynności, budzi się sam przy mowie, a most przed każdym grafem ComfyUI prosi głos i Ollamę o zwolnienie karty. „🎛️ Zwolnij kartę” w Pamięci Katedry i /zwolnij karte w czacie.",
+    en: { title: "🎛️ The Cathedral voice yields the GPU to renders", desc: "The voice engine held ~3.3 GB VRAM from the first recording and video spilled into RAM. Now the voice model sleeps when idle, wakes itself to speak, and before every ComfyUI graph the bridge asks the voice and Ollama to free the card. “🎛️ Free GPU” in Cathedral Memory and /zwolnij karte in chat." },
+  },
+  {
     date: "2026-10-13",
     ref: "sklep-mini",
     sector: "grv",
