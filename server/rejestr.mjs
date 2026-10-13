@@ -201,7 +201,7 @@ export function tanecZWizytowki(t, teraz = Date.now()) {
     if (!Array.isArray(d.frazy) || d.frazy.length < 2 || d.frazy.length > 96) return null;
     const frazy = d.frazy.map((f) => ({ od: r3(Number(f?.[0])), uderzen: Math.round(Number(f?.[1])), energia: r3(Number(f?.[2])) }));
     if (frazy.some((f) => !(f.od >= 0 && f.od < 100_000) || !FRAZY_TANCA.includes(f.uderzen) || !(f.energia >= 0 && f.energia <= 1))) return null;
-    if (!Array.isArray(d.ruchy) || d.ruchy.length < 2 || d.ruchy.length > 40) return null;
+    if (!Array.isArray(d.ruchy) || d.ruchy.length < 2 || d.ruchy.length > 128) return null;
     const ruchy = [], nazwy = new Set();
     for (const r of d.ruchy) {
         const nazwa = String(r?.[0] ?? '').replace(/[^\p{L}\p{N} _.|:-]/gu, '').trim().slice(0, 60);
