@@ -37,6 +37,50 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-13",
+    ref: "mapa-agi",
+    sector: "web",
+    title: "🧠 Sieć neuronowa Katedry mówi prawdę",
+    desc: "Mapa sieci neuronowej (na tej stronie i w Hubie) pokazuje teraz 21 prawdziwych modułów: Ollamę, most, Stado, Dyrygenta, Głównego, Stół, Whisper, Zwiadowcę, Jev, Kodeksa, obraz, wideo, bryły, głos, muzykę, usta, Tarczę, Straż, Księgę GRV i Tunel. Zniknęły węzły, których Katedra już nie ma albo których nikt nie sprawdzał (Kronos, Ted, VideO-Use, Kwantowa Tarcza) — dawniej „oddychały” z zegara. Z mostem uruchomionym na Twojej maszynie każdy węzeł ma sondę z modułu i pokazuje: działa, gotowe (śpi) albo brak — zawsze z powodem. Bez mostu mapa jest samym manifestem.",
+    en: {
+      title: "🧠 The Cathedral's neural network tells the truth",
+      desc: "The neural network map (on this site and in the Hub) now shows 21 real modules: Ollama, the bridge, the Herd, the Conductor, the Lead, the Table, Whisper, the Scout, Jev, the Codex, image, video, meshes, voice, music, lips, the Shield, the Guard, the GRV Ledger and the Tunnel. Nodes the Cathedral no longer has or that nobody checked (Kronos, Ted, VideO-Use, Quantum Shield) are gone — they used to “breathe” from a clock. With the bridge running on your machine every node has a probe from its module and shows: running, ready (asleep) or missing — always with a reason. Without the bridge the map is just the manifest.",
+    },
+  },
+  {
+    date: "2026-10-13",
+    ref: "35f99d9",
+    sector: "core",
+    title: "🎪 TeO Game Show w Katedrze — występ sam składa się w odcinek",
+    desc: "Nagranie występu z Tanecznego Starcia samo staje się odcinkiem: intro postaci (Wan z obrazem tancerza), plansza konkurencji Teterhii z głosem prowadzącego, występ, finał z wynikiem i wywiadem po stworkowemu. Odcinek dostaje klocki programu, Kronikarz pisze opis, a publikacja czeka na Twoje ✓ w Impresariacie. Domyślnie po angielsku (z przeróbką na inny język bez liczenia intro od nowa), wysłane odcinki trafiają same na playlistę programu, a ten sam film można dać na kolejny kanał. Inne sieci niż YouTube są uczciwie oznaczone jako niepodłączone.",
+    en: {
+      title: "🎪 TeO Game Show in the Cathedral — a performance becomes an episode by itself",
+      desc: "A Dance Clash recording turns into an episode on its own: a character intro (Wan with the dancer's image), a Teterhia contest board voiced by the host, the performance and a finale with the score and a creature-style interview. The episode gets the show's blocks, the Chronicler writes the description, and publishing waits for your ✓ in the Impresario. English by default (with a remake into another language without re-rendering the intro); sent episodes land on the show's playlist by themselves, and the same film can go to another channel. Networks other than YouTube are honestly marked as not connected.",
+    },
+  },
+  {
+    date: "2026-10-13",
+    ref: "5008c14",
+    sector: "core",
+    title: "🏛️⚡ JaJo Kompozytor, ⚔️ PvP rytmiczny i album Suno jako podkład",
+    desc: "JaJo Kompozytor układa oś utworu tanecznego: sekcje w taktach, ruchy, sceny świateł i prompt. Oś jest sprawdzana (granice, kolejność, typy), a zamówienie idzie do Joanny z jego promptem. Twoje poprawki zapisują się jako pary do treningu, tak jak u JaJa Mistrza. Ring ma pokój PvP rytmicznego: trafienia nut i Overdrive, wynik liczy każda Katedra u siebie, most tylko przekazuje ruchy. Album z Suno może być podkładem do tańca — utwory same trafiają do biblioteki; prywatny album dostaje uczciwą radę zamiast cichego błędu. Tancerz może mieć do 128 ruchów (TeO CaT ma 85 klipów).",
+    en: {
+      title: "🏛️⚡ The Composer's Egg, ⚔️ rhythm PvP and a Suno album as backing",
+      desc: "The Composer's Egg lays out a dance track's timeline: sections in bars, moves, light scenes and a prompt. The timeline is checked (bounds, order, types) and the order goes to Joanna with its prompt. Your corrections are saved as training pairs, just like the Master's Egg. The Ring has a rhythm PvP room: note hits and Overdrive, each Cathedral computes the result itself, the bridge only relays moves. A Suno album can back a dance — its tracks go to the library on their own; a private album gets honest advice instead of a silent error. A dancer can have up to 128 moves (TeO CaT has 85 clips).",
+    },
+  },
+  {
+    date: "2026-10-13",
+    ref: "5d1bc54",
+    sector: "grv",
+    title: "🛒 Sklep bez demo, Stół z koszem",
+    desc: "Sklep Katedry startuje pusty i nie dosiewa produktów demo — wystawiasz tylko swoje (usuwanie produktu jest tylko przy maszynie). Linia PRODUKT: od Stada nie wystawia już niczego sama, tylko zostawia propozycję dla modułu produktów. Kartę ze Stołu usuniesz jednym kliknięciem (także z telefonu); karty w opracowaniu Katedra nie usuwa.",
+    en: {
+      title: "🛒 A shop without demos, a Table with a bin",
+      desc: "The Cathedral's shop starts empty and no longer seeds demo products — you list only your own (deleting a product is machine-only). The Herd's PRODUCT: line no longer lists anything by itself; it only leaves a proposal for the products module. You can remove a Table card with one click (from the phone too); cards in progress are not removed.",
+    },
+  },
+  {
+    date: "2026-10-13",
     sector: "web",
     title: "🎪 TeO Game Show na stronie — odcinki w Twoim języku",
     desc: "Każda Katedra wystawia playlistę swojego programu TeO Game Show (odcinki Tanecznego Starcia), a rejestr przenosi ją do sieci. Strona pokazuje odcinki wszystkich Katedr online w języku wybranym przełącznikiem PL/EN, najnowsze pierwsze — odtwarzacz youtube-nocookie ładuje się dopiero po kliknięciu. Uczciwie: język Katedra rozpoznaje z tytułu i opisu filmu (bez modelu), więc może się pomylić; filmy bez rozpoznanego języka widać zawsze.",
@@ -51,10 +95,65 @@ export const UPDATES: UpdateEntry[] = [
   },
   {
     date: "2026-10-12",
+    ref: "28badeb",
+    sector: "mesh",
+    title: "💃🥊 Ring taneczny — Mini-TeOgochi tańczą przeciw innym Katedrom",
+    desc: "Pojedynki Mini-TeOgochi między Katedrami: pokój w moście trzyma tylko karty, ziarno, tempo i ruchy, a walkę liczy deterministycznie każdy gracz u siebie (apka Taneczne Starcie w Pierścieniu). Choreografie dostają ocenę 0–100 liczoną z rytmu utworu, nagranie występu idzie do Montażowni, a najlepszy w okresie startuje w turniejach Klubu Mistrzów — od Tańca Dnia po grudniowe Mistrzostwa Świata.",
+    en: {
+      title: "💃🥊 Dance Ring — Mini-TeOgochi dance against other Cathedrals",
+      desc: "Mini-TeOgochi duels between Cathedrals: a room on the bridge holds only cards, a seed, the tempo and moves, while each player computes the fight deterministically (the Dance Clash app in the Ring). Choreographies get a 0–100 score computed from the track's rhythm, the performance recording goes to the Editing Room, and the best of a period enters Masters' Club tournaments — from Dance of the Day to the December World Championship.",
+    },
+  },
+  {
+    date: "2026-10-12",
+    ref: "659c5f6",
+    sector: "core",
+    title: "🎵 Bazylika Dźwięku i 📖 Bestiariusz Mini-TeOgochi",
+    desc: "Bazylika Dźwięku zapisuje bit z Pracowni gry do biblioteki muzyki, zamawia utwór u Joanny z opisu i składa album albo składankę (ffmpeg z przejściami, lista z czasami) prosto do Marketplace. Bestiariusz opisuje Mini-TeOgochi gry: rzadkości (szansa, próg Jaja, mnożnik), skille, warianty i dropy; „Mini z ruchem” scala wersje brył do tej z największą liczbą klipów, a Reżyser zna Bestiariusz przy planowaniu.",
+    en: {
+      title: "🎵 Basilica of Sound and 📖 the Mini-TeOgochi Bestiary",
+      desc: "The Basilica of Sound saves a beat from the game workshop to the music library, orders a track from Joanna from a description and assembles an album or compilation (ffmpeg with transitions, a timed track list) straight into the Marketplace. The Bestiary describes the game's Mini-TeOgochi: rarities (chance, Egg threshold, multiplier), skills, variants and drops; “Mini with motion” merges mesh versions into the one with the most clips, and the Director knows the Bestiary when planning.",
+    },
+  },
+  {
+    date: "2026-10-12",
+    ref: "ea537cc",
+    sector: "core",
+    title: "🧪 Kuźnia w Colabie — trening modelu TeOgochi na A100/H100",
+    desc: "Gdy karta w domu za słaba na trening, Katedra składa notatnik Google Colab: dane z wkładów stada, par JaJa i rund Kodeksa (klucze i ścieżki zamazane), przypięte wersje bibliotek, SFT i opcjonalnie DPO (LoRA/QLoRA), scalenie i GGUF. Wykuty plik wczytujesz z powrotem jako teogochi-<agent>-colab — silnika nie podmienia sam. Uczciwie: dane jadą wtedy do Google, notatnik mówi to wprost; trening w Colabie nie był jeszcze uruchomiony.",
+    en: {
+      title: "🧪 Colab Forge — training a TeOgochi model on an A100/H100",
+      desc: "When the home GPU is too weak for training, the Cathedral builds a Google Colab notebook: data from the herd's contributions, Egg pairs and Codex rounds (keys and paths blurred), pinned library versions, SFT and optionally DPO (LoRA/QLoRA), merging and GGUF. You load the forged file back as teogochi-<agent>-colab — it does not swap the engine by itself. Honestly: the data then goes to Google, and the notebook says so; training in Colab has not been run yet.",
+    },
+  },
+  {
+    date: "2026-10-12",
+    ref: "928b240",
+    sector: "mesh",
+    title: "🌐 Tunel wstaje sam, gry dla telefonu lżejsze i aktualizowane po kawałku",
+    desc: "Most pamięta, czy włączyłeś tunel: po restarcie wstaje sam z ponowieniami i od razu melduje wizytówkę, a padnięty cloudflared podnosi się do trzech razy z rzędu. Udostępniona gra ma lekkie bryły dla telefonu gościa (do 60 tys. trójkątów, tekstury ≤ 1024 px) — wejście gościa zmalało ze 140 do 26 MB. Paczka gry niesie podpisaną listę plików z sumami SHA-256, więc aktualizacja pobiera tylko zmienione pliki i podmienia je dopiero, gdy wszystkie są zgodne.",
+    en: {
+      title: "🌐 The tunnel comes up by itself, games lighter for phones and updated piece by piece",
+      desc: "The bridge remembers whether you turned the tunnel on: after a restart it comes up by itself with retries and reports the card at once, and a crashed cloudflared is restarted up to three times in a row. A shared game has light meshes for a guest's phone (up to 60k triangles, textures ≤ 1024 px) — a guest's entry dropped from 140 to 26 MB. The game package carries a signed file list with SHA-256 sums, so an update downloads only changed files and swaps them only when all match.",
+    },
+  },
+  {
+    date: "2026-10-12",
     sector: "grv",
     title: "💳 Przelew GRV między Katedrami — kupujesz grę innej Katedry",
     desc: "Gra innej Katedry (np. Teterhia za 333 GRV) kupuje się teraz przelewem GRV z pokwitowaniami. Każda Katedra ma własną księgę, więc przelew to dwie połowy: Twoja księga odkłada kwotę i podpisuje zlecenie, księga sprzedającego sprawdza podpis kluczem z rejestru, dopisuje kwotę i odsyła pokwitowanie podpisane swoim kluczem — dopiero wtedy paczka gry. Odrzucone = zwrot, zerwane łącze = GRV czekają na ponowienie, to samo zlecenie nie płaci dwa razy. Gra jako gość na wyspie zostaje darmowa.",
     en: { title: "💳 GRV transfer between Cathedrals — buy another Cathedral's game", desc: "Another Cathedral's game (e.g. Teterhia for 333 GRV) is now bought with a GRV transfer with receipts. Each Cathedral has its own ledger, so a transfer is two halves: your ledger sets the amount aside and signs the order, the seller's ledger checks the signature with the registry key, credits the amount and sends back a receipt signed with its key — only then the game package. Rejected = refund, dropped connection = GRV wait for a retry, the same order never pays twice. Playing as a guest on the island stays free." },
+  },
+  {
+    date: "2026-10-11",
+    ref: "ec75092",
+    sector: "grv",
+    title: "📜 TeO Trust każdej Katedry i 🧠 Mózg Katedry",
+    desc: "TeO Trust powstaje dla każdej Katedry z jej własnej księgi: Beneficjentem jest właściciel tej Katedry, Art. II obejmuje całe stado TeOgochi, a Gwarantem jest The Eternal One — prawo naturalne każdego Suwerena. Mózg Katedry w TeO-Sim to jedno miejsce na modele: Reżyser, Joanna, Kronikarz, Kupiec i Aktor pytają most o przydział swojej roli zamiast stałego modelu. Menu mózgu dostało Koherencję zamiast Reasoning Monitora, a Mapa Sieci przestała pokazywać offline tam, gdzie wszystko działa.",
+    en: {
+      title: "📜 Every Cathedral's TeO Trust and 🧠 the Cathedral Brain",
+      desc: "A TeO Trust is created for each Cathedral from its own ledger: the Beneficiary is that Cathedral's owner, Art. II covers the whole TeOgochi herd, and the Guarantor is The Eternal One — the natural law of every Sovereign. The Cathedral Brain in TeO-Sim is one place for models: the Director, Joanna, the Chronicler, the Merchant and the Actor ask the bridge for their role's assignment instead of a fixed model. The brain menu got Coherence instead of the Reasoning Monitor, and the Network Map stopped showing offline where everything works.",
+    },
   },
   {
     date: "2026-10-11",
