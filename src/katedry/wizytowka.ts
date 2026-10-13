@@ -35,7 +35,9 @@ export interface PostacKatedry { imie: string; plec: 'kobieta' | 'mezczyzna' | '
 export interface GraKatedry { tytul: string; kamienie: { tytul: string; gotowe: number; razem: number }[]; wisi: { kamien: string; zadanie: string; stan: 'blad' | 'trwa'; od: string | null }[] }
 /** 🏝️ Gra udostępniona przez Katedrę (pole `paczkiGier` z rejestru) — do zagrania jako gość i do instalacji w swojej Katedrze. */
 export interface PaczkaGry { id: string; nazwa: string; wersja: string; bajtow: number }
-export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; gra?: GraKatedry; paczkiGier?: PaczkaGry[]; widziano: string }
+/** 🎪 TeO Game Show z rejestru: playlista programu Katedry, język filmu rozpoznany przez Katedrę z tytułu i opisu. */
+export interface GameShowKatedry { playlista: string; tytul: string; filmy: { id: string; tytul: string; kiedy: string | null; jezyk: 'pl' | 'en' | null }[] }
+export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; gra?: GraKatedry; paczkiGier?: PaczkaGry[]; gameShow?: GameShowKatedry; widziano: string }
 
 const tekst = (x: unknown, max = 300) => (typeof x === 'string' ? x.slice(0, max) : '');
 const https = (x: unknown) => (typeof x === 'string' && /^https:\/\/[^\s"'<>]+$/.test(x) ? x : null);

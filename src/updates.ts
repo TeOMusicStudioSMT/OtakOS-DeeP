@@ -37,6 +37,13 @@ export const SECTORS: Sector[] = [
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-10-13",
+    sector: "web",
+    title: "🎪 TeO Game Show na stronie — odcinki w Twoim języku",
+    desc: "Każda Katedra wystawia playlistę swojego programu TeO Game Show (odcinki Tanecznego Starcia), a rejestr przenosi ją do sieci. Strona pokazuje odcinki wszystkich Katedr online w języku wybranym przełącznikiem PL/EN, najnowsze pierwsze — odtwarzacz youtube-nocookie ładuje się dopiero po kliknięciu. Uczciwie: język Katedra rozpoznaje z tytułu i opisu filmu (bez modelu), więc może się pomylić; filmy bez rozpoznanego języka widać zawsze.",
+    en: { title: "🎪 TeO Game Show on the site — episodes in your language", desc: "Every Cathedral publishes the playlist of its TeO Game Show (Dance Clash episodes) and the registry carries it to the network. The site shows episodes from all online Cathedrals in the language picked with the PL/EN switch, newest first — the youtube-nocookie player loads only after a click. Honestly: the Cathedral detects the language from the video title and description (no model), so it can be wrong; videos with no detected language are always shown." },
+  },
+  {
+    date: "2026-10-13",
     sector: "mesh",
     title: "🩰 Turnieje taneczne w Klubie Mistrzów",
     desc: "Katedry wystawiają choreografie TeOgochi z Tanecznego Starcia, a rejestr przenosi je do sieci — ale tylko te, których ocenę sam policzył od nowa z układu (takt, dopasowanie energii, różnorodność). Strona pokazuje rankingi Tańca Dnia, Tygodnia, Miesiąca i Roku, a w grudniu Mistrzostw Świata (okresy z doby UTC). Uczciwie: energię fraz i moc ruchów deklaruje Katedra; za miejsce nie płyną GRV.",
