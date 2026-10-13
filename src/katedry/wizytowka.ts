@@ -37,7 +37,11 @@ export interface GraKatedry { tytul: string; kamienie: { tytul: string; gotowe: 
 export interface PaczkaGry { id: string; nazwa: string; wersja: string; bajtow: number }
 /** 🎪 TeO Game Show z rejestru: playlista programu Katedry, język filmu rozpoznany przez Katedrę z tytułu i opisu. */
 export interface GameShowKatedry { playlista: string; tytul: string; filmy: { id: string; tytul: string; kiedy: string | null; jezyk: 'pl' | 'en' | null }[] }
-export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; gra?: GraKatedry; paczkiGier?: PaczkaGry[]; gameShow?: GameShowKatedry; widziano: string }
+/** 💳🐾 Sklep Katedry z rejestru: link darowizn Stripe i pakiety Mini-TeOgochi (zakup przez most Katedry, płatność Stripe). */
+export type Rzadkosc = 'pospolity' | 'rzadki' | 'epicki' | 'legendarny' | 'mityczny';
+export interface PakietMini { id: string; nazwa: string; rzadkosc: Rzadkosc; cena: number; waluta: 'usd' | 'eur' | 'pln'; opis: string; klipow: number; obrazow: number; bajtow: number; obraz: string | null }
+export interface SklepKatedry { darowizny?: { link: string; waluta: 'usd' | 'eur' | 'pln'; sugerowana: number }; mini?: PakietMini[]; tryb: 'live' | 'test' | null }
+export interface KatedraOnline { nick: string; adres: string; motto: string; klucz?: string; moc?: MocKatedry; zlecenia?: ZlecenieKatedry[]; mistrz?: MistrzKatedry; postac?: PostacKatedry; gra?: GraKatedry; paczkiGier?: PaczkaGry[]; gameShow?: GameShowKatedry; sklep?: SklepKatedry; widziano: string }
 
 const tekst = (x: unknown, max = 300) => (typeof x === 'string' ? x.slice(0, max) : '');
 const https = (x: unknown) => (typeof x === 'string' && /^https:\/\/[^\s"'<>]+$/.test(x) ? x : null);

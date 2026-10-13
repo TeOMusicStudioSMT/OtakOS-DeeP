@@ -325,3 +325,26 @@ test('rejestr przenosi gameShow z wizytówki do listy', async () => {
     assert.equal((await r.meldunek(meldunek())).status, 200);
     assert.deepEqual(r.lista()[0].gameShow, { playlista: 'PLQHA79g8V0HM', tytul: 'Show', filmy: [{ id: 'abcdefghijk', tytul: 'Dance', kiedy: '2026-10-13T10:00:00.000Z', jezyk: 'en' }] });
 });
+
+test('sklepZWizytowki: link darowizn tylko Stripe, pakiety Mini z rzadkością, okładka z adresu Katedry — reszta odpada', async () => {
+    const { sklepZWizytowki } = await import('./rejestr.mjs');
+    const adres = 'https://katedra.example.org';
+    const s = sklepZWizytowki({
+        darowizny: { link: 'https://buy.stripe.com/test_abc123', waluta: 'usd', sugerowana: 5 },
+        mini: [
+            { id: 'pk-0123abcd', nazwa: 'Mgiełka', rzadkosc: 'legendarny', cena: 9, waluta: 'usd', opis: 'duszek', klipow: 4, obrazow: 3, bajtow: 1000, obraz: '/wizytowka/sklep/pk-0123abcd/okladka.png' },
+            { id: 'pk-0123abcd', nazwa: 'dubel', rzadkosc: 'rzadki', cena: 3 },
+            { id: 'pk-zle', nazwa: 'złe id', rzadkosc: 'rzadki', cena: 3 },
+            { id: 'pk-89abcdef', nazwa: 'Obcy obraz', rzadkosc: 'boski', cena: 3 },
+            { id: 'pk-fedcba98', nazwa: 'Iskrzak', rzadkosc: 'pospolity', cena: 3, obraz: 'https://zly.example/x.png' },
+        ],
+        tryb: 'test',
+    }, adres);
+    assert.equal(s.darowizny.link, 'https://buy.stripe.com/test_abc123');
+    assert.deepEqual(s.mini.map((m) => m.id), ['pk-0123abcd', 'pk-fedcba98']);
+    assert.equal(s.mini[0].obraz, `${adres}/wizytowka/sklep/pk-0123abcd/okladka.png`);
+    assert.equal(s.mini[1].obraz, null);
+    assert.equal(s.tryb, 'test');
+    assert.equal(sklepZWizytowki({ darowizny: { link: 'https://zly.example/pay' } }, adres), null);
+    assert.equal(sklepZWizytowki(null, adres), null);
+});
