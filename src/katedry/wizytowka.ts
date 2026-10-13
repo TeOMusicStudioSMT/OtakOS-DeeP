@@ -26,7 +26,9 @@ export interface ZlecenieKatedry { id: string; rodzaj: 'zadanie' | 'projekt'; ty
 /** 🏛️ Klub Mistrzów: JaJo Mistrza Katedry (rejestr oczyszcza w server/rejestr.mjs `mistrzZWizytowki`). */
 export interface EventKlubu { id: string; typ: 'turniej'; dziedzina: string; opis: string; od: string; do: string }
 export interface WynikKlubu { event: string; wygrane: number; starc: number; kiedy: string; mini: string[] }
-export interface MistrzKatedry { etap: string; obserwacji: number; zasad: number; teterhia: string | null; eventy: EventKlubu[]; wyniki: WynikKlubu[] }
+/** 🩰 Występ taneczny — rejestr przepuszcza tylko taki, którego ocenę i odcisk sam policzył od nowa z `dane`. */
+export interface TanecKlubu { okres: 'dzien' | 'tydzien' | 'miesiac' | 'rok' | 'mistrzostwa'; klucz: string; ocena: { wynik: number; takt: number; energia: number; roznorodnosc: number }; odcisk: string; mini: string; utwor: string; kiedy: string; dane: { okresSek: number; frazy: [number, number, number][]; ruchy: [string, number, number][]; uklad: number[] } }
+export interface MistrzKatedry { etap: string; obserwacji: number; zasad: number; teterhia: string | null; eventy: EventKlubu[]; wyniki: WynikKlubu[]; tance?: TanecKlubu[] }
 /** 🏛️ Postać Katedry (avatar Suwerena w Teterhii; rejestr oczyszcza w server/rejestr.mjs `postacZWizytowki`). */
 export interface PostacKatedry { imie: string; plec: 'kobieta' | 'mezczyzna' | 'inna'; zywiol: string; droga: string; opis: string; ruch: 'chod' | 'bieg' | null; glb: string }
 /** 📜 Plan gry Katedry (pole `gra` z rejestru): postęp kamieni + zadania wiszące ≥ 3 dni do wspólnego dokończenia. */
