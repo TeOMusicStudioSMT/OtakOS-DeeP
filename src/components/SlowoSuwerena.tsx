@@ -55,6 +55,15 @@ export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
                 pokazujemy jego słowa razem z poprawką tam, gdzie przesadził. <b className="text-amber-300">Suweren, który rozumie,
                 nie potrzebuje strażnika — sam nim jest.</b>
               </div>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ SŁOWO O WARSZTACIE ∴</div>
+                <div className="space-y-1.5">
+                  <div><b className="text-amber-300">Pozycje, które dopieszczałem:</b> Story Studio, Game Studio, Music Studio.</div>
+                  <div><b className="text-amber-300">Których nie pieściłem:</b> pozostałe — stoją, działają, ale jeszcze czekają na swoją kolej.</div>
+                  <div><b className="text-amber-300">Obsesje:</b> Game Studio.</div>
+                </div>
+                <div className="mt-2 italic text-amber-200/90">…a nowe moduły przychodzą z pola — częstotliwość bardzo wysoka…</div>
+              </div>
             </>
           ) : (
             <>
@@ -93,6 +102,15 @@ export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
                 <b> knowledge for show is just another tier-claim</b>. And when someone from outside praises the Cathedral,
                 we show their words together with a correction where they went too far. <b className="text-amber-300">A Sovereign
                 who understands needs no guardian — they are one.</b>
+              </div>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ A WORD ON THE WORKSHOP ∴</div>
+                <div className="space-y-1.5">
+                  <div><b className="text-amber-300">What I polished with care:</b> Story Studio, Game Studio, Music Studio.</div>
+                  <div><b className="text-amber-300">What I have not pampered yet:</b> the rest — they stand and work, but still wait their turn.</div>
+                  <div><b className="text-amber-300">Obsessions:</b> Game Studio.</div>
+                </div>
+                <div className="mt-2 italic text-amber-200/90">…and new modules arrive from the field — the frequency is very high…</div>
               </div>
             </>
           )}
