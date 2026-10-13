@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
-import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki, zleceniaZWizytowki, mistrzZWizytowki, postacZWizytowki } from './rejestr.mjs';
+import { utworzRejestr, adresDozwolony, trescMeldunku, mocZWizytowki, zleceniaZWizytowki, mistrzZWizytowki, postacZWizytowki, tanecZWizytowki, ocenChoreografie, odciskChoreografii, kluczOkresu, tydzienISO } from './rejestr.mjs';
 
 const para = crypto.generateKeyPairSync('ed25519');
 const KLUCZ = para.publicKey.export({ format: 'der', type: 'spki' }).toString('base64');
@@ -189,7 +189,7 @@ test('🏛️ Klub Mistrzów: mistrz z wizytówki — znane pola, trwające turn
     }, t);
     assert.deepEqual(m, { etap: 'pęka', obserwacji: 43, zasad: 15, teterhia: 'Turniej: Takt',
         eventy: [{ id: 'g-0a1b2c3d', typ: 'turniej', dziedzina: 'takt', opis: 'Kto upadł, wstaje', od: '2026-10-08', do: '2026-10-10' }],
-        wyniki: [{ event: 'wyspa-ola:g-11112222', wygrane: 3, starc: 3, kiedy: '2026-10-09T11:00:00Z', mini: ['Iskra'] }] });
+        wyniki: [{ event: 'wyspa-ola:g-11112222', wygrane: 3, starc: 3, kiedy: '2026-10-09T11:00:00Z', mini: ['Iskra'] }], tance: [] });
     assert.equal(mistrzZWizytowki('nie'), null);
     assert.equal(mistrzZWizytowki({ etap: 'smok' }).etap, 'jajo');
 });
@@ -197,7 +197,7 @@ test('🏛️ Klub Mistrzów: mistrz z wizytówki — znane pola, trwające turn
 test('🏛️ Klub Mistrzów: rejestr niesie mistrza w /api/katedry, Katedra bez mistrza — bez pola', async () => {
     const { r } = rejestr({ wizytowka: { nick: 'teo-center', klucz: KLUCZ, motto: 'x', mistrz: { etap: 'drży', obserwacji: 21, eventy: [], wyniki: [] } } });
     assert.equal((await r.meldunek(meldunek())).status, 200);
-    assert.deepEqual(r.lista()[0].mistrz, { etap: 'drży', obserwacji: 21, zasad: 0, teterhia: null, eventy: [], wyniki: [] });
+    assert.deepEqual(r.lista()[0].mistrz, { etap: 'drży', obserwacji: 21, zasad: 0, teterhia: null, eventy: [], wyniki: [], tance: [] });
     const bez = rejestr();
     await bez.r.meldunek(meldunek());
     assert.equal('mistrz' in bez.r.lista()[0], false);
@@ -250,4 +250,46 @@ test('paczkiGierZWizytowki: tylko id/nazwa/wersja/rozmiar, złe id odpada, ≤ 5
     assert.deepEqual(p, [{ id: 'teterhia-wieczna-saga', nazwa: 'Teterhia', wersja: '2026.10.11.1939', bajtow: 747282559 }, { id: 'gra-2', nazwa: 'gra-2', wersja: '', bajtow: 0 }]);
     assert.deepEqual(paczkiGierZWizytowki('nie'), []);
     assert.equal(paczkiGierZWizytowki(Array.from({ length: 9 }, (_, i) => ({ id: `gra-${i}` }))).length, 5);
+});
+
+// 🩰 Turnieje taneczne — występ z oceną policzoną od nowa (wzór = kopia teo-app-hub services/Choreografie.js)
+function wystep(okres, teraz, zmiana = {}) {
+    const dane = { okresSek: 0.469, frazy: [[0, 8, 0.4], [3.75, 8, 0.9], [7.5, 8, 0.2], [11.25, 8, 0.7]], ruchy: [['Samba', 3.75, 1.2], ['Hip-hop', 1.9, 3.4], ['Krok', 7.4, 0.5]], uklad: [1, 0, 2, 0] };
+    const o = { okresSek: dane.okresSek, frazy: dane.frazy.map(([od, uderzen, energia]) => ({ od, uderzen, energia })), ruchy: dane.ruchy.map(([nazwa, sek, moc]) => ({ nazwa, sek, moc })), uklad: dane.uklad };
+    return { okres, klucz: kluczOkresu(okres, teraz), ocena: ocenChoreografie(o), odcisk: odciskChoreografii(o), mini: 'Kot Tancerz', utwor: 'Bazylika', kiedy: '2026-10-13T10:00:00Z', dane, ...zmiana };
+}
+
+test('🩰 okresy tańca z doby UTC — tydzień ISO, Mistrzostwa tylko w grudniu', () => {
+    assert.equal(tydzienISO(Date.parse('2026-10-13T12:00:00Z')), '2026-W42');
+    assert.equal(tydzienISO(Date.parse('2027-01-01T12:00:00Z')), '2026-W53');
+    assert.equal(kluczOkresu('mistrzostwa', Date.parse('2026-10-13T12:00:00Z')), null);
+    assert.equal(kluczOkresu('mistrzostwa', Date.parse('2026-12-05T12:00:00Z')), 'MS-2026');
+    assert.equal(kluczOkresu('miesiac', Date.parse('2026-10-31T23:59:00Z')), '2026-10');
+});
+
+test('🩰 taniec z wizytówki — ocena i odcisk liczone od nowa, oszust i stary okres odpadają', () => {
+    const t = Date.parse('2026-10-13T12:00:00Z');
+    const ok = tanecZWizytowki({ ...wystep('dzien', t), wlam: '<script>' }, t);
+    assert.ok(ok && ok.ocena.wynik > 0);
+    assert.equal('wlam' in ok, false);
+    assert.deepEqual(ok.dane.uklad, [1, 0, 2, 0]);
+    // dane przechodzą dalej w tej samej postaci — ponowne sprawdzenie daje ten sam wynik
+    assert.deepEqual(tanecZWizytowki(ok, t), ok);
+    const w = wystep('dzien', t);
+    assert.equal(tanecZWizytowki({ ...w, ocena: { ...w.ocena, wynik: 99 } }, t), null);          // zawyżona ocena
+    assert.equal(tanecZWizytowki({ ...w, odcisk: 'deadbeef' }, t), null);                         // podmieniony odcisk
+    assert.equal(tanecZWizytowki({ ...w, dane: { ...w.dane, uklad: [0, 0, 0, 9] } }, t), null);   // ruch spoza listy
+    assert.equal(tanecZWizytowki({ ...w, klucz: '2026-10-12' }, t), null);                         // wczorajszy Taniec Dnia
+    assert.equal(tanecZWizytowki(wystep('mistrzostwa', t, { klucz: 'MS-2026' }), t), null);       // nie grudzień
+    assert.equal(tanecZWizytowki({ ...w, dane: { ...w.dane, frazy: [[0, 5, 0.4], [3, 8, 0.9]] } }, t), null);
+    assert.equal(tanecZWizytowki({ ...w, okres: 'wiek' }, t), null);
+    const m = mistrzZWizytowki({ etap: 'wykluty', tance: [wystep('dzien', t), wystep('tydzien', t), wystep('rok', t, { odcisk: '00000000' }), ...Array.from({ length: 5 }, () => wystep('miesiac', t))] }, t);
+    assert.deepEqual(m.tance.map((x) => x.okres), ['dzien', 'tydzien', 'miesiac', 'miesiac']);
+});
+
+test('🩰 rejestr niesie tance w /api/katedry', async () => {
+    const { r } = rejestr({ wizytowka: { nick: 'teo-center', klucz: KLUCZ, motto: 'x', mistrz: { etap: 'drży', tance: [wystep('tydzien', zegar)] } } });
+    assert.equal((await r.meldunek(meldunek())).status, 200);
+    assert.equal(r.lista()[0].mistrz.tance.length, 1);
+    assert.equal(r.lista()[0].mistrz.tance[0].okres, 'tydzien');
 });

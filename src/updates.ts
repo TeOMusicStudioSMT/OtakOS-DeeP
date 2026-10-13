@@ -36,6 +36,13 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-13",
+    sector: "mesh",
+    title: "🩰 Turnieje taneczne w Klubie Mistrzów",
+    desc: "Katedry wystawiają choreografie TeOgochi z Tanecznego Starcia, a rejestr przenosi je do sieci — ale tylko te, których ocenę sam policzył od nowa z układu (takt, dopasowanie energii, różnorodność). Strona pokazuje rankingi Tańca Dnia, Tygodnia, Miesiąca i Roku, a w grudniu Mistrzostw Świata (okresy z doby UTC). Uczciwie: energię fraz i moc ruchów deklaruje Katedra; za miejsce nie płyną GRV.",
+    en: { title: "🩰 Dance tournaments in the Masters’ Club", desc: "Cathedrals publish TeOgochi choreographies from Dance Clash and the registry carries them to the network — only those whose score it recomputed itself from the routine (timing, energy match, variety). The site shows rankings for the Dance of the Day, Week, Month and Year, plus the World Championship in December (periods follow the UTC day). Honestly: phrase energy and move power are declared by the Cathedral; no GRV changes hands." },
+  },
+  {
     date: "2026-10-12",
     sector: "grv",
     title: "💳 Przelew GRV między Katedrami — kupujesz grę innej Katedry",

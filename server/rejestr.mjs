@@ -116,6 +116,109 @@ export function mistrzZWizytowki(m, teraz = Date.now()) {
         etap: ETAPY_JAJA.includes(m.etap) ? m.etap : 'jajo',
         obserwacji: calk(m.obserwacji, 0, 1_000_000), zasad: calk(m.zasad, 0, 15),
         teterhia: tekst(m.teterhia, 80) || null, eventy, wyniki,
+        tance: (Array.isArray(m.tance) ? m.tance : []).slice(0, 5).map((x) => tanecZWizytowki(x, teraz)).filter(Boolean),
+    };
+}
+
+/**
+ * 🩰 Turnieje taneczne (2026-10-13, teo-app-hub services/Choreografie.js): Katedra wystawia w `mistrz.tance` ≤ 5 występów
+ * (Taniec Dnia / Tygodnia / Miesiąca / Roku, Mistrzostwa Świata w grudniu; okresy z doby UTC, tydzień ISO). Rejestr
+ * przepuszcza TYLKO występ w okresie, który dziś trwa, i TYLKO gdy ocena i odcisk policzone OD NOWA z układu zgadzają się
+ * z deklaracją — tym samym wzorem co most (`tanecZSieci`; to KOPIA — zmieniasz wzór tam, zmień tu). Dane (`dane`) idą dalej
+ * w tej samej postaci, żeby każda Katedra mogła policzyć je jeszcze raz. Sprawdzalna jest arytmetyka; energię fraz i moc
+ * ruchów deklaruje Katedra.
+ */
+export const OKRESY_TANCA = { dzien: 'Taniec Dnia', tydzien: 'Taniec Tygodnia', miesiac: 'Taniec Miesiąca', rok: 'Taniec Roku', mistrzostwa: 'Mistrzostwa Świata' };
+const FRAZY_TANCA = [4, 8, 16];
+const UDERZENIA_KLIPU = [1, 2, 3, 4, 6, 8, 12, 16];
+const WAGI_TANCA = { takt: 0.4, energia: 0.35, roznorodnosc: 0.25 };
+const r3 = (x) => Math.round(x * 1000) / 1000;
+function rangi(w) {
+    const n = w.length;
+    if (n < 2) return w.map(() => 0.5);
+    const kol = w.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v || a.i - b.i);
+    const r = new Array(n);
+    kol.forEach((x, k) => { r[x.i] = k / (n - 1); });
+    return r;
+}
+function trafienieTaktu(sek, okresSek) {
+    if (!(sek > 0) || !(okresSek > 0)) return 1;
+    let naj = UDERZENIA_KLIPU[0], blad = Infinity;
+    for (const u of UDERZENIA_KLIPU) { const e = Math.abs(Math.log2(sek / (u * okresSek))); if (e < blad - 1e-9) { blad = e; naj = u; } }
+    const skala = r3(sek / (naj * okresSek));
+    return Math.max(0, 1 - Math.abs(Math.log2(skala)) / 0.3);
+}
+export function ocenChoreografie({ okresSek, frazy, ruchy, uklad }) {
+    const n = frazy.length;
+    if (n < 2 || ruchy.length < 1 || uklad.length !== n || uklad.some((m) => !Number.isInteger(m) || m < 0 || m >= ruchy.length)) return { wynik: 0, takt: 0, energia: 0, roznorodnosc: 0 };
+    const eR = rangi(frazy.map((f) => f.energia));
+    const mR = rangi(ruchy.map((r) => r.moc));
+    let t = 0, e = 0, powtorki = 0;
+    for (let i = 0; i < n; i++) {
+        t += trafienieTaktu(ruchy[uklad[i]].sek, okresSek);
+        e += Math.abs(mR[uklad[i]] - eR[i]);
+        if (i && uklad[i] === uklad[i - 1]) powtorki++;
+    }
+    const takt = t / n;
+    const energia = Math.max(0, 1 - 2 * (e / n));
+    const rozne = new Set(uklad).size / Math.min(n, ruchy.length);
+    const roznorodnosc = 0.6 * rozne + 0.4 * (1 - powtorki / (n - 1));
+    const wynik = Math.round(100 * (WAGI_TANCA.takt * takt + WAGI_TANCA.energia * energia + WAGI_TANCA.roznorodnosc * roznorodnosc));
+    return { wynik, takt: r3(takt), energia: r3(energia), roznorodnosc: r3(roznorodnosc) };
+}
+export function odciskChoreografii({ okresSek, frazy, ruchy, uklad }) {
+    const s = JSON.stringify([r3(okresSek), frazy.map((f) => [f.od, f.uderzen, f.energia]), ruchy.map((r) => [r.nazwa, r3(r.sek), r3(r.moc)]), uklad]);
+    let h = 0x811c9dc5;
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return h.toString(16).padStart(8, '0');
+}
+export function tydzienISO(t) {
+    const d = new Date(t);
+    const dzien = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+    const nr = dzien.getUTCDay() || 7;
+    dzien.setUTCDate(dzien.getUTCDate() + 4 - nr);
+    const rok = dzien.getUTCFullYear();
+    const tydz = Math.ceil(((dzien - Date.UTC(rok, 0, 1)) / 86_400_000 + 1) / 7);
+    return `${rok}-W${String(tydz).padStart(2, '0')}`;
+}
+/** Klucz okresu, który trwa w chwili `teraz` (UTC); Mistrzostwa tylko w grudniu. */
+export function kluczOkresu(okres, teraz = Date.now()) {
+    const d = new Date(teraz).toISOString().slice(0, 10);
+    if (okres === 'dzien') return d;
+    if (okres === 'tydzien') return tydzienISO(teraz);
+    if (okres === 'miesiac') return d.slice(0, 7);
+    if (okres === 'rok') return d.slice(0, 4);
+    if (okres === 'mistrzostwa') return d.slice(5, 7) === '12' ? `MS-${d.slice(0, 4)}` : null;
+    return null;
+}
+export function tanecZWizytowki(t, teraz = Date.now()) {
+    if (!t || typeof t !== 'object' || !OKRESY_TANCA[t.okres]) return null;
+    const klucz = kluczOkresu(t.okres, teraz);
+    if (!klucz || klucz !== String(t.klucz)) return null;
+    const d = t.dane && typeof t.dane === 'object' ? t.dane : {};
+    const okresSek = Number(d.okresSek);
+    if (!(okresSek > 0.2 && okresSek < 2)) return null;
+    if (!Array.isArray(d.frazy) || d.frazy.length < 2 || d.frazy.length > 96) return null;
+    const frazy = d.frazy.map((f) => ({ od: r3(Number(f?.[0])), uderzen: Math.round(Number(f?.[1])), energia: r3(Number(f?.[2])) }));
+    if (frazy.some((f) => !(f.od >= 0 && f.od < 100_000) || !FRAZY_TANCA.includes(f.uderzen) || !(f.energia >= 0 && f.energia <= 1))) return null;
+    if (!Array.isArray(d.ruchy) || d.ruchy.length < 2 || d.ruchy.length > 40) return null;
+    const ruchy = [], nazwy = new Set();
+    for (const r of d.ruchy) {
+        const nazwa = String(r?.[0] ?? '').replace(/[^\p{L}\p{N} _.|:-]/gu, '').trim().slice(0, 60);
+        const sek = Number(r?.[1]), moc = Number(r?.[2]);
+        if (!nazwa || nazwy.has(nazwa) || !(sek > 0.1 && sek < 120) || !(moc >= 0 && moc < 1000)) return null;
+        nazwy.add(nazwa);
+        ruchy.push({ nazwa, sek: r3(sek), moc: r3(moc) });
+    }
+    const uklad = Array.isArray(d.uklad) ? d.uklad.map(Number) : [];
+    const ocena = ocenChoreografie({ okresSek, frazy, ruchy, uklad });
+    if (ocena.wynik === 0 || ocena.wynik !== Math.round(Number(t.ocena?.wynik))) return null;
+    const odcisk = odciskChoreografii({ okresSek, frazy, ruchy, uklad });
+    if (odcisk !== t.odcisk) return null;
+    const tekst = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+    return {
+        okres: t.okres, klucz, ocena, odcisk, mini: tekst(t.mini, 40), utwor: tekst(t.utwor, 80), kiedy: tekst(t.kiedy, 30),
+        dane: { okresSek, frazy: frazy.map((f) => [f.od, f.uderzen, f.energia]), ruchy: ruchy.map((r) => [r.nazwa, r.sek, r.moc]), uklad },
     };
 }
 
