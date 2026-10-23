@@ -1,137 +1,137 @@
 {
     "wersja": "V_ZERO",
-    "numer": "2026.10.13.1954",
-    "data": "2026-10-13T17:54:17Z",
-    "commit": "3080ee3",
+    "numer": "2026.10.23.0553",
+    "data": "2026-10-23T03:53:21Z",
+    "commit": "be288e9",
     "katalogWPaczce": "TeO_Genesis_V_ZERO",
     "zmiany": [
         {
-            "data": "2026-10-13",
-            "ref": "3080ee3",
-            "tytul": "fix(miniaturyzator): katalogi prywatne i pliki kluczy poza paczką; szerszy skan wzorców tokenów"
+            "data": "2026-10-22",
+            "ref": "be288e9",
+            "tytul": "chore(deps): 🎨 Tailwind 4 — migracja bez zmiany wyglądu Huba"
         },
         {
-            "data": "2026-10-13",
-            "ref": "a91f859",
-            "tytul": "feat(mapa-agi): sieć neuronowa zgodna z rzeczywistością + README Katedry od nowa"
+            "data": "2026-10-22",
+            "ref": "331dd28",
+            "tytul": "chore(deps): ⚡ Vite 8 (Rolldown) i @vitejs/plugin-react 6"
         },
         {
-            "data": "2026-10-13",
-            "ref": "d7ff6e9",
-            "tytul": "fix(choreografie): do 128 ruchów tancerza — TeO CaT ma 85 klipów, limit 40 ucinał listę i zapis odrzucał układ („wskazuje ruch, którego nie ma”)"
+            "data": "2026-10-22",
+            "ref": "f92fa34",
+            "tytul": "chore(deps): 🛡️ bez extract-zip i @xenova/transformers — bezpieczne rozpakowanie i wektory z Ollamy"
         },
         {
-            "data": "2026-10-13",
-            "ref": "4a0a454",
-            "tytul": "feat(suno): 🎵 album Suno jako podkład do tańca — utwory albumu same do biblioteki muzyki (choreografia i wszystkie tryby Tanecznego Starcia), prywatne uczciwie z radą"
+            "data": "2026-10-22",
+            "ref": "d1724d8",
+            "tytul": "chore(deps): 🛡️ npm audit fix — 56 → 34 podatności (krytyczne 3 → 1), bez zmian łamiących"
         },
         {
-            "data": "2026-10-13",
-            "ref": "838bd59",
-            "tytul": "docs(claude): 🏛️⚡ JaJo Kompozytor i ⚔️ PvP rytmiczny w mapie modułów"
+            "data": "2026-10-22",
+            "ref": "a0caa0b",
+            "tytul": "feat(formaty): 📱📋 opis szkicu TikTok na telefon linkiem — strona z przyciskiem Kopiuj, bez tłumaczenia"
         },
         {
-            "data": "2026-10-13",
-            "ref": "056521f",
-            "tytul": "feat(ring): ⚔️ pokój PvP rytmicznego — oś pojedynku (takty, poziom, sekcje) sprawdzana i w widoku, tryb na liście ringów, limit ruchów 2400 (nuty + Overdrive)"
+            "data": "2026-10-22",
+            "ref": "78427b1",
+            "tytul": "fix(gol-dnia): 🔑 TheSportsDB na kluczu 123 — stary darmowy „3” oddaje HTTP 403"
         },
         {
-            "data": "2026-10-13",
-            "ref": "5008c14",
-            "tytul": "feat(kompozytor): 🏛️⚡ JaJo Kompozytor — oś czasu utworu tanecznego (sekcje w taktach, ruchy, sceny LED, prompt) sprawdzana, zamówienie u Joanny z jego promptem, poprawki Suwerena = pary pod trening"
+            "data": "2026-10-22",
+            "ref": "3b0df82",
+            "tytul": "feat(game-show): 📡 jedno ✓ wysyła odcinek na wszystkie kanały programu, każdy z własną playlistą"
         },
         {
-            "data": "2026-10-13",
-            "ref": "f0caf98",
-            "tytul": "feat(stado): linia PRODUKT: nie wystawia już merchu w Marketplace — tylko propozycja (/api/produkty/propozycje) dla modułu produktów"
+            "data": "2026-10-22",
+            "ref": "4be6d38",
+            "tytul": "fix(publikacje): 🎪 prefiks z dwukropkiem jak w ręcznych tytułach Suwerena"
         },
         {
-            "data": "2026-10-13",
-            "ref": "8f3ff01",
-            "tytul": "feat(bestiariusz): 🕺 Mini z ruchem — rodziny wersji brył z Assetów 3D scalone do wersji z najwięcej klipami, kategoria z nazw klipów, sortowanie (GET /api/bestiariusz/:projekt/z-ruchem)"
+            "data": "2026-10-22",
+            "ref": "2e2cbe1",
+            "tytul": "feat(publikacje): 🎪 „🎪 TeO Game Show🎪” na początku tytułu każdej produkcji tanecznej — dokleja kod, nie model"
         },
         {
-            "data": "2026-10-13",
-            "ref": "912cab4",
-            "tytul": "feat(game-show): 🧱 Klocki Dance — Start/End w języku odcinka przy składaniu; doklejanie do gotowych odcinków czekających na ✓"
+            "data": "2026-10-22",
+            "ref": "97a31f2",
+            "tytul": "fix(zebrra-taniec): 🔢 liczby z nazw z ułamkiem („T 8.1”) są faktami — scenariusz nie pada na tytule utworu"
         },
         {
-            "data": "2026-10-13",
-            "ref": "522f2e1",
-            "tytul": "feat(game-show): 📋 playlista programu — wysłane odcinki same na playlistę Katedry, jej filmy z językiem z metadanych w wizytówce (otakos.wtf); ➕ ten sam film na kolejny kanał w Impresariacie"
+            "data": "2026-10-22",
+            "ref": "f5d9f88",
+            "tytul": "fix(most): 🧵 piszModelem strumieniem — długie pisanie modelu nie kończy się „fetch failed” po 300 s"
         },
         {
-            "data": "2026-10-13",
-            "ref": "a8ea2af",
-            "tytul": "feat(game-show): 🌍 TeO Game Show po angielsku (domyślnie) — zapowiedź, plansze, wynik, wywiad z napisami EN, głos i opis Kronikarza; przeróbka odcinka w innym języku bez ponownego liczenia intro"
+            "data": "2026-10-22",
+            "ref": "f029ecb",
+            "tytul": "fix(formaty): 🤖 limit autopilota z listy 0–max zamiast pola liczby, poza etykietą przełącznika"
         },
         {
-            "data": "2026-10-13",
-            "ref": "a266230",
-            "tytul": "feat(game-show): 🎪 panel TeO Game Show w Impresariacie — etapy odcinków, ↻ ponów / bez intro, kanał programu, karta zarządzania na Stół; głos z jednym ponowieniem; wpis w CLAUDE.md"
+            "data": "2026-10-22",
+            "ref": "a430e47",
+            "tytul": "feat(jam): 🥁 pady z dźwiękiem — zestawy padów, każdy dźwięk przez ffmpeg do wav"
         },
         {
-            "data": "2026-10-13",
-            "ref": "35f99d9",
-            "tytul": "feat(game-show): 🎪 TeO Game Show — nagranie występu Tanecznego Starcia samo składa się w odcinek"
+            "data": "2026-10-22",
+            "ref": "76d425e",
+            "tytul": "feat(formaty): 📱 Shorts i Reels do 3 minut (180 s)"
         },
         {
-            "data": "2026-10-13",
-            "ref": "5d1bc54",
-            "tytul": "feat(market): sklep startuje pusty i nie dosiewa produktów demo; DELETE /api/market/products/:id (tylko maszyna)"
+            "data": "2026-10-22",
+            "ref": "9c8bf68",
+            "tytul": "feat(formaty): 📱 TikTok do 10 min — cały taniec zamiast 60-s skrótu + opis szkicu na telefon kodem QR"
         },
         {
-            "data": "2026-10-13",
-            "ref": "e9deaf3",
-            "tytul": "feat(stol): 🗑️ usuń kartę ze stołu jednym klikiem (POST /api/stol/:id/usun, maszyna albo sparowany telefon; karty w opracowaniu nie usuwa)"
+            "data": "2026-10-22",
+            "ref": "bcf85fd",
+            "tytul": "feat(wieczor): 🌙 Wieczór Tańca — po nagraniu występu Game Show + Zebrra Sports + Mame Leon (tancerz i choreograf) w jeden film"
         },
         {
-            "data": "2026-10-13",
-            "ref": "08e1d7d",
-            "tytul": "fix(testy): test Stołu w silniki.test.mjs pisał karty „Film o morzu”/„Gra o ogrodzie” do prawdziwego stol.json Suwerena (podawał katalog zamiast plik)"
+            "data": "2026-10-20",
+            "ref": "688012f",
+            "tytul": "docs(claude): 📚 Biblioteka Shoudów — wpis modułu z pomiarem indeksu i porównaniem z modelem znajomego"
         },
         {
-            "data": "2026-10-13",
-            "ref": "1de8b3f",
-            "tytul": "feat(choreografie): 🩰 choreografie Tanecznego Starcia w moście — zapis z oceną liczoną z rytmu, nagranie występu → mp4 w Montażowni, turnieje Taniec Dnia…Mistrzostwa Świata w Klubie Mistrzów"
+            "data": "2026-10-20",
+            "ref": "7c63f40",
+            "tytul": "feat(baza-wiedzy): 📚 Biblioteka Shoudów — prywatny RAG z przypisami na większym modelu"
         },
         {
-            "data": "2026-10-12",
-            "ref": "659c5f6",
-            "tytul": "feat(bazylika): 🎵 Bazylika Dźwięku — bit z Pracowni gry do biblioteki, zamówienie utworu u Joanny, album/składanka do Marketplace"
+            "data": "2026-10-20",
+            "ref": "ebe496d",
+            "tytul": "feat(figury): ✦ figury taneczne — Kompozytor składa nowe ruchy z klipów riga, most liczy je sam"
         },
         {
-            "data": "2026-10-12",
-            "ref": "28badeb",
-            "tytul": "feat(ring-taneczny): 💃🥊 Ring taneczny — pojedynki Mini-TeOgochi między Katedrami (lockstep) + Taneczne Starcie w Pierścieniu"
+            "data": "2026-10-20",
+            "ref": "b373f64",
+            "tytul": "docs(claude): 🧬 Harness² po katedralnemu — wpis modułu z wynikiem żywych prób"
         },
         {
-            "data": "2026-10-12",
-            "ref": "776158b",
-            "tytul": "docs(claude-md): 🧪 Kuźnia w Colabie — wpis w mapie modułów"
+            "data": "2026-10-20",
+            "ref": "eb61ec7",
+            "tytul": "fix(uprzaz): padnięty model kandydata = awaria (bez sędziego i bez lekcji), rodzaj zmiany bez ogonków"
         },
         {
-            "data": "2026-10-12",
-            "ref": "ea537cc",
-            "tytul": "feat(kuznia-colab): 🧪 Kuźnia w Colabie — notatnik Google Colab do treningu modelu TeOgochi na A100/H100"
+            "data": "2026-10-20",
+            "ref": "b64d683",
+            "tytul": "feat(game-studio): 🎮 MCP Game Studio (stdio, grupy, zgody) + 🎲 Unity jako drugi silnik (przygotowanie)"
         },
         {
-            "data": "2026-10-12",
-            "ref": "2cfcd08",
-            "tytul": "fix(kodeks): sędzia martwego modułu nie karze rundy za moduł martwy już przed zadaniem, którego runda nie ruszyła (zgubiony import dalej łapany)"
+            "data": "2026-10-20",
+            "ref": "6fefa4f",
+            "tytul": "feat(uprzaz): 🧬 Harness² po katedralnemu — uprząż TeOgochi jako nadpisania, Propose–Probe–Compose na tym samym materiale"
         },
         {
-            "data": "2026-10-12",
-            "ref": "c30d988",
-            "tytul": "fix(kodeks): chmura nie dostaje fałszywego „okno modelu wyczerpane” — liczy się ucięcie odpowiedzi (limit wyjścia), Gemini oddaje do 32 k tokenów"
+            "data": "2026-10-20",
+            "ref": "cff9114",
+            "tytul": "feat(aranz): 🎼 Joanna aranżuje szkic — plan z zamkniętych list, demo, pełne brzmienie przez Warsztat"
         },
         {
-            "data": "2026-10-12",
-            "ref": "37ccf2f",
-            "tytul": "fix(duchy): zadanie planu „trwa” bez żywej produkcji po restarcie mostu → „czeka” z adnotacją (13.2 wisiało od wieczora)"
+            "data": "2026-10-20",
+            "ref": "296d3d8",
+            "tytul": "feat(jam): 🎹 Jam z Joanną — most: strategia Joanny z zamkniętej listy, zapis nagrania do biblioteki"
         }
     ],
     "paczka": "V_ZERO_archive.zip",
-    "sha256": "98e2e49e36bd79278240468d08dd2a0e7a36ab86bbff8f370d69a8d12dccac3a",
-    "bajtow": 38762418
+    "sha256": "e5d4b4482114d16d3303bd014473ef47434ec6645b2dafb92852a65b4fe55621",
+    "bajtow": 39186714
 }
