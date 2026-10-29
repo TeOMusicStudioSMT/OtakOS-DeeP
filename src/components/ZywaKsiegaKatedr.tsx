@@ -26,7 +26,7 @@ const TEKST = {
 type Kreska = { kolor: string; grubosc: number; punkty: [number, number][] };
 interface WpisKsiegi {
     id: string; kiedy: string; tekst: string; nick: string; adres: string;
-    slowo: { tekst: string } | null; zdjecie: { url: string } | null; ilustracja: { url: string } | null; nagranie: { url: string } | null;
+    slowo: { tekst: string } | null; zdjecie: { url: string } | null; ilustracja: { url: string; styl: string | null } | null; nagranie: { url: string } | null;
     rysunki: { id: string; tytul: string | null; klatki: Kreska[][] }[];
 }
 
@@ -40,7 +40,7 @@ function oczyscWpis(x: any, nick: string, adres: string): WpisKsiegi | null {
         id: x.id, nick, adres, kiedy: typeof x.kiedy === 'string' ? x.kiedy : '', tekst: x.tekst.slice(0, 4000),
         slowo: typeof x.slowo?.tekst === 'string' ? { tekst: x.slowo.tekst.slice(0, 900) } : null,
         zdjecie: fot ? { url: `${adres}${fot}` } : null,
-        ilustracja: il ? { url: `${adres}${il}` } : null, nagranie: nag ? { url: `${adres}${nag}` } : null,
+        ilustracja: il ? { url: `${adres}${il}`, styl: typeof x.ilustracja?.styl === 'string' ? x.ilustracja.styl.slice(0, 60) : null } : null, nagranie: nag ? { url: `${adres}${nag}` } : null,
         rysunki: (Array.isArray(x.rysunki) ? x.rysunki : []).slice(0, 6).map((r: any) => ({
             id: String(r?.id ?? ''), tytul: typeof r?.tytul === 'string' ? r.tytul.slice(0, 80) : null,
             klatki: (Array.isArray(r?.klatki) ? r.klatki : []).slice(0, 3).map((k: any) => (Array.isArray(k) ? k : []).slice(0, 400).map((s: any) => ({
@@ -128,7 +128,7 @@ export const ZywaKsiegaKatedr: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }>
                                     <p className="font-serif italic">{w.slowo.tekst}</p>
                                 </div>}
                                 {w.ilustracja && <div className="overflow-hidden rounded-lg border border-[#c4a168] bg-[#efdcb4]">
-                                    <div className="px-3 pt-2 text-[11px] font-bold text-[#7a5230]">{t.paleta}</div>
+                                    <div className="px-3 pt-2 text-[11px] font-bold text-[#7a5230]">{t.paleta}{w.ilustracja.styl && <span className="font-normal"> · {w.ilustracja.styl}</span>}</div>
                                     <img src={w.ilustracja.url} alt="" loading="lazy" className="mt-1 w-full" />
                                 </div>}
                             </div>}
