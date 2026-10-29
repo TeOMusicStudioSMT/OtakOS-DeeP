@@ -26,19 +26,20 @@ const TEKST = {
 type Kreska = { kolor: string; grubosc: number; punkty: [number, number][] };
 interface WpisKsiegi {
     id: string; kiedy: string; tekst: string; nick: string; adres: string;
-    slowo: { tekst: string } | null; ilustracja: { url: string } | null; nagranie: { url: string } | null;
+    slowo: { tekst: string } | null; zdjecie: { url: string } | null; ilustracja: { url: string } | null; nagranie: { url: string } | null;
     rysunki: { id: string; tytul: string | null; klatki: Kreska[][] }[];
 }
 
 const KOLOR = /^#[0-9a-f]{6}$/i;
-const sciezka = (x: unknown) => (typeof x === 'string' && /^\/wizytowka\/ksiega\/k-\d{8}-[0-9a-f]{6}\/(ilustracja\.png|nagranie\.mp4)(\?v=[\w%.:-]*)?$/.test(x) ? x : null);
+const sciezka = (x: unknown) => (typeof x === 'string' && /^\/wizytowka\/ksiega\/k-\d{8}-[0-9a-f]{6}\/(zdjecie\.jpg|ilustracja\.png|nagranie\.mp4)(\?v=[\w%.:-]*)?$/.test(x) ? x : null);
 /** Wpis z cudzej Katedry — tylko pola, które znamy, adresy plików tylko z jej własnego tunelu. */
 function oczyscWpis(x: any, nick: string, adres: string): WpisKsiegi | null {
     if (!x || typeof x.id !== 'string' || !/^k-\d{8}-[0-9a-f]{6}$/.test(x.id) || typeof x.tekst !== 'string' || !x.tekst.trim()) return null;
-    const il = sciezka(x.ilustracja?.url), nag = sciezka(x.nagranie?.url);
+    const il = sciezka(x.ilustracja?.url), fot = sciezka(x.zdjecie?.url), nag = sciezka(x.nagranie?.url);
     return {
         id: x.id, nick, adres, kiedy: typeof x.kiedy === 'string' ? x.kiedy : '', tekst: x.tekst.slice(0, 4000),
         slowo: typeof x.slowo?.tekst === 'string' ? { tekst: x.slowo.tekst.slice(0, 900) } : null,
+        zdjecie: fot ? { url: `${adres}${fot}` } : null,
         ilustracja: il ? { url: `${adres}${il}` } : null, nagranie: nag ? { url: `${adres}${nag}` } : null,
         rysunki: (Array.isArray(x.rysunki) ? x.rysunki : []).slice(0, 6).map((r: any) => ({
             id: String(r?.id ?? ''), tytul: typeof r?.tytul === 'string' ? r.tytul.slice(0, 80) : null,
@@ -117,7 +118,9 @@ export const ZywaKsiegaKatedr: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }>
                     <article key={`${w.nick}-${w.id}`} className="relative overflow-hidden rounded-xl border-4 border-[#3b2314] bg-[#1c120a] p-1">
                         <div className="rounded-lg bg-[#f3e4c4] p-4 text-[#2c1810] font-sans">
                             <div className="mb-2 text-[11px] text-[#7a5230]"><b>{w.nick}</b> · {data(w.kiedy)}</div>
+                            {w.zdjecie && <img src={w.zdjecie.url} alt={w.nick} loading="lazy" className="float-right mb-2 ml-3 max-h-56 w-auto max-w-[45%] rounded-lg border-2 border-[#5c3a21] object-cover shadow-md" />}
                             <p className="whitespace-pre-wrap font-serif text-base leading-relaxed">{w.tekst}</p>
+                            <div className="clear-both" />
                             {w.nagranie && <video src={w.nagranie.url} controls preload="metadata" className="mt-3 max-h-80 w-full rounded-lg border-2 border-[#5c3a21] bg-black" />}
                             {(w.slowo || w.ilustracja) && <div className="mt-3 grid gap-3 sm:grid-cols-2">
                                 {w.slowo && <div className="rounded-lg border border-[#c4a168] bg-[#efdcb4] p-3 text-sm">

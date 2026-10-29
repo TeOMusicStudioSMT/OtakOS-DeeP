@@ -40,10 +40,10 @@ export const UPDATES: UpdateEntry[] = [
     ref: "58add97",
     sector: "web",
     title: "Żywa Księga — poranna Iskra Suwerena, odpowiedź i obraz od stada",
-    desc: "Suweren zostawia rano parę słów z przepływu (i, jeśli chce, nagranie twarzy znad stołu), a stado TeOgochi jego Katedry dopisuje odpowiedź Kronikarza i maluje ilustrację lokalnie, FLUX-em na własnej karcie. Na tej stronie widać wpisy oznaczone „dla świata” — czytane prosto z tunelu Katedry; strona niczego nie przechowuje, a gdy Katedra śpi, jej Księgi nie ma.",
+    desc: "Suweren zostawia rano parę słów z przepływu (i, jeśli chce, zdjęcie albo nagranie twarzy znad stołu), a stado TeOgochi jego Katedry dopisuje odpowiedź Kronikarza i maluje ilustrację lokalnie, FLUX-em na własnej karcie. Na tej stronie widać wpisy oznaczone „dla świata” — czytane prosto z tunelu Katedry; zdjęcia idą bez metadanych (GPS i aparat zostają w domu); strona niczego nie przechowuje, a gdy Katedra śpi, jej Księgi nie ma.",
     en: {
       title: "Living Book — the Sovereign's morning Spark, a reply and a picture from the herd",
-      desc: "In the morning the Sovereign leaves a few words from the flow (and, if they wish, a recording from the table), and their Cathedral's TeOgochi herd writes the Chronicler's reply and paints an illustration locally, with FLUX on their own graphics card. This page shows entries marked “for the world” — read directly from the Cathedral's tunnel; the site stores nothing, and when the Cathedral sleeps, its Book is not here.",
+      desc: "In the morning the Sovereign leaves a few words from the flow (and, if they wish, a photo or a recording from the table), and their Cathedral's TeOgochi herd writes the Chronicler's reply and paints an illustration locally, with FLUX on their own graphics card. This page shows entries marked “for the world” — read directly from the Cathedral's tunnel; photos go out without metadata (GPS and camera details stay home); the site stores nothing, and when the Cathedral sleeps, its Book is not here.",
     },
   },
   {
