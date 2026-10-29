@@ -12,6 +12,7 @@ const TEKST = {
     pl: {
         tytul: 'Żywa Księga', wstep: 'Poranne Iskry Suwerenów — kilka słów z przepływu, czasem nagranie znad stołu, a stado TeOgochi dopisuje odpowiedź i maluje obraz.',
         brak: 'Rejestr Katedr nie odpowiada — nie pokażę wpisów, których nie znam.', pusto: 'Żadna Katedra online nie wystawia teraz wpisów Żywej Księgi.',
+        przeklad: '', oryginal: '', pokazPrzeklad: '',
         kronikarz: '📜 Kronikarz stada', paleta: '🎨 Paleta', rysunek: '✒️ żywa kreska', wiecej: 'starsze wpisy', mniej: 'zwiń',
         uczciwie: 'Wpisy czytamy prosto z Katedr (ich tunel) — strona niczego nie przechowuje. Odpowiedź i obraz tworzy lokalnie stado TeOgochi tej Katedry; słowa Suwerena są w jego języku.',
     },
@@ -19,14 +20,15 @@ const TEKST = {
         tytul: 'Living Book', wstep: 'Morning Sparks of the Sovereigns — a few words from the flow, sometimes a recording from the table, and the TeOgochi herd writes a reply and paints a picture.',
         brak: 'The Cathedral registry is not responding — no made-up entries here.', pusto: 'No Cathedral online publishes Living Book entries right now.',
         kronikarz: '📜 Herd Chronicler', paleta: '🎨 Palette', rysunek: '✒️ living line', wiecej: 'older entries', mniej: 'collapse',
-        uczciwie: 'Entries are read directly from the Cathedrals (their tunnel) — this site stores nothing. The reply and picture are made locally by that Cathedral’s TeOgochi herd; the Sovereign’s words stay in their own language.',
+        uczciwie: 'Entries are read directly from the Cathedrals (their tunnel) — this site stores nothing. The reply, picture and English translation are made locally by that Cathedral’s TeOgochi herd; the original words are one click away.',
+        przeklad: '🌍 translated by the herd', oryginal: 'original', pokazPrzeklad: 'translation',
     },
 };
 
 type Kreska = { kolor: string; grubosc: number; punkty: [number, number][] };
 interface WpisKsiegi {
     id: string; kiedy: string; tekst: string; nick: string; adres: string;
-    slowo: { tekst: string } | null; zdjecie: { url: string } | null; ilustracja: { url: string; styl: string | null } | null; nagranie: { url: string } | null;
+    slowo: { tekst: string } | null; przeklad: { tekst: string; slowo: string | null } | null; zdjecie: { url: string } | null; ilustracja: { url: string; styl: string | null } | null; nagranie: { url: string } | null;
     rysunki: { id: string; tytul: string | null; klatki: Kreska[][] }[];
 }
 
@@ -39,6 +41,9 @@ function oczyscWpis(x: any, nick: string, adres: string): WpisKsiegi | null {
     return {
         id: x.id, nick, adres, kiedy: typeof x.kiedy === 'string' ? x.kiedy : '', tekst: x.tekst.slice(0, 4000),
         slowo: typeof x.slowo?.tekst === 'string' ? { tekst: x.slowo.tekst.slice(0, 900) } : null,
+        // 🌍 przekład stada (Kronikarz) — tylko angielski, tylko napisy
+        przeklad: typeof x.przeklad?.en?.tekst === 'string' && x.przeklad.en.tekst.trim()
+            ? { tekst: x.przeklad.en.tekst.slice(0, 4000), slowo: typeof x.przeklad.en.slowo === 'string' ? x.przeklad.en.slowo.slice(0, 900) : null } : null,
         zdjecie: fot ? { url: `${adres}${fot}` } : null,
         ilustracja: il ? { url: `${adres}${il}`, styl: typeof x.ilustracja?.styl === 'string' ? x.ilustracja.styl.slice(0, 60) : null } : null, nagranie: nag ? { url: `${adres}${nag}` } : null,
         rysunki: (Array.isArray(x.rysunki) ? x.rysunki : []).slice(0, 6).map((r: any) => ({
@@ -81,6 +86,8 @@ export const ZywaKsiegaKatedr: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }>
     const t = TEKST[lang];
     const [wpisy, setWpisy] = useState<WpisKsiegi[] | null | undefined>(undefined);
     const [wszystkie, setWszystkie] = useState(false);
+    // 🌍 w EN pokazujemy przekład stada; klik = oryginał (pamięć per wpis)
+    const [oryginaly, setOryginaly] = useState<Record<string, boolean>>({});
     useEffect(() => {
         let zyje = true;
         const pobierz = async () => {
@@ -119,13 +126,16 @@ export const ZywaKsiegaKatedr: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }>
                         <div className="rounded-lg bg-[#f3e4c4] p-4 text-[#2c1810] font-sans">
                             <div className="mb-2 text-[11px] text-[#7a5230]"><b>{w.nick}</b> · {data(w.kiedy)}</div>
                             {w.zdjecie && <img src={w.zdjecie.url} alt={w.nick} loading="lazy" className="float-right mb-2 ml-3 max-h-56 w-auto max-w-[45%] rounded-lg border-2 border-[#5c3a21] object-cover shadow-md" />}
-                            <p className="whitespace-pre-wrap font-serif text-base leading-relaxed">{w.tekst}</p>
+                            {(() => { const pk = lang === 'en' && w.przeklad && !oryginaly[w.id] ? w.przeklad : null; return <>
+                                <p className="whitespace-pre-wrap font-serif text-base leading-relaxed">{pk ? pk.tekst : w.tekst}</p>
+                                {lang === 'en' && w.przeklad && <button onClick={() => setOryginaly((o) => ({ ...o, [w.id]: !o[w.id] }))} className="mt-1 text-[10px] text-[#7a5230] underline">{pk ? `${t.przeklad} · ${t.oryginal} ⇄` : `${t.pokazPrzeklad} ⇄`}</button>}
+                            </>; })()}
                             <div className="clear-both" />
                             {w.nagranie && <video src={w.nagranie.url} controls preload="metadata" className="mt-3 max-h-80 w-full rounded-lg border-2 border-[#5c3a21] bg-black" />}
                             {(w.slowo || w.ilustracja) && <div className="mt-3 grid gap-3 sm:grid-cols-2">
                                 {w.slowo && <div className="rounded-lg border border-[#c4a168] bg-[#efdcb4] p-3 text-sm">
                                     <div className="mb-1 text-[11px] font-bold text-[#7a5230]">{t.kronikarz}</div>
-                                    <p className="font-serif italic">{w.slowo.tekst}</p>
+                                    <p className="font-serif italic">{lang === 'en' && w.przeklad?.slowo && !oryginaly[w.id] ? w.przeklad.slowo : w.slowo.tekst}</p>
                                 </div>}
                                 {w.ilustracja && <div className="overflow-hidden rounded-lg border border-[#c4a168] bg-[#efdcb4]">
                                     <div className="px-3 pt-2 text-[11px] font-bold text-[#7a5230]">{t.paleta}{w.ilustracja.styl && <span className="font-normal"> · {w.ilustracja.styl}</span>}</div>
