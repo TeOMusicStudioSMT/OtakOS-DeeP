@@ -47,6 +47,7 @@ import NodeSphere from './components/NodeSphere';
 import { GieldaMocy } from './components/GieldaMocy';
 import { KlubMistrzow } from './components/KlubMistrzow';
 import { TeoGameShow } from './components/TeoGameShow';
+import { ZywaKsiegaKatedr } from './components/ZywaKsiegaKatedr';
 import { SklepKatedr } from './components/SklepKatedr';
 import UpdatesSection from './components/UpdatesSection';
 import AdTowerSection from './components/AdTowerSection';
@@ -895,6 +896,7 @@ export default function App() {
         <GieldaMocy lang={lang} kawaii={activeThemeId === 'kawaii'} onSiec={() => setSphereOpen(true)} onOnline={setActivePeers} />
         {/* 🏛️ Globalny Klub Mistrzów — JaJa Mistrzów Katedr online, turnieje Klubu i rankingi (z rejestru) */}
         <KlubMistrzow lang={lang} kawaii={activeThemeId === 'kawaii'} />
+        <ZywaKsiegaKatedr lang={lang} kawaii={activeThemeId === 'kawaii'} />
         <TeoGameShow lang={lang} kawaii={activeThemeId === 'kawaii'} />
         <SklepKatedr lang={lang} kawaii={activeThemeId === 'kawaii'} />
       </section>
