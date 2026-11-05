@@ -36,6 +36,83 @@ export const SECTORS: Sector[] = [
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
   {
+    "date": "2026-11-05",
+    "ref": "9989b67",
+    "sector": "web",
+    "title": "📚 Wypożyczalnia Żywych Ksiąg — teostory.studio",
+    "desc": "„Netflix” dla ilustrowanych ksiąg czytanych na głosy. Katalog, okładki i treść podaje Katedra przez swój tunel — portal niczego nie przechowuje. Księgi demo czyta się za darmo, pozostałe wypożycza się na 48 h przez Stripe (cenę liczy Katedra, nie przeglądarka). Bez wymyślonych portfeli, passów i „zweryfikowanych” pieczęci: gdy Katedra śpi, portal mówi, że śpi.",
+    "en": {
+      "title": "📚 Living Books rental — teostory.studio",
+      "desc": "A “Netflix” for illustrated books read aloud in voices. The catalogue, covers and content come from the Cathedral through its tunnel — the portal stores nothing. Demo books are free to read, others are rented for 48 h via Stripe (the price is set by the Cathedral, not the browser). No made-up wallets, passes or “verified” seals: when the Cathedral sleeps, the portal says so."
+    }
+  },
+  {
+    "date": "2026-11-05",
+    "ref": "58faafb",
+    "sector": "core",
+    "title": "📖✍️ Silnik Żywych Ksiąg — Kronikarz pisze, Paleta rysuje",
+    "desc": "Czytnik z AI Studio trafił do TeO Story Studio, ale serce dostał z Katedry, jak Żywa Księga: Kronikarz pisze księgę lokalnym modelem, Paleta (FLUX na własnej karcie) rysuje każdą postać jako wycinankę z papieru — z kartą aktora ze Stałej Obsady jako wzorem — i ilustruje strony. Google Agent został opcją. Pierwsza próba: „Lot nad Teterhią”, 3 strony, napisane lokalnie w ~6 minut.",
+    "en": {
+      "title": "📖✍️ Living Books engine — the Chronicler writes, the Palette paints",
+      "desc": "The reader built in AI Studio moved into TeO Story Studio, but got its heart from the Cathedral, like the Living Book: the Chronicler writes the book with a local model, the Palette (FLUX on the node's own GPU) draws every character as a paper cut-out — using the Standing Cast actor sheet as reference — and illustrates the pages. The Google agent stays optional. First run: “Flight over Teterhia”, 3 pages, written locally in ~6 minutes."
+    }
+  },
+  {
+    "date": "2026-11-05",
+    "ref": "ced7e9f",
+    "sector": "distro",
+    "title": "👕🔭 Zwiadowca kanałów dystrybucji + nadruki Mini-TeOgochi",
+    "desc": "Zwiadowca szuka w sieci druku na żądanie, marketplace'ów i sklepów twórców dla merchu z motywami Teterhii — przyjmuje tylko kanały, których link padł w wynikach wyszukiwania; „podłącz” trafia do Izby zgód, konto zakłada człowiek. TeO Fashion Studio dostało zakładkę Nadruki: Mini-TeOgochi i postacie z Pracowni na koszulkach, bluzach i torbach, z plikiem druku.",
+    "en": {
+      "title": "👕🔭 Distribution channel Scout + Mini-TeOgochi prints",
+      "desc": "The Scout searches the web for print-on-demand, marketplaces and creator shops for Teterhia-themed merch — it keeps only channels whose link appeared in search results; “connect” goes to the Approval Chamber and a human opens the account. TeO Fashion Studio got a Prints tab: Mini-TeOgochi and characters from the Workshop on t-shirts, hoodies and bags, with a print file."
+    }
+  },
+  {
+    "date": "2026-11-05",
+    "ref": "4c3980b",
+    "sector": "core",
+    "title": "🌅 Warsztat Stada: niebo i światło Teterhii",
+    "desc": "TeOsim Paleta proponuje już nie tylko wodę, ale też barwę nieba, siłę słońca, światło nieba, poświatę zmierzchu i głębię nocy — liczbami w zakresach, nie kodem. Gra pokazuje zrzut „teraz / po”, decyzja zapada w Izbie zgód. Bez przepisu gra wygląda dokładnie jak dawniej.",
+    "en": {
+      "title": "🌅 Herd Workshop: Teterhia's sky and light",
+      "desc": "TeOsim Palette now proposes not only water but also sky colour, sun strength, sky light, dusk glow and depth of night — as numbers within ranges, not code. The game shows a “now / after” screenshot and the decision is made in the Approval Chamber. Without a recipe the game looks exactly as before."
+    }
+  },
+  {
+    "date": "2026-11-05",
+    "ref": "dd9f0b8",
+    "sector": "core",
+    "title": "📥 Izba zgód — jedna lista ✓ na telefonie",
+    "desc": "Wszystko, co czeka na decyzję Suwerena, w jednym miejscu (Hub i telefon StoL): publikacje YouTube, nowe Katedry w rejestrze, Warsztat Stada, kanały dystrybucji, Sklep Mini i Stała Obsada. Decyzje kosztujące kredyty albo kartę graficzną zapadają tylko przy Katedrze; Poranny brief liczy sprawy z Izby.",
+    "en": {
+      "title": "📥 Approval Chamber — one ✓ list on the phone",
+      "desc": "Everything waiting for the Sovereign's decision in one place (Hub and the StoL phone app): YouTube publications, new Cathedrals in the registry, the Herd Workshop, distribution channels, the Mini Shop and the Standing Cast. Decisions that spend credits or the GPU are taken only at the Cathedral; the Morning Brief counts the Chamber's items."
+    }
+  },
+  {
+    "date": "2026-11-01",
+    "ref": "7da4fcb",
+    "sector": "core",
+    "title": "🐟 Złota Rybka — recenzja planu bez kontekstu",
+    "desc": "Metoda „projektuj ze słoniem, recenzuj ze złotą rybką” (Google, Apache-2.0): recenzent dostaje tylko to, co dostanie Kodeks — bez rozmowy z Reżyserem — i dlatego widzi niejawne założenia planu gry. Raz w tygodniu taka rybka sprawdza też, czy opis Katedry zgadza się z kodem.",
+    "en": {
+      "title": "🐟 Goldfish — plan review without context",
+      "desc": "The “design with an elephant, review with a goldfish” method (Google, Apache-2.0): the reviewer sees only what the Codex will see — without the Director's conversation — so it spots the plan's hidden assumptions. Once a week a goldfish also checks whether the Cathedral's description still matches the code."
+    }
+  },
+  {
+    "date": "2026-11-01",
+    "ref": "36e0c26",
+    "sector": "core",
+    "title": "🎵🔌 Suno w Katedrze + Jason, producent wykonawczy",
+    "desc": "Most Katedry umie być klientem oficjalnego Suno MCP (logowanie kontem Suwerena, utwory prosto do biblioteki muzyki, każde wydanie kredytów za zgodą) — czeka, aż Suno włączy łączenie kont. Gemy Suwerena stały się umiejętnościami Katedry: Jason (producent muzyczny), RA-DA 7 i reżyser wideo.",
+    "en": {
+      "title": "🎵🔌 Suno in the Cathedral + Jason, executive producer",
+      "desc": "The Cathedral bridge can act as a client of the official Suno MCP (sign-in with the Sovereign's account, tracks straight into the music library, every credit spend needs consent) — waiting for Suno to enable account linking. The Sovereign's Gems became Cathedral skills: Jason (music producer), RA-DA 7 and the video director."
+    }
+  },
+  {
     date: "2026-10-29",
     ref: "58add97",
     sector: "web",
