@@ -1,3 +1,4 @@
+import { tr, type Lang } from '../i18n';
 /**
  * 🔮 NodeSphere — szklana, obracająca się sieć 3D węzłów lokalnej Katedry.
  *
@@ -20,12 +21,12 @@ const LAYER_COLOR: Record<AgiLayer, string> = { SENSE: '#22d3ee', CORE: '#34d399
 type LiveState = Record<string, { status: string; load: number }>;
 interface SphereNode { id: string; label: string; emoji: string; color: string; you?: boolean; }
 
-export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> = ({ lang = 'pl', onClose }) => {
+export const NodeSphere: React.FC<{ lang?: Lang; onClose: () => void }> = ({ lang = 'pl' as Lang, onClose }) => {
   const [angle, setAngle] = useState(0);
   const [live, setLive] = useState<LiveState | null>(null);
   const [cath, setCath] = useState<{ self: { name: string }; count: number; collectedAt: number } | null>(null);
   const [sel, setSel] = useState<string | null>(null);
-  const [name, setName] = useState(() => localStorage.getItem(NAME_KEY) || (lang === 'pl' ? 'TWÓJ-WĘZEŁ' : 'YOUR-NODE'));
+  const [name, setName] = useState(() => localStorage.getItem(NAME_KEY) || tr(lang, 'TWÓJ-WĘZEŁ', 'YOUR-NODE', 'DEIN-KNOTEN'));
   const [pairs, setPairs] = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem(PAIR_KEY) || '[]')); } catch { return new Set(); }
   });
@@ -58,7 +59,7 @@ export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> =
 
   const nodes: SphereNode[] = useMemo(() => [
     { id: '__you', label: name, emoji: '👑', color: '#a78bfa', you: true },
-    ...AGI_LOCAL.nodes.map(n => ({ id: n.id, label: lang === 'pl' ? n.label : n.labelEn, emoji: n.emoji, color: LAYER_COLOR[n.layer] })),
+    ...AGI_LOCAL.nodes.map(n => ({ id: n.id, label: tr(lang, n.label, n.labelEn, n.labelDe ?? n.labelEn), emoji: n.emoji, color: LAYER_COLOR[n.layer] })),
   ], [name, lang]);
 
   // Fibonacci sphere + obrót Y + projekcja perspektywiczna
@@ -103,14 +104,14 @@ export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> =
           <div>
             <div className="text-[10px] tracking-[0.3em] text-emerald-500/60 font-mono">∴ SIEĆ REZONANSOWA ∴</div>
             <h3 className="text-lg sm:text-xl font-bold text-emerald-300 font-mono">
-              {lang === 'pl' ? '🔮 SZKLANA SIEĆ WĘZŁÓW 0.00G' : '🔮 GLASS NODE NETWORK 0.00G'}
+              {tr(lang, '🔮 SZKLANA SIEĆ WĘZŁÓW 0.00G', '🔮 GLASS NODE NETWORK 0.00G', '🔮 GLÄSERNES KNOTENNETZ 0.00G')}
             </h3>
           </div>
           <div className="flex items-center gap-2">
             <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border font-mono ${
               mode === 'LIVE' ? 'border-emerald-500/50 text-emerald-300 bg-emerald-950/40' : 'border-zinc-700 text-zinc-500 bg-black/30'}`}>
               <span className={`w-1.5 h-1.5 rounded-full ${mode === 'LIVE' ? 'bg-emerald-400 animate-ping' : 'bg-zinc-600'}`} />
-              {mode === 'LIVE' ? (lang === 'pl' ? 'ŻYWY MOST' : 'LIVE') : (lang === 'pl' ? 'MANIFEST' : 'STATIC')}
+              {mode === 'LIVE' ? tr(lang, 'ŻYWY MOST', 'LIVE', 'LIVE') : tr(lang, 'MANIFEST', 'STATIC', 'MANIFEST')}
             </span>
             <button onClick={onClose} className="text-zinc-400 hover:text-white text-xl leading-none px-1">✕</button>
           </div>
@@ -165,11 +166,11 @@ export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> =
           <div className="md:col-span-5 font-mono space-y-3">
             {/* Twój węzeł — rename */}
             <div className="rounded-lg border border-violet-500/30 bg-violet-950/20 p-3">
-              <div className="text-[10px] text-violet-300/70 tracking-wider mb-1">👑 {lang === 'pl' ? 'TWÓJ WĘZEŁ' : 'YOUR NODE'}</div>
+              <div className="text-[10px] text-violet-300/70 tracking-wider mb-1">👑 {tr(lang, 'TWÓJ WĘZEŁ', 'YOUR NODE', 'DEIN KNOTEN')}</div>
               <input value={name} onChange={e => setName(e.target.value.toUpperCase().slice(0, 22))}
                 className="w-full bg-black/40 border border-violet-500/30 rounded px-2 py-1 text-sm text-violet-200 outline-none focus:border-violet-400"
-                placeholder={lang === 'pl' ? 'nazwa węzła...' : 'node name...'} />
-              <div className="text-[9px] text-zinc-500 mt-1">{lang === 'pl' ? 'Zmieniasz nazwę w swojej Katedrze (zapis lokalny).' : 'Rename in your own Cathedral (local save).'}</div>
+                placeholder={tr(lang, 'nazwa węzła...', 'node name...', 'Knotenname...')} />
+              <div className="text-[9px] text-zinc-500 mt-1">{tr(lang, 'Zmieniasz nazwę w swojej Katedrze (zapis lokalny).', 'Rename in your own Cathedral (local save).', 'Umbenennen in deiner eigenen Kathedrale (lokal gespeichert).')}</div>
             </div>
 
             {/* Wybrany węzeł — parowanie */}
@@ -177,19 +178,19 @@ export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> =
               {selNode ? (
                 <>
                   <div className="text-sm font-bold flex items-center gap-2" style={{ color: LAYER_COLOR[selNode.layer] }}>
-                    <span>{selNode.emoji}</span>{lang === 'pl' ? selNode.label : selNode.labelEn}
+                    <span>{selNode.emoji}</span>{tr(lang, selNode.label, selNode.labelEn, selNode.labelDe ?? selNode.labelEn)}
                     {statusOf(selNode.id) === 'online' && <span className="text-[9px] text-emerald-400 animate-pulse">● LIVE</span>}
                   </div>
-                  <div className="text-[11px] text-zinc-400 mt-1">{lang === 'pl' ? selNode.desc : selNode.descEn}</div>
+                  <div className="text-[11px] text-zinc-400 mt-1">{tr(lang, selNode.desc, selNode.descEn, selNode.descDe ?? selNode.descEn)}</div>
                   <button onClick={() => togglePair(selNode.id)}
                     className={`mt-2 text-[11px] px-3 py-1 rounded border font-bold ${
                       pairs.has(selNode.id) ? 'border-violet-400 text-violet-300 bg-violet-950/40' : 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/30'}`}>
-                    {pairs.has(selNode.id) ? (lang === 'pl' ? '🔗 SPAROWANY — rozłącz' : '🔗 PAIRED — unlink') : (lang === 'pl' ? '⚡ PARUJ węzeł' : '⚡ PAIR node')}
+                    {pairs.has(selNode.id) ? tr(lang, '🔗 SPAROWANY — rozłącz', '🔗 PAIRED — unlink', '🔗 GEKOPPELT — trennen') : tr(lang, '⚡ PARUJ węzeł', '⚡ PAIR node', '⚡ Knoten KOPPELN')}
                   </button>
                 </>
               ) : (
                 <div className="text-[11px] text-zinc-500 flex items-center h-full">
-                  {lang === 'pl' ? '↖ Kliknij węzeł na sferze, by zobaczyć szczegóły i sparować.' : '↖ Click a node on the sphere to view details and pair.'}
+                  {tr(lang, '↖ Kliknij węzeł na sferze, by zobaczyć szczegóły i sparować.', '↖ Click a node on the sphere to view details and pair.', '↖ Klicke auf einen Knoten der Sphäre, um Details zu sehen und ihn zu koppeln.')}
                 </div>
               )}
             </div>
@@ -201,37 +202,37 @@ export const NodeSphere: React.FC<{ lang?: 'pl' | 'en'; onClose: () => void }> =
                 <span>origin</span><span className="text-emerald-300">{AGI_LOCAL.origin}</span>
                 <span>wymiar</span><span className="text-emerald-300">{AGI_LOCAL.dimension}</span>
                 <span>wersja</span><span className="text-emerald-300">{AGI_LOCAL.version}</span>
-                <span>{lang === 'pl' ? 'neuronów' : 'neurons'}</span><span className="text-emerald-300">{AGI_LOCAL.nodes.length}</span>
-                <span>{lang === 'pl' ? 'sparowane' : 'paired'}</span><span className="text-violet-300">{pairs.size}</span>
-                <span>{lang === 'pl' ? 'pula meshu' : 'mesh pool'}</span>
+                <span>{tr(lang, 'neuronów', 'neurons', 'Neuronen')}</span><span className="text-emerald-300">{AGI_LOCAL.nodes.length}</span>
+                <span>{tr(lang, 'sparowane', 'paired', 'gekoppelt')}</span><span className="text-violet-300">{pairs.size}</span>
+                <span>{tr(lang, 'pula meshu', 'mesh pool', 'Mesh-Pool')}</span>
                 <span className="text-violet-300">{(16 + pairs.size * 8).toLocaleString()} GB</span>
               </div>
               <div className="text-[9px] text-zinc-500 mt-1.5 leading-snug">
-                {lang === 'pl'
-                  ? 'Parowanie = lista zaufanych rówieśników Twojej Katedry. Każdy most dokłada moc do wspólnej puli (VRAM/inferencja) — fundament p2p bez chmury.'
-                  : 'Pairing = your Cathedral’s trusted-peer list. Each bridge adds power to the shared pool (VRAM/inference) — the p2p foundation, no cloud.'}
+                {tr(lang, 'Parowanie = lista zaufanych rówieśników Twojej Katedry. Każdy most dokłada moc do wspólnej puli (VRAM/inferencja) — fundament p2p bez chmury.',
+                  'Pairing = your Cathedral’s trusted-peer list. Each bridge adds power to the shared pool (VRAM/inference) — the p2p foundation, no cloud.',
+                  'Koppeln = Liste vertrauenswürdiger Peers deiner Kathedrale. Jede Brücke trägt Leistung zum gemeinsamen Pool bei (VRAM/Inferenz) — das P2P-Fundament ohne Cloud.')}
               </div>
             </div>
 
             {/* Automat Katedr — rejestr live (z mostu) */}
             {cath && (
               <div className="rounded-lg border border-emerald-500/20 bg-black/40 p-3 text-[11px]">
-                <div className="text-emerald-400 font-bold mb-1">🖨️ {lang === 'pl' ? 'AUTOMAT KATEDR' : 'CATHEDRAL COLLECTOR'}</div>
+                <div className="text-emerald-400 font-bold mb-1">🖨️ {tr(lang, 'AUTOMAT KATEDR', 'CATHEDRAL COLLECTOR', 'KATHEDRALEN-SAMMLER')}</div>
                 <div className="grid grid-cols-2 gap-1 text-zinc-400">
-                  <span>{lang === 'pl' ? 'ta katedra' : 'this cathedral'}</span><span className="text-emerald-300">{cath.self.name}</span>
-                  <span>{lang === 'pl' ? 'katedr w sieci' : 'cathedrals'}</span><span className="text-emerald-300">{cath.count}</span>
-                  <span>{lang === 'pl' ? 'zebrano' : 'collected'}</span><span className="text-emerald-300">{new Date(cath.collectedAt).toLocaleTimeString()}</span>
+                  <span>{tr(lang, 'ta katedra', 'this cathedral', 'diese Kathedrale')}</span><span className="text-emerald-300">{cath.self.name}</span>
+                  <span>{tr(lang, 'katedr w sieci', 'cathedrals', 'Kathedralen im Netz')}</span><span className="text-emerald-300">{cath.count}</span>
+                  <span>{tr(lang, 'zebrano', 'collected', 'gesammelt')}</span><span className="text-emerald-300">{new Date(cath.collectedAt).toLocaleTimeString()}</span>
                 </div>
-                <div className="text-[9px] text-zinc-500 mt-1">{lang === 'pl' ? 'Drukarka odświeża co 10 min — live, lokalnie, bez chmury.' : 'Printer refreshes every 10 min — live, local, no cloud.'}</div>
+                <div className="text-[9px] text-zinc-500 mt-1">{tr(lang, 'Drukarka odświeża co 10 min — live, lokalnie, bez chmury.', 'Printer refreshes every 10 min — live, local, no cloud.', 'Der Drucker aktualisiert alle 10 Min. — live, lokal, ohne Cloud.')}</div>
               </div>
             )}
           </div>
         </div>
 
         <div className="mt-3 text-[10px] text-zinc-600 font-mono">
-          {lang === 'pl'
-            ? 'Każdy Suweren widzi sieć ze swojej Katedry — kolory pokazują żywą aktywność, parowanie tworzy lokalne mosty p2p.'
-            : 'Each Sovereign sees the network from their Cathedral — colors show live activity, pairing forms local p2p bridges.'}
+          {tr(lang, 'Każdy Suweren widzi sieć ze swojej Katedry — kolory pokazują żywą aktywność, parowanie tworzy lokalne mosty p2p.',
+            'Each Sovereign sees the network from their Cathedral — colors show live activity, pairing forms local p2p bridges.',
+            'Jeder Souverän sieht das Netz aus seiner Kathedrale — Farben zeigen lebendige Aktivität, Koppeln bildet lokale P2P-Brücken.')}
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import type { Lang } from '../i18n';
 /**
  * 🏛️ Globalny Klub Mistrzów (2026-10-09) — PRAWDZIWE dane z rejestru Katedr (`mistrz` w /api/katedry, oczyszczone
  * w server/rejestr.mjs). Każda Katedra online wystawia tu swojego JaJa Mistrza (etap, event dnia jej Teterhii),
@@ -8,13 +9,13 @@ import React, { useEffect, useState } from 'react';
 import { Crown } from 'lucide-react';
 import { katedryOnline, type KatedraOnline, type TanecKlubu } from '../katedry/wizytowka';
 
-const DZIEDZINY: Record<string, { pl: string; en: string; plD: string; ikona: string }> = {
-    takt: { pl: 'Takt', en: 'Rhythm', plD: 'Taktu', ikona: '🎵' },
-    zwinnosc: { pl: 'Zwinność', en: 'Agility', plD: 'Zwinności', ikona: '🌀' },
-    spryt: { pl: 'Spryt', en: 'Wit', plD: 'Sprytu', ikona: '🧩' },
-    urok: { pl: 'Urok', en: 'Charm', plD: 'Uroku', ikona: '✨' },
+const DZIEDZINY: Record<string, { pl: string; en: string; de: string; plD: string; ikona: string }> = {
+    takt: { pl: 'Takt', en: 'Rhythm', de: 'Takt', plD: 'Taktu', ikona: '🎵' },
+    zwinnosc: { pl: 'Zwinność', en: 'Agility', de: 'Geschick', plD: 'Zwinności', ikona: '🌀' },
+    spryt: { pl: 'Spryt', en: 'Wit', de: 'Köpfchen', plD: 'Sprytu', ikona: '🧩' },
+    urok: { pl: 'Urok', en: 'Charm', de: 'Charme', plD: 'Uroku', ikona: '✨' },
 };
-const ETAP: Record<string, { ikona: string; en: string }> = { jajo: { ikona: '🥚', en: 'egg' }, 'drży': { ikona: '🥚', en: 'trembling' }, 'pęka': { ikona: '🐣', en: 'cracking' }, wykluty: { ikona: '🐥', en: 'hatched' } };
+const ETAP: Record<string, { ikona: string; en: string; de: string }> = { jajo: { ikona: '🥚', en: 'egg', de: 'Ei' }, 'drży': { ikona: '🥚', en: 'trembling', de: 'zittert' }, 'pęka': { ikona: '🐣', en: 'cracking', de: 'bricht auf' }, wykluty: { ikona: '🐥', en: 'hatched', de: 'geschlüpft' } };
 
 const TEKST = {
     pl: {
@@ -47,6 +48,21 @@ const TEKST = {
         tanceUczciwie: 'The registry recomputes every score from the routine the Cathedral publishes — the arithmetic (timing, energy match, variety) is verifiable. Phrase energy and move power are declared by the Cathedral. No GRV changes hands.',
         mistrzostwaOd: 'The World Championship starts on 1 December',
     },
+    de: {
+        tytul: 'Globaler Club der Meister',
+        wstep: 'Jede Kathedrale hat ihr Meister-Ei — es lernt den Stil des Souveräns, ist Schiedsrichter in ihrer Teterhia und vertritt sie hier.',
+        brak: 'Das Kathedralen-Register antwortet nicht — wir zeigen keinen erfundenen Club.',
+        pusto: 'Gerade ist kein Meister online. Der Club erwacht, sobald sich Kathedralen mit Meister-Ei anmelden.',
+        turnieje: 'Club-Turniere', bezTurniejow: 'Gerade läuft kein Club-Turnier.',
+        organizuje: 'veranstaltet', do: 'bis', jeszczeNikt: 'noch hat niemand gespielt',
+        jak: 'Ein Turnier kündigst du in deiner Kathedrale an: Hub → Quanten-Inkubator → 🏛️ Club der Meister. Spieler jeder Kathedrale spielen es in ihrer eigenen Teterhia (K → 🏛️).',
+        uczciwie: 'Die Ergebnisse melden die Kathedralen selbst — die Identität bestätigt eine signierte Anmeldung, die Zahlen prüft niemand unabhängig. Für die Teilnahme fließen keine GRV.',
+        teterhia: 'in Teterhia',
+        tance: '🩰 Tanzturniere', bezTancow: 'noch hat niemand getanzt',
+        tanceJak: 'Choreografien erstellst und meldest du in deiner eigenen Kathedrale: App Tanz-Duell → 🩰 Choreografie. Zeiträume richten sich nach dem UTC-Tag (ISO-Woche); die Weltmeisterschaft läuft den ganzen Dezember.',
+        tanceUczciwie: 'Das Register berechnet jede Wertung neu aus der Choreografie, die die Kathedrale veröffentlicht — die Arithmetik (Takt, Energie-Abgleich, Vielfalt) ist überprüfbar. Die Energie der Phrasen und die Kraft der Bewegungen meldet die Kathedrale. Für Platzierungen fließen keine GRV.',
+        mistrzostwaOd: 'Die Weltmeisterschaft beginnt am 1. Dezember',
+    },
 };
 
 interface Turniej { klucz: string; organizator: string; dziedzina: string; opis: string; do: string; wyniki: { nick: string; wygrane: number; starc: number; kiedy: string }[] }
@@ -58,12 +74,12 @@ export function turniejeKlubu(lista: KatedraOnline[]): Turniej[] {
     return t;
 }
 
-const OKRESY_TANCA: { okres: TanecKlubu['okres']; pl: string; en: string }[] = [
-    { okres: 'dzien', pl: 'Taniec Dnia', en: 'Dance of the Day' },
-    { okres: 'tydzien', pl: 'Taniec Tygodnia', en: 'Dance of the Week' },
-    { okres: 'miesiac', pl: 'Taniec Miesiąca', en: 'Dance of the Month' },
-    { okres: 'rok', pl: 'Taniec Roku', en: 'Dance of the Year' },
-    { okres: 'mistrzostwa', pl: 'Mistrzostwa Świata', en: 'World Championship' },
+const OKRESY_TANCA: { okres: TanecKlubu['okres']; pl: string; en: string; de: string }[] = [
+    { okres: 'dzien', pl: 'Taniec Dnia', en: 'Dance of the Day', de: 'Tanz des Tages' },
+    { okres: 'tydzien', pl: 'Taniec Tygodnia', en: 'Dance of the Week', de: 'Tanz der Woche' },
+    { okres: 'miesiac', pl: 'Taniec Miesiąca', en: 'Dance of the Month', de: 'Tanz des Monats' },
+    { okres: 'rok', pl: 'Taniec Roku', en: 'Dance of the Year', de: 'Tanz des Jahres' },
+    { okres: 'mistrzostwa', pl: 'Mistrzostwa Świata', en: 'World Championship', de: 'Weltmeisterschaft' },
 ];
 /** Tydzień ISO 8601 („2026-W42”) — jak services/Choreografie.js Katedry i server/rejestr.mjs. */
 export function tydzienISO(t: number): string {
@@ -97,7 +113,7 @@ export function rankingiTanca(lista: KatedraOnline[], teraz = Date.now()) {
     });
 }
 
-export const KlubMistrzow: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }> = ({ lang, kawaii }) => {
+export const KlubMistrzow: React.FC<{ lang: Lang; kawaii?: boolean }> = ({ lang, kawaii }) => {
     const t = TEKST[lang];
     const [lista, setLista] = useState<KatedraOnline[] | null | undefined>(undefined);
     useEffect(() => {
@@ -130,7 +146,7 @@ export const KlubMistrzow: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }> = (
                         return (
                             <li key={k.nick} className="rounded-lg border border-zinc-900 bg-[#07070b] px-3 py-2 text-xs">
                                 <span className="mr-1">{e.ikona}</span><b className="text-zinc-200">{k.nick}</b>
-                                <span className="text-zinc-500"> · {lang === 'en' ? e.en : k.mistrz!.etap}</span>
+                                <span className="text-zinc-500"> · {lang === 'pl' ? k.mistrz!.etap : e[lang]}</span>
                                 {k.mistrz!.teterhia && <div className="text-[10px] text-zinc-500 font-sans">🎲 {t.teterhia}: {k.mistrz!.teterhia}</div>}
                             </li>
                         );
@@ -147,7 +163,7 @@ export const KlubMistrzow: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }> = (
                                 return (
                                     <li key={x.klucz} className="rounded-lg border border-zinc-900 bg-[#07070b] p-3 text-xs min-w-0">
                                         <div className="flex flex-wrap items-baseline gap-2">
-                                            <b className={akcent}>{d.ikona} {lang === 'en' ? `${d.en} Tournament` : `Turniej ${d.plD}`}</b>
+                                            <b className={akcent}>{d.ikona} {lang === 'pl' ? `Turniej ${d.plD}` : lang === 'de' ? `${d.de}-Turnier` : `${d.en} Tournament`}</b>
                                             <span className="text-zinc-500">· {x.organizator} {t.organizuje} · {t.do} {x.do}</span>
                                         </div>
                                         {x.opis && <div className="mt-1 text-[10px] text-zinc-400 font-sans break-words">{x.opis}</div>}
@@ -172,7 +188,7 @@ export const KlubMistrzow: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }> = (
                             return (
                                 <li key={x.okres} className="rounded-lg border border-zinc-900 bg-[#07070b] p-3 text-xs min-w-0">
                                     <div className="flex flex-wrap items-baseline gap-2">
-                                        <b className={akcent}>{lang === 'en' ? o.en : o.pl}</b>
+                                        <b className={akcent}>{o[lang]}</b>
                                         <span className="text-zinc-500">· {x.klucz}</span>
                                     </div>
                                     {x.miejsca.length === 0 ? <div className="mt-1 text-[10px] text-zinc-600 font-sans">{t.bezTancow}</div> : (

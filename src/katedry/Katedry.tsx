@@ -1,3 +1,4 @@
+import { tr, type Lang } from '../i18n';
 /**
  * 🧭 Katedry — przewijanie wizytówek na otakos.wtf (2026-10-02).
  *
@@ -46,7 +47,8 @@ function useGestPoziomy(cel: React.RefObject<HTMLElement | null> | null, onGest:
   }, [cel, onGest]);
 }
 
-const TwojaPanel: React.FC<{ pl: boolean }> = ({ pl }) => {
+const TwojaPanel: React.FC<{ lang: Lang }> = ({ lang }) => {
+    const pl = lang === 'pl';
   const [w, setW] = useState<Wizytowka | null | 'brak-nicka' | 'laduje'>('laduje');
   const [offline, setOffline] = useState<string | null>(null);
   const [powod, setPowod] = useState<StanKatedry | null | 'brak-wizytowki'>(null);
@@ -67,46 +69,43 @@ const TwojaPanel: React.FC<{ pl: boolean }> = ({ pl }) => {
       setW(lokalna);
     })();
   }, []);
-  if (w === 'laduje') return <p className="pt-24 text-center text-sm text-slate-500">{pl ? 'Szukam Twojej Katedry…' : 'Looking for your Cathedral…'}</p>;
-  if (w && w !== 'brak-nicka') return <KartaKatedry w={w} pl={pl} twoja />;
+  if (w === 'laduje') return <p className="pt-24 text-center text-sm text-slate-500">{tr(lang, 'Szukam Twojej Katedry…', 'Looking for your Cathedral…', 'Ich suche deine Kathedrale…')}</p>;
+  if (w && w !== 'brak-nicka') return <KartaKatedry w={w} lang={lang} twoja />;
   if (offline) return (
     <div className="mx-auto max-w-xl px-6 pt-20 text-center">
-      <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">{pl ? '∴ Twoja Katedra ∴' : '∴ Your Cathedral ∴'}</div>
+      <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">{tr(lang, '∴ Twoja Katedra ∴', '∴ Your Cathedral ∴', '∴ Deine Kathedrale ∴')}</div>
       <h2 className="mt-2 font-mono text-4xl font-black text-white">{offline}</h2>
-      <p className="mt-4 text-sm text-slate-400">{pl ? 'Jest teraz offline — wizytówka wróci, gdy Katedra włączy tunel i meldunek.' : 'It is offline right now — the card returns once the Cathedral enables its tunnel and check-in.'}</p>
+      <p className="mt-4 text-sm text-slate-400">{tr(lang, 'Jest teraz offline — wizytówka wróci, gdy Katedra włączy tunel i meldunek.', 'It is offline right now — the card returns once the Cathedral enables its tunnel and check-in.', 'Sie ist gerade offline — die Visitenkarte kehrt zurück, sobald die Kathedrale Tunnel und Anmeldung einschaltet.')}</p>
       <p className="mt-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-[11px] leading-relaxed text-slate-300">
         {powod === 'brak-wizytowki'
-          ? (pl ? 'Rejestr widzi ją online, ale jej tunel nie oddał wizytówki tej przeglądarce. Spróbuj za chwilę.' : 'The registry sees it online, but its tunnel did not return the card to this browser. Try again shortly.')
+          ? (tr(lang, 'Rejestr widzi ją online, ale jej tunel nie oddał wizytówki tej przeglądarce. Spróbuj za chwilę.', 'The registry sees it online, but its tunnel did not return the card to this browser. Try again shortly.', 'Das Register sieht sie online, aber ihr Tunnel hat diesem Browser die Visitenkarte nicht geliefert. Versuche es gleich noch einmal.'))
           : powod?.meldunek
-            ? <>{pl ? 'Ostatni meldunek' : 'Last check-in'} ({new Date(powod.meldunek.kiedy).toLocaleTimeString(pl ? 'pl-PL' : 'en-GB')}): {powod.meldunek.ok ? '✓' : '⚠'} {powod.meldunek.wiadomosc}</>
+            ? <>{tr(lang, 'Ostatni meldunek', 'Last check-in', 'Letzte Anmeldung')} ({new Date(powod.meldunek.kiedy).toLocaleTimeString(tr(lang, 'pl-PL', 'en-GB', 'de-DE'))}): {powod.meldunek.ok ? '✓' : '⚠'} {powod.meldunek.wiadomosc}</>
             : powod
-              ? (pl ? 'Rejestr nie dostał od niej meldunku od swojego ostatniego startu. W Katedrze: Kwantowy Tunel włączony + 🪪 „Melduj w sieci” — panel 🪪 pokazuje, co odpowiada rejestr.' : 'The registry has had no check-in from it since its last start. In the Cathedral: Quantum Tunnel on + 🪪 “check in” — the 🪪 panel shows the registry reply.')
-              : (pl ? 'Rejestr Katedr jest teraz nieosiągalny.' : 'The Cathedral registry is unreachable right now.')}
+              ? (tr(lang, 'Rejestr nie dostał od niej meldunku od swojego ostatniego startu. W Katedrze: Kwantowy Tunel włączony + 🪪 „Melduj w sieci” — panel 🪪 pokazuje, co odpowiada rejestr.', 'The registry has had no check-in from it since its last start. In the Cathedral: Quantum Tunnel on + 🪪 “check in” — the 🪪 panel shows the registry reply.', 'Das Register hat seit seinem letzten Start keine Anmeldung von ihr erhalten. In der Kathedrale: Quanten-Tunnel an + 🪪 „Im Netz anmelden“ — das 🪪-Panel zeigt die Antwort des Registers.'))
+              : (tr(lang, 'Rejestr Katedr jest teraz nieosiągalny.', 'The Cathedral registry is unreachable right now.', 'Das Kathedralen-Register ist gerade nicht erreichbar.'))}
       </p>
-      <button onClick={() => { ustawMoja(null); setOffline(null); }} className="mt-6 text-[11px] text-slate-500 underline">{pl ? 'to nie moja Katedra' : 'not my Cathedral'}</button>
+      <button onClick={() => { ustawMoja(null); setOffline(null); }} className="mt-6 text-[11px] text-slate-500 underline">{tr(lang, 'to nie moja Katedra', 'not my Cathedral', 'nicht meine Kathedrale')}</button>
     </div>
   );
   return (
     <div className="mx-auto max-w-xl px-6 pt-20 text-center">
-      <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">{pl ? '∴ Twoja Katedra ∴' : '∴ Your Cathedral ∴'}</div>
+      <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">{tr(lang, '∴ Twoja Katedra ∴', '∴ Your Cathedral ∴', '∴ Deine Kathedrale ∴')}</div>
       {w === 'brak-nicka' ? (
-        <p className="mt-4 text-sm leading-relaxed text-slate-300">{pl
-          ? 'Twoja Katedra działa, ale nie ma jeszcze wizytówki. W Katedrze: Dashboard → „Wystawa teo.center” → 🪪 Wizytówka — wpisz nick i motto.'
-          : 'Your Cathedral is running but has no card yet. In the Cathedral: Dashboard → “Wystawa teo.center” → 🪪 Wizytówka — set a nick and motto.'}</p>
+        <p className="mt-4 text-sm leading-relaxed text-slate-300">{tr(lang, 'Twoja Katedra działa, ale nie ma jeszcze wizytówki. W Katedrze: Dashboard → „Wystawa teo.center” → 🪪 Wizytówka — wpisz nick i motto.', 'Your Cathedral is running but has no card yet. In the Cathedral: Dashboard → “Wystawa teo.center” → 🪪 Wizytówka — set a nick and motto.', 'Deine Kathedrale läuft, hat aber noch keine Visitenkarte. In der Kathedrale: Dashboard → „Wystawa teo.center“ → 🪪 Visitenkarte — Nick und Motto eintragen.')}</p>
       ) : (
         <>
-          <p className="mt-4 text-sm leading-relaxed text-slate-300">{pl
-            ? 'Nie widzę Katedry na tej maszynie. Twoja wizytówka pokaże się tu, gdy Katedra będzie działać obok przeglądarki — a w sieci, gdy włączysz Kwantowy Tunel i meldunek.'
-            : 'No Cathedral found on this machine. Your card appears here when a Cathedral runs next to this browser — and in the network once you enable the Quantum Tunnel and check-in.'}</p>
-          <a href="#" onClick={(e) => { e.preventDefault(); history.replaceState(null, '', window.location.pathname); window.dispatchEvent(new HashChangeEvent('hashchange')); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-6 inline-block rounded-lg border border-emerald-400/50 px-4 py-2 font-mono text-xs font-bold text-emerald-300 hover:bg-emerald-400/10">{pl ? '⬇ Pobierz Katedrę na otakos.wtf' : '⬇ Download the Cathedral on otakos.wtf'}</a>
+          <p className="mt-4 text-sm leading-relaxed text-slate-300">{tr(lang, 'Nie widzę Katedry na tej maszynie. Twoja wizytówka pokaże się tu, gdy Katedra będzie działać obok przeglądarki — a w sieci, gdy włączysz Kwantowy Tunel i meldunek.', 'No Cathedral found on this machine. Your card appears here when a Cathedral runs next to this browser — and in the network once you enable the Quantum Tunnel and check-in.', 'Auf diesem Rechner finde ich keine Kathedrale. Deine Visitenkarte erscheint hier, wenn eine Kathedrale neben diesem Browser läuft — und im Netz, sobald du Quanten-Tunnel und Anmeldung einschaltest.')}</p>
+          <a href="#" onClick={(e) => { e.preventDefault(); history.replaceState(null, '', window.location.pathname); window.dispatchEvent(new HashChangeEvent('hashchange')); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-6 inline-block rounded-lg border border-emerald-400/50 px-4 py-2 font-mono text-xs font-bold text-emerald-300 hover:bg-emerald-400/10">{tr(lang, '⬇ Pobierz Katedrę na otakos.wtf', '⬇ Download the Cathedral on otakos.wtf', '⬇ Kathedrale auf otakos.wtf herunterladen')}</a>
         </>
       )}
-      <p className="mt-10 text-[11px] text-slate-600">{pl ? 'Przesuń dalej → Katedry w sieci' : 'Swipe on → Cathedrals online'}</p>
+      <p className="mt-10 text-[11px] text-slate-600">{tr(lang, 'Przesuń dalej → Katedry w sieci', 'Swipe on → Cathedrals online', 'Weiterwischen → Kathedralen online')}</p>
     </div>
   );
 };
 
-const KartaSieci: React.FC<{ k: KatedraOnline; pl: boolean; aktywna: boolean }> = ({ k, pl, aktywna }) => {
+const KartaSieci: React.FC<{ k: KatedraOnline; lang: Lang; aktywna: boolean }> = ({ k, lang, aktywna }) => {
+    const pl = lang === 'pl';
   const [w, setW] = useState<Wizytowka | null | 'laduje' | 'blad'>(null);
   useEffect(() => {
     if (!aktywna || w) return;
@@ -118,22 +117,23 @@ const KartaSieci: React.FC<{ k: KatedraOnline; pl: boolean; aktywna: boolean }> 
     <section data-nick={k.nick} className="relative min-h-full snap-start border-b border-white/5">
       <button onClick={() => { ustawMoja(moja ? null : k.nick); setMoja(!moja); }}
         className={`absolute right-3 top-3 z-10 rounded-full border px-2.5 py-0.5 font-mono text-[10px] ${moja ? 'border-amber-300/60 bg-amber-400/20 text-amber-100' : 'border-white/15 text-slate-500 hover:text-slate-200'}`}>
-        {moja ? (pl ? '⭐ moja' : '⭐ mine') : (pl ? '☆ to moja' : '☆ this is mine')}
+        {moja ? (tr(lang, '⭐ moja', '⭐ mine', '⭐ meine')) : (tr(lang, '☆ to moja', '☆ this is mine', '☆ das ist meine'))}
       </button>
-      {postacZ(k) && <div className="mx-auto max-w-md px-4 pt-14"><KartaPostaci p={postacZ(k)!} pl={pl} nick={k.nick} /></div>}
-      {w && w !== 'laduje' && w !== 'blad' ? <KartaKatedry w={w} pl={pl} /> : (
+      {postacZ(k) && <div className="mx-auto max-w-md px-4 pt-14"><KartaPostaci p={postacZ(k)!} lang={lang} nick={k.nick} /></div>}
+      {w && w !== 'laduje' && w !== 'blad' ? <KartaKatedry w={w} lang={lang} /> : (
         <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
           <div className="text-[10px] uppercase tracking-[0.35em] text-fuchsia-300/70">∴ Katedra ∴</div>
           <h2 className="mt-2 font-mono text-4xl font-black text-white sm:text-5xl">{k.nick}</h2>
           {k.motto && <p className="mt-2 text-sm italic text-amber-200/90">„{k.motto}”</p>}
-          <p className="mt-6 text-[11px] text-slate-500">{w === 'blad' ? (pl ? 'Katedra właśnie zniknęła z sieci albo jej tunel nie odpowiada.' : 'This Cathedral just went offline or its tunnel is not responding.') : (pl ? 'Otwieram wizytówkę…' : 'Opening the card…')}</p>
+          <p className="mt-6 text-[11px] text-slate-500">{w === 'blad' ? (tr(lang, 'Katedra właśnie zniknęła z sieci albo jej tunel nie odpowiada.', 'This Cathedral just went offline or its tunnel is not responding.', 'Diese Kathedrale ist gerade aus dem Netz verschwunden oder ihr Tunnel antwortet nicht.')) : (tr(lang, 'Otwieram wizytówkę…', 'Opening the card…', 'Öffne die Visitenkarte…'))}</p>
         </div>
       )}
     </section>
   );
 };
 
-const SiecPanel: React.FC<{ pl: boolean; cel: string | null }> = ({ pl, cel }) => {
+const SiecPanel: React.FC<{ lang: Lang; cel: string | null }> = ({ lang, cel }) => {
+    const pl = lang === 'pl';
   const [lista, setLista] = useState<KatedraOnline[] | null | 'laduje'>('laduje');
   const [widoczne, setWidoczne] = useState<Set<string>>(new Set());
   const pojemnik = useRef<HTMLDivElement>(null);
@@ -157,17 +157,17 @@ const SiecPanel: React.FC<{ pl: boolean; cel: string | null }> = ({ pl, cel }) =
     return () => obs.disconnect();
   }, [lista, cel]);
 
-  if (lista === 'laduje') return <p className="pt-24 text-center text-sm text-slate-500">{pl ? 'Pytam sieć, kto jest online…' : 'Asking the network who is online…'}</p>;
-  if (lista === null) return <p className="mx-auto max-w-md px-6 pt-24 text-center text-sm text-slate-400">{pl ? 'Rejestr Katedr jest teraz nieosiągalny. Spróbuj za chwilę.' : 'The Cathedral registry is unreachable right now. Try again shortly.'}</p>;
-  if (!lista.length) return <p className="mx-auto max-w-md px-6 pt-24 text-center text-sm text-slate-400">{pl ? 'Żadna Katedra nie jest teraz online. Twoja może być pierwsza: Kwantowy Tunel + meldunek w karcie Wystawy.' : 'No Cathedral is online right now. Yours could be the first: Quantum Tunnel + check-in in the Wystawa card.'}</p>;
+  if (lista === 'laduje') return <p className="pt-24 text-center text-sm text-slate-500">{tr(lang, 'Pytam sieć, kto jest online…', 'Asking the network who is online…', 'Ich frage das Netz, wer online ist…')}</p>;
+  if (lista === null) return <p className="mx-auto max-w-md px-6 pt-24 text-center text-sm text-slate-400">{tr(lang, 'Rejestr Katedr jest teraz nieosiągalny. Spróbuj za chwilę.', 'The Cathedral registry is unreachable right now. Try again shortly.', 'Das Kathedralen-Register ist gerade nicht erreichbar. Versuche es gleich noch einmal.')}</p>;
+  if (!lista.length) return <p className="mx-auto max-w-md px-6 pt-24 text-center text-sm text-slate-400">{tr(lang, 'Żadna Katedra nie jest teraz online. Twoja może być pierwsza: Kwantowy Tunel + meldunek w karcie Wystawy.', 'No Cathedral is online right now. Yours could be the first: Quantum Tunnel + check-in in the Wystawa card.', 'Gerade ist keine Kathedrale online. Deine könnte die erste sein: Quanten-Tunnel + Anmeldung in der Karte Wystawa.')}</p>;
   return (
     <div ref={pojemnik} className="h-full snap-y snap-proximity overflow-y-auto overscroll-contain">
-      {lista.map((k) => <KartaSieci key={k.nick} k={k} pl={pl} aktywna={widoczne.has(k.nick)} />)}
+      {lista.map((k) => <KartaSieci key={k.nick} k={k} lang={lang} aktywna={widoczne.has(k.nick)} />)}
     </div>
   );
 };
 
-export const Katedry: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
+export const Katedry: React.FC<{ lang?: Lang }> = ({ lang = 'pl' as Lang }) => {
   const pl = lang === 'pl';
   const [otwarte, setOtwarte] = useState(() => { mojaZHasha(); return czyKatedry(); });
   const [cel, setCel] = useState(nickZHasha);
@@ -202,9 +202,9 @@ export const Katedry: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
 
   if (!otwarte) {
     return (
-      <button onClick={otworz} title={pl ? 'Katedry w sieci — wizytówki' : 'Cathedrals online — cards'}
+      <button onClick={otworz} title={tr(lang, 'Katedry w sieci — wizytówki', 'Cathedrals online — cards', 'Kathedralen online — Visitenkarten')}
         className="fixed right-0 top-1/2 z-[60] -translate-y-1/2 rounded-l-xl border border-r-0 border-fuchsia-400/40 bg-[#12081f]/90 px-1.5 py-4 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-fuchsia-200 shadow-lg shadow-fuchsia-900/30 hover:bg-fuchsia-900/40 [writing-mode:vertical-rl]">
-        {pl ? 'Katedry ›' : 'Cathedrals ›'}
+        {tr(lang, 'Katedry ›', 'Cathedrals ›', 'Kathedralen ›')}
       </button>
     );
   }
@@ -213,7 +213,7 @@ export const Katedry: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
       <div className="flex items-center gap-3 border-b border-white/10 px-4 py-2 font-mono text-[11px]">
         <button onClick={zamknij} className="text-slate-400 hover:text-white">← otakos.wtf</button>
         <div className="mx-auto flex gap-1">
-          {[pl ? 'Twoja' : 'Yours', pl ? 'Sieć' : 'Network'].map((n, i) => (
+          {[tr(lang, 'Twoja', 'Yours', 'Deine'), tr(lang, 'Sieć', 'Network', 'Netz')].map((n, i) => (
             <button key={n} onClick={() => idzDo(i)} className={`rounded-full px-3 py-0.5 ${panel === i ? 'bg-fuchsia-500/30 text-fuchsia-100' : 'text-slate-500 hover:text-slate-300'}`}>{n}</button>
           ))}
         </div>
@@ -221,8 +221,8 @@ export const Katedry: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
       </div>
       <div ref={pozioma} onScroll={(e) => setPanel(Math.round(e.currentTarget.scrollLeft / Math.max(1, e.currentTarget.clientWidth)))}
         className="flex flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-contain [scrollbar-width:none]">
-        <div className="h-full w-full shrink-0 snap-start overflow-y-auto"><TwojaPanel pl={pl} /></div>
-        <div className="h-full w-full shrink-0 snap-start overflow-hidden"><SiecPanel pl={pl} cel={cel} /></div>
+        <div className="h-full w-full shrink-0 snap-start overflow-y-auto"><TwojaPanel lang={lang} /></div>
+        <div className="h-full w-full shrink-0 snap-start overflow-hidden"><SiecPanel lang={lang} cel={cel} /></div>
       </div>
     </div>
   );

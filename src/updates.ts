@@ -9,7 +9,7 @@ export type SectorId = 'core' | 'grv' | 'crypto' | 'mesh' | 'web' | 'distro';
 
 export interface Sector {
   id: SectorId;
-  label: { pl: string; en: string };
+  label: { pl: string; en: string; de: string };
   icon: string;
   color: string;
 }
@@ -22,19 +22,34 @@ export interface UpdateEntry {
   desc: string;
   /** Wersja angielska (przełącznik PL/EN strony). Starsze wpisy jej nie mają — wtedy pokazujemy polski oryginał. */
   en?: { title: string; desc: string };
+  de?: { title: string; desc: string };
 }
 
 export const SECTORS: Sector[] = [
-  { id: 'core',   label: { pl: 'Rdzeń & AI',      en: 'Core & AI' },        icon: '🧠', color: '#34d399' },
-  { id: 'grv',    label: { pl: 'Ekonomia GRV',     en: 'GRV Economy' },      icon: '⚖️', color: '#f59e0b' },
-  { id: 'crypto', label: { pl: 'Krypto & Tarcza',  en: 'Crypto & Shield' },  icon: '🔐', color: '#fb7185' },
-  { id: 'mesh',   label: { pl: 'Sieć & Mapa',      en: 'Network & Map' },    icon: '🗺️', color: '#22d3ee' },
-  { id: 'web',    label: { pl: 'Strona & UI',      en: 'Web & UI' },         icon: '🌐', color: '#a78bfa' },
-  { id: 'distro', label: { pl: 'Dystrybucja',       en: 'Distribution' },     icon: '📦', color: '#94a3b8' },
+  { id: 'core',   label: { pl: 'Rdzeń & AI',      en: 'Core & AI',        de: 'Kern & KI' },        icon: '🧠', color: '#34d399' },
+  { id: 'grv',    label: { pl: 'Ekonomia GRV',     en: 'GRV Economy',      de: 'GRV-Ökonomie' },      icon: '⚖️', color: '#f59e0b' },
+  { id: 'crypto', label: { pl: 'Krypto & Tarcza',  en: 'Crypto & Shield',  de: 'Krypto & Schild' },  icon: '🔐', color: '#fb7185' },
+  { id: 'mesh',   label: { pl: 'Sieć & Mapa',      en: 'Network & Map',    de: 'Netz & Karte' },    icon: '🗺️', color: '#22d3ee' },
+  { id: 'web',    label: { pl: 'Strona & UI',      en: 'Web & UI',         de: 'Web & UI' },         icon: '🌐', color: '#a78bfa' },
+  { id: 'distro', label: { pl: 'Dystrybucja',       en: 'Distribution',     de: 'Distribution' },     icon: '📦', color: '#94a3b8' },
 ];
 
 /** Najnowsze NA GÓRZE. */
 export const UPDATES: UpdateEntry[] = [
+  {
+    "date": "2026-11-09",
+    "sector": "web",
+    "title": "🇩🇪 otakos.wtf po niemiecku — PL / EN / DE",
+    "desc": "Strona ma trzeci język. Przełącznik PL / EN / DE w nagłówku (klik w literę albo po kolei), wybór zostaje w przeglądarce, a gość z niemiecką przeglądarką od razu widzi wersję DE; link z ?lang=de otwiera ją wprost. Przetłumaczone: główne sekcje, Giełda Master Flow, Klub Mistrzów, Żywa Księga, TeO Game Show, Sklep Mini, sieć neuronowa (21 modułów), Aether, Teterhia, wizytówki Katedr, Wieża Partnerów, Słowo Architekta i Słowo Suwerena. Uczciwie: starsze wpisy tej Kroniki po niemiecku pokazują wersję angielską (EN), a treści z Katedr (słowa Suwerenów, odcinki) zostają w swoim języku.",
+    "en": {
+      "title": "🇩🇪 otakos.wtf in German — PL / EN / DE",
+      "desc": "The site has a third language. A PL / EN / DE switch in the header (click a letter or cycle), the choice stays in your browser, and a visitor with a German browser sees the DE version straight away; a link with ?lang=de opens it directly. Translated: the main sections, Master Flow Exchange, Masters’ Club, Living Book, TeO Game Show, Mini Shop, the neural network (21 modules), Aether, Teterhia, Cathedral cards, Partner Tower, the Architect’s and the Sovereign’s Word. Honestly: older entries of this log show their English version in German, and content from the Cathedrals (the Sovereigns’ words, episodes) stays in its own language."
+    },
+    "de": {
+      "title": "🇩🇪 otakos.wtf auf Deutsch — PL / EN / DE",
+      "desc": "Die Seite hat eine dritte Sprache. Ein Umschalter PL / EN / DE in der Kopfzeile (Buchstaben anklicken oder durchschalten); die Wahl bleibt im Browser gespeichert, und Besucher mit deutschem Browser sehen sofort die deutsche Version — ein Link mit ?lang=de öffnet sie direkt. Übersetzt: die Hauptbereiche, Master-Flow-Börse, Club der Meister, Lebendiges Buch, TeO Game Show, Mini-Shop, das neuronale Netz (21 Module), Aether, Teterhia, Kathedralen-Visitenkarten, Partnerturm sowie das Wort des Architekten und das Wort des Souveräns. Ehrlich gesagt: Ältere Einträge dieser Chronik erscheinen auf Deutsch in ihrer englischen Fassung, und Inhalte aus den Kathedralen (Worte der Souveräne, Folgen) bleiben in ihrer Originalsprache."
+    }
+  },
   {
     "date": "2026-11-05",
     "ref": "9989b67",

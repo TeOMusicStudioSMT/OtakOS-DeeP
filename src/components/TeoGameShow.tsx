@@ -1,3 +1,4 @@
+import type { Lang } from '../i18n';
 /**
  * 🎪 TeO Game Show (2026-10-13) — odcinki Tanecznego Starcia z playlist programu Katedr online (`gameShow` w /api/katedry,
  * oczyszczone w server/rejestr.mjs). Każda Katedra ma własną playlistę; strona pokazuje filmy w języku wybranym na stronie
@@ -29,19 +30,30 @@ const TEKST = {
         odtworz: 'Play episode',
         uczciwie: 'The episode language was detected by the Cathedral from the video title and description (no model) — it can be wrong; videos with no detected language are always shown. The Sovereign sets the playlist in their Cathedral: Impresariat → 🎪 TeO Game Show.',
     },
+    de: {
+        tytul: 'TeO Game Show',
+        wstep: 'TeOgochi-Auftritte aus dem Tanz-Duell — jede Aufnahme setzt die Kathedrale selbst zu einer Folge zusammen: Intro, Wettbewerb, Tanz, Ergebnis und ein kurzes Interview.',
+        brak: 'Das Kathedralen-Register antwortet nicht — wir zeigen keine erfundenen Folgen.',
+        pusto: 'Keine Kathedrale online veröffentlicht gerade eine TeO-Game-Show-Playlist.',
+        bezJezyka: 'Keine Folgen auf Englisch (Deutsch folgt) — wechsle die Seite auf PL, um die übrigen zu sehen',
+        playlista: 'ganze Playlist →',
+        odtworz: 'Folge abspielen',
+        uczciwie: 'Die Sprache der Folge hat die Kathedrale aus Titel und Beschreibung des Videos erkannt (ohne Modell) — sie kann sich irren; Videos ohne erkannte Sprache werden immer gezeigt. Auf Deutsch zeigen wir die englischen Folgen. Die Playlist legt der Souverän in seiner Kathedrale fest: Impresariat → 🎪 TeO Game Show.',
+    },
 };
 
 export interface OdcinekShow { id: string; tytul: string; kiedy: string | null; jezyk: 'pl' | 'en' | null; nick: string; playlista: string }
 
 /** Odcinki ze wszystkich Katedr w języku strony (albo bez rozpoznanego języka), najnowsze pierwsze, bez dubli. */
-export function odcinkiShow(lista: KatedraOnline[], lang: 'pl' | 'en'): OdcinekShow[] {
+export function odcinkiShow(lista: KatedraOnline[], lang: Lang): OdcinekShow[] {
     const widziane = new Set<string>();
+    const jezyk = lang === 'de' ? 'en' : lang;   // odcinków po niemiecku jeszcze nie ma — DE pokazuje angielskie
     return lista.flatMap((k) => (k.gameShow?.filmy ?? []).map((f) => ({ ...f, nick: k.nick, playlista: k.gameShow!.playlista })))
-        .filter((f) => (f.jezyk === lang || f.jezyk === null) && !widziane.has(f.id) && (widziane.add(f.id), true))
+        .filter((f) => (f.jezyk === jezyk || f.jezyk === null) && !widziane.has(f.id) && (widziane.add(f.id), true))
         .sort((a, b) => (b.kiedy ?? '').localeCompare(a.kiedy ?? ''));
 }
 
-export const TeoGameShow: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }> = ({ lang, kawaii }) => {
+export const TeoGameShow: React.FC<{ lang: Lang; kawaii?: boolean }> = ({ lang, kawaii }) => {
     const t = TEKST[lang];
     const [lista, setLista] = useState<KatedraOnline[] | null | undefined>(undefined);
     const [gra, setGra] = useState<string | null>(null);   // null = nic nie ładujemy, dopóki gość nie kliknie

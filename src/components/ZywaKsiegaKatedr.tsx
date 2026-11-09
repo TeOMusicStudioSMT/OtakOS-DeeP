@@ -1,3 +1,4 @@
+import type { Lang } from '../i18n';
 /**
  * 📖 Żywa Księga (2026-10-29) — poranne Iskry Suwerenów Katedr online: ich słowa, nagranie twarzy, odpowiedź stada
  * (Kronikarz) i ilustracja (Paleta, FLUX). Strona NIE trzyma wpisów: czyta je prosto z tunelu Katedry
@@ -22,6 +23,13 @@ const TEKST = {
         kronikarz: '📜 Herd Chronicler', paleta: '🎨 Palette', rysunek: '✒️ living line', wiecej: 'older entries', mniej: 'collapse',
         uczciwie: 'Entries are read directly from the Cathedrals (their tunnel) — this site stores nothing. The reply, picture and English translation are made locally by that Cathedral’s TeOgochi herd; the original words are one click away.',
         przeklad: '🌍 translated by the herd', oryginal: 'original', pokazPrzeklad: 'translation',
+    },
+    de: {
+        tytul: 'Lebendiges Buch', wstep: 'Morgendliche Funken der Souveräne — ein paar Worte aus dem Fluss, manchmal eine Aufnahme vom Tisch, und die TeOgochi-Herde schreibt eine Antwort und malt ein Bild.',
+        brak: 'Das Kathedralen-Register antwortet nicht — wir zeigen keine erfundenen Einträge.', pusto: 'Keine Kathedrale online veröffentlicht gerade Einträge im Lebendigen Buch.',
+        kronikarz: '📜 Chronist der Herde', paleta: '🎨 Palette', rysunek: '✒️ lebendige Linie', wiecej: 'ältere Einträge', mniej: 'einklappen',
+        uczciwie: 'Die Einträge lesen wir direkt aus den Kathedralen (ihr Tunnel) — diese Seite speichert nichts. Antwort, Bild und englische Übersetzung erstellt lokal die TeOgochi-Herde dieser Kathedrale; auf Deutsch zeigen wir die englische Übersetzung, das Original ist einen Klick entfernt.',
+        przeklad: '🌍 von der Herde übersetzt (EN)', oryginal: 'Original', pokazPrzeklad: 'Übersetzung',
     },
 };
 
@@ -82,7 +90,7 @@ function ZywaKreska({ klatki }: { klatki: Kreska[][] }) {
     return <canvas ref={ref} width={480} height={240} className="block h-32 w-full" />;
 }
 
-export const ZywaKsiegaKatedr: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }> = ({ lang, kawaii }) => {
+export const ZywaKsiegaKatedr: React.FC<{ lang: Lang; kawaii?: boolean }> = ({ lang, kawaii }) => {
     const t = TEKST[lang];
     const [wpisy, setWpisy] = useState<WpisKsiegi[] | null | undefined>(undefined);
     const [wszystkie, setWszystkie] = useState(false);
@@ -108,7 +116,7 @@ export const ZywaKsiegaKatedr: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }>
     }, []);
     const akcent = kawaii ? 'text-pink-400' : 'text-amber-300';
     const widoczne = (wpisy ?? []).slice(0, wszystkie ? 30 : 3);
-    const data = (k: string) => { try { return new Date(k).toLocaleString(lang === 'pl' ? 'pl-PL' : 'en-GB', { dateStyle: 'long', timeStyle: 'short' }); } catch { return k; } };
+    const data = (k: string) => { try { return new Date(k).toLocaleString(lang === 'pl' ? 'pl-PL' : lang === 'de' ? 'de-DE' : 'en-GB', { dateStyle: 'long', timeStyle: 'short' }); } catch { return k; } };
 
     return (
         <div className="w-full mt-6 p-6 bg-[#040407] border border-zinc-800/80 rounded-xl max-w-5xl text-left font-mono">
@@ -126,16 +134,16 @@ export const ZywaKsiegaKatedr: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }>
                         <div className="rounded-lg bg-[#f3e4c4] p-4 text-[#2c1810] font-sans">
                             <div className="mb-2 text-[11px] text-[#7a5230]"><b>{w.nick}</b> · {data(w.kiedy)}</div>
                             {w.zdjecie && <img src={w.zdjecie.url} alt={w.nick} loading="lazy" className="float-right mb-2 ml-3 max-h-56 w-auto max-w-[45%] rounded-lg border-2 border-[#5c3a21] object-cover shadow-md" />}
-                            {(() => { const pk = lang === 'en' && w.przeklad && !oryginaly[w.id] ? w.przeklad : null; return <>
+                            {(() => { const pk = lang !== 'pl' && w.przeklad && !oryginaly[w.id] ? w.przeklad : null; return <>
                                 <p className="whitespace-pre-wrap font-serif text-base leading-relaxed">{pk ? pk.tekst : w.tekst}</p>
-                                {lang === 'en' && w.przeklad && <button onClick={() => setOryginaly((o) => ({ ...o, [w.id]: !o[w.id] }))} className="mt-1 text-[10px] text-[#7a5230] underline">{pk ? `${t.przeklad} · ${t.oryginal} ⇄` : `${t.pokazPrzeklad} ⇄`}</button>}
+                                {lang !== 'pl' && w.przeklad && <button onClick={() => setOryginaly((o) => ({ ...o, [w.id]: !o[w.id] }))} className="mt-1 text-[10px] text-[#7a5230] underline">{pk ? `${t.przeklad} · ${t.oryginal} ⇄` : `${t.pokazPrzeklad} ⇄`}</button>}
                             </>; })()}
                             <div className="clear-both" />
                             {w.nagranie && <video src={w.nagranie.url} controls preload="metadata" className="mt-3 max-h-80 w-full rounded-lg border-2 border-[#5c3a21] bg-black" />}
                             {(w.slowo || w.ilustracja) && <div className="mt-3 grid gap-3 sm:grid-cols-2">
                                 {w.slowo && <div className="rounded-lg border border-[#c4a168] bg-[#efdcb4] p-3 text-sm">
                                     <div className="mb-1 text-[11px] font-bold text-[#7a5230]">{t.kronikarz}</div>
-                                    <p className="font-serif italic">{lang === 'en' && w.przeklad?.slowo && !oryginaly[w.id] ? w.przeklad.slowo : w.slowo.tekst}</p>
+                                    <p className="font-serif italic">{lang !== 'pl' && w.przeklad?.slowo && !oryginaly[w.id] ? w.przeklad.slowo : w.slowo.tekst}</p>
                                 </div>}
                                 {w.ilustracja && <div className="overflow-hidden rounded-lg border border-[#c4a168] bg-[#efdcb4]">
                                     <div className="px-3 pt-2 text-[11px] font-bold text-[#7a5230]">{t.paleta}{w.ilustracja.styl && <span className="font-normal"> · {w.ilustracja.styl}</span>}</div>

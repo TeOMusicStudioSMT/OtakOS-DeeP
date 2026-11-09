@@ -1,3 +1,4 @@
+import { locale, type Lang } from '../i18n';
 /**
  * ⚡ Giełda Master Flow (TeOkoP GRV, dawniej „Giełda mocy”) — PRAWDZIWE liczby z rejestru Katedr (2026-10-04;
  * nazwa i zlecenia 2026-10-06: Katedry ogłaszają też, czego SZUKAJĄ — zadanie albo cały projekt).
@@ -34,9 +35,20 @@ const TEKST = {
         etap: 'Stage 1 = announcements. Running jobs between Cathedrals and settling in GRV come later (stage 2).',
         siec: '🔮 your Cathedral’s 3D net',
     },
+    de: {
+        tytul: 'Master-Flow-Börse · TeOkoP GRV',
+        suma: 'Von Kathedralen online bereitgestellter VRAM',
+        online: 'Kathedralen online', zOferta: 'mit Rechenangebot',
+        brakRejestru: 'Das Kathedralen-Register antwortet nicht — wir zeigen keine erfundenen Zahlen.',
+        pusto: 'Noch keine Kathedrale online hat Rechenleistung angeboten. Sei die erste.',
+        jak: 'Biete die Leistung deiner Kathedrale an: Hub → Karte Ausstellung → ⚡ Master-Flow-Börse (VRAM, Modelle aus Ollama, Preis in GRV). Einen Auftrag (eine Aufgabe oder ein ganzes Projekt) veröffentlichst du in TeO Games Studio → Regisseur & GDD. Angebote und Aufträge reisen in deiner Visitenkarte mit, solange die Kathedrale online und ihr Nick bestätigt ist.',
+        zlecenia: 'Aufträge — was Kathedralen suchen', zadanie: 'Aufgabe', projekt: 'Projekt',
+        etap: 'Stufe 1 = Ankündigungen. Das Ausführen von Aufträgen zwischen Kathedralen und die Abrechnung in GRV folgen später (Stufe 2).',
+        siec: '🔮 3D-Netz deiner Kathedrale',
+    },
 };
 
-export const GieldaMocy: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean; onSiec?: () => void; onOnline?: (n: number | null) => void }> = ({ lang, kawaii, onSiec, onOnline }) => {
+export const GieldaMocy: React.FC<{ lang: Lang; kawaii?: boolean; onSiec?: () => void; onOnline?: (n: number | null) => void }> = ({ lang, kawaii, onSiec, onOnline }) => {
     const t = TEKST[lang];
     const [lista, setLista] = useState<KatedraOnline[] | null | undefined>(undefined);
     useEffect(() => {
@@ -67,7 +79,7 @@ export const GieldaMocy: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean; onSiec?
                         <div>
                             <div className="text-[10px] text-zinc-500 uppercase">{t.suma}</div>
                             <div className="flex items-baseline gap-2">
-                                <span className={`text-2xl sm:text-3xl font-bold ${akcent}`}>{lista === undefined ? '…' : vram.toLocaleString(lang === 'pl' ? 'pl-PL' : 'en-US')}</span>
+                                <span className={`text-2xl sm:text-3xl font-bold ${akcent}`}>{lista === undefined ? '…' : vram.toLocaleString(locale(lang))}</span>
                                 <span className="text-zinc-500 text-xs">GB VRAM</span>
                             </div>
                         </div>
@@ -82,7 +94,7 @@ export const GieldaMocy: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean; onSiec?
                                     <div className="flex flex-wrap items-baseline gap-2">
                                         <b className="text-zinc-200">{k.nick}</b>
                                         <span className="text-zinc-500">{k.moc!.gpu || 'GPU'} · {k.moc!.vramGB} GB</span>
-                                        <span className={`ml-auto font-bold ${akcent}`}>{k.moc!.cenaGRV} GRV / {lang === 'en' && k.moc!.jednostka === '1000 tokenów' ? '1000 tokens' : k.moc!.jednostka}</span>
+                                        <span className={`ml-auto font-bold ${akcent}`}>{k.moc!.cenaGRV} GRV / {lang !== 'pl' && k.moc!.jednostka === '1000 tokenów' ? (lang === 'de' ? '1000 Tokens' : '1000 tokens') : k.moc!.jednostka}</span>
                                     </div>
                                     <div className="mt-1 text-[10px] text-zinc-400 break-words">{k.moc!.modele.join(' · ')}</div>
                                     {(k.moc!.opis || k.moc!.godziny) && <div className="mt-1 text-[10px] text-zinc-500 font-sans">{[k.moc!.opis, k.moc!.godziny].filter(Boolean).join(' — ')}</div>}

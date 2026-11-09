@@ -1,3 +1,4 @@
+import { tr, type Lang } from '../i18n';
 /**
  * 🏛️ Postać Katedry — avatar Suwerena przy jego wyspie (2026-10-09).
  *
@@ -12,12 +13,12 @@ import type { PostacKatedry } from './wizytowka';
 const MAX_GLB = 40 * 1024 * 1024;
 
 export const ZNAK_PLCI: Record<string, string> = { kobieta: '♀', mezczyzna: '♂', inna: '⚥' };
-export const ZYWIOL_POSTACI: Record<string, { pl: string; en: string; hue: number }> = {
-  ogien: { pl: 'Ogień', en: 'Fire', hue: 12 }, woda: { pl: 'Woda', en: 'Water', hue: 200 }, ziemia: { pl: 'Ziemia', en: 'Earth', hue: 96 },
-  powietrze: { pl: 'Powietrze', en: 'Air', hue: 168 }, eter: { pl: 'Eter', en: 'Ether', hue: 280 },
+export const ZYWIOL_POSTACI: Record<string, { pl: string; en: string; de: string; hue: number }> = {
+  ogien: { pl: 'Ogień', en: 'Fire', de: 'Feuer', hue: 12 }, woda: { pl: 'Woda', en: 'Water', de: 'Wasser', hue: 200 }, ziemia: { pl: 'Ziemia', en: 'Earth', de: 'Erde', hue: 96 },
+  powietrze: { pl: 'Powietrze', en: 'Air', de: 'Luft', hue: 168 }, eter: { pl: 'Eter', en: 'Ether', de: 'Äther', hue: 280 },
 };
-const DROGA: Record<string, { pl: string; en: string }> = {
-  tworca: { pl: 'Twórca', en: 'Maker' }, opiekun: { pl: 'Opiekun', en: 'Guardian' }, wedrowiec: { pl: 'Wędrowiec', en: 'Wanderer' }, badacz: { pl: 'Badacz', en: 'Seeker' },
+const DROGA: Record<string, { pl: string; en: string; de: string }> = {
+  tworca: { pl: 'Twórca', en: 'Maker', de: 'Schöpfer' }, opiekun: { pl: 'Opiekun', en: 'Guardian', de: 'Hüter' }, wedrowiec: { pl: 'Wędrowiec', en: 'Wanderer', de: 'Wanderer' }, badacz: { pl: 'Badacz', en: 'Seeker', de: 'Forscher' },
 };
 
 /** Jeden podgląd w całej stronie: otwarcie nowego zamyka poprzedni. */
@@ -110,7 +111,7 @@ async function pokazGlb(el: HTMLDivElement, url: string, naBlad: (m: string) => 
   };
 }
 
-const PodgladGlb: React.FC<{ url: string; pl: boolean; onZamknij: () => void }> = ({ url, pl, onZamknij }) => {
+const PodgladGlb: React.FC<{ url: string; lang: Lang; onZamknij: () => void }> = ({ url, lang, onZamknij }) => {
   const el = useRef<HTMLDivElement>(null);
   const [stan, setStan] = useState<'laduje' | 'gra' | string>('laduje');
   useEffect(() => {
@@ -126,41 +127,43 @@ const PodgladGlb: React.FC<{ url: string; pl: boolean; onZamknij: () => void }> 
   return (
     <div className="relative h-64 w-full overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-slate-900 to-black">
       <div ref={el} className="absolute inset-0 touch-none" />
-      {stan === 'laduje' && <p className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">{pl ? 'Wczytuję postać z Katedry…' : 'Loading the character from the Cathedral…'}</p>}
-      {stan !== 'laduje' && stan !== 'gra' && <p className="absolute inset-0 flex items-center justify-center px-4 text-center text-[11px] text-rose-300">{pl ? `Postać się nie wczytała: ${stan}. Tunel Katedry mógł właśnie zniknąć.` : `The character did not load: ${stan}. The Cathedral tunnel may have just gone away.`}</p>}
-      <button onClick={onZamknij} className="absolute right-2 top-2 rounded-full border border-white/20 bg-black/60 px-2 py-0.5 text-[10px] text-slate-300 hover:text-white">✕ {pl ? 'zamknij 3D' : 'close 3D'}</button>
+      {stan === 'laduje' && <p className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">{tr(lang, 'Wczytuję postać z Katedry…', 'Loading the character from the Cathedral…', 'Lade die Figur aus der Kathedrale…')}</p>}
+      {stan !== 'laduje' && stan !== 'gra' && <p className="absolute inset-0 flex items-center justify-center px-4 text-center text-[11px] text-rose-300">{tr(lang, `Postać się nie wczytała: ${stan}. Tunel Katedry mógł właśnie zniknąć.`, `The character did not load: ${stan}. The Cathedral tunnel may have just gone away.`, `Die Figur wurde nicht geladen: ${stan}. Der Tunnel der Kathedrale ist vielleicht gerade verschwunden.`)}</p>}
+      <button onClick={onZamknij} className="absolute right-2 top-2 rounded-full border border-white/20 bg-black/60 px-2 py-0.5 text-[10px] text-slate-300 hover:text-white">✕ {tr(lang, 'zamknij 3D', 'close 3D', '3D schließen')}</button>
     </div>
   );
 };
 
 /** Linijka postaci: znak płci, imię, żywioł, droga. */
-export const LiniaPostaci: React.FC<{ p: PostacKatedry; pl: boolean; nick: string }> = ({ p, pl, nick }) => {
+export const LiniaPostaci: React.FC<{ p: PostacKatedry; lang: Lang; nick: string }> = ({ p, lang, nick }) => {
+  const pl = lang === 'pl';
   const z = ZYWIOL_POSTACI[p.zywiol], d = DROGA[p.droga];
   return (
     <span className="inline-flex flex-wrap items-center gap-x-1.5">
       <span title={p.plec}>{ZNAK_PLCI[p.plec] ?? '⚥'}</span>
       <b className="text-slate-100">{p.imie || nick}</b>
-      {z && <span style={{ color: `hsl(${z.hue} 80% 70%)` }}>· {pl ? z.pl : z.en}</span>}
-      {d && <span className="text-slate-400">· {pl ? d.pl : d.en}</span>}
+      {z && <span style={{ color: `hsl(${z.hue} 80% 70%)` }}>· {z[lang]}</span>}
+      {d && <span className="text-slate-400">· {d[lang]}</span>}
     </span>
   );
 };
 
-export const KartaPostaci: React.FC<{ p: PostacKatedry; pl: boolean; nick: string }> = ({ p, pl, nick }) => {
+export const KartaPostaci: React.FC<{ p: PostacKatedry; lang: Lang; nick: string }> = ({ p, lang, nick }) => {
+  const pl = lang === 'pl';
   const [otwarty, setOtwarty] = useState(false);
   const zamknij = React.useCallback(() => setOtwarty(false), []);
   useEffect(() => { setOtwarty(false); }, [p.glb]);
   return (
     <div className="space-y-2 rounded-xl border border-amber-300/25 bg-amber-950/10 p-3 text-xs text-slate-300">
-      <p className="text-[10px] uppercase tracking-[0.3em] text-amber-200/70">{pl ? 'postać Katedry' : 'Cathedral character'}</p>
-      <p className="text-sm"><LiniaPostaci p={p} pl={pl} nick={nick} /></p>
+      <p className="text-[10px] uppercase tracking-[0.3em] text-amber-200/70">{tr(lang, 'postać Katedry', 'Cathedral character', 'Figur der Kathedrale')}</p>
+      <p className="text-sm"><LiniaPostaci p={p} lang={lang} nick={nick} /></p>
       {p.opis && <p className="line-clamp-4 leading-relaxed text-slate-400">{p.opis}</p>}
-      {otwarty ? <PodgladGlb url={p.glb} pl={pl} onZamknij={zamknij} /> : (
+      {otwarty ? <PodgladGlb url={p.glb} lang={lang} onZamknij={zamknij} /> : (
         <button onClick={() => setOtwarty(true)} className="rounded-lg border border-amber-300/40 px-3 py-1 text-amber-100 hover:bg-amber-900/30">
-          🧍 {pl ? 'Zobacz postać w 3D' : 'View the character in 3D'}{p.ruch ? (pl ? ' (z chodem)' : ' (walking)') : ''}
+          🧍 {tr(lang, 'Zobacz postać w 3D', 'View the character in 3D', 'Figur in 3D ansehen')}{p.ruch ? (tr(lang, ' (z chodem)', ' (walking)', ' (mit Gang)')) : ''}
         </button>
       )}
-      {otwarty && <p className="text-[10px] text-slate-500">{pl ? 'Plik idzie prosto z tunelu tej Katedry. Przeciągnij, by obrócić.' : 'The file comes straight from this Cathedral’s tunnel. Drag to rotate.'}</p>}
+      {otwarty && <p className="text-[10px] text-slate-500">{tr(lang, 'Plik idzie prosto z tunelu tej Katedry. Przeciągnij, by obrócić.', 'The file comes straight from this Cathedral’s tunnel. Drag to rotate.', 'Die Datei kommt direkt aus dem Tunnel dieser Kathedrale. Ziehen zum Drehen.')}</p>}
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { locale, type Lang } from '../i18n';
 /**
  * 💳🐾 Wsparcie i Sklep Mini (2026-10-13) — darowizny i pakiety Mini-TeOgochi z Katedr online (`sklep` w /api/katedry,
  * oczyszczone w server/rejestr.mjs `sklepZWizytowki`). Darowizna = link Stripe Katedry (buy.stripe.com). Zakup pakietu:
@@ -37,12 +38,26 @@ const TEKST = {
         uczciwie: 'Payment is handled by Stripe (this site never sees your card). The Cathedral releases the pack after payment — it must be online then; the download link works 5 times.',
         bladKupna: 'The Cathedral did not respond',
     },
+    de: {
+        tytul: 'Unterstützung & Mini-Shop',
+        wstep: 'Mini-TeOgochi aus den Kathedralen: texturiertes Modell mit Skelett, Bewegungen und Aktionen, dazu drei Variantenvorschläge zum Erstellen in deiner eigenen Kathedrale.',
+        brak: 'Das Kathedralen-Register antwortet nicht — wir zeigen keinen erfundenen Shop.',
+        pusto: 'Keine Kathedrale online nimmt gerade Spenden an oder bietet Minis an.',
+        wesprzyj: 'Unterstützen',
+        kup: 'Kaufen',
+        laczy: 'verbinde mit der Kathedrale…',
+        test: 'TESTMODUS — Stripe-Testkarten, kein echtes Geld',
+        klipow: 'Bewegungsclips', obrazow: 'Varianten',
+        rz: { pospolity: 'gewöhnlich', rzadki: 'selten', epicki: 'episch', legendarny: 'legendär', mityczny: 'mythisch' } as Record<Rzadkosc, string>,
+        uczciwie: 'Die Zahlung wickelt Stripe ab (diese Seite sieht deine Karte nie). Die Kathedrale gibt das Paket nach der Zahlung frei — sie muss dann online sein; der Download-Link funktioniert 5-mal.',
+        bladKupna: 'Die Kathedrale hat nicht geantwortet',
+    },
 };
 const KOLOR: Record<Rzadkosc, string> = { pospolity: '#9ca3af', rzadki: '#38bdf8', epicki: '#a78bfa', legendarny: '#f59e0b', mityczny: '#f472b6' };
 const CHECKOUT = /^https:\/\/checkout\.stripe\.com\//;
-const cena = (k: number, w: string, lang: 'pl' | 'en') => new Intl.NumberFormat(lang === 'pl' ? 'pl-PL' : 'en-US', { style: 'currency', currency: w.toUpperCase() }).format(k);
+const cena = (k: number, w: string, lang: Lang) => new Intl.NumberFormat(locale(lang), { style: 'currency', currency: w.toUpperCase() }).format(k);
 
-export const SklepKatedr: React.FC<{ lang: 'pl' | 'en'; kawaii?: boolean }> = ({ lang, kawaii }) => {
+export const SklepKatedr: React.FC<{ lang: Lang; kawaii?: boolean }> = ({ lang, kawaii }) => {
     const t = TEKST[lang];
     const [lista, setLista] = useState<KatedraOnline[] | null | undefined>(undefined);
     const [kupuje, setKupuje] = useState<string | null>(null);

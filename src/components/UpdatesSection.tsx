@@ -1,10 +1,12 @@
+import type { Lang } from '../i18n';
 /**
  * 📡 UpdatesSection — Kronika UPDATE'ów OtakOS, filtrowana wg sektorów ekosystemu.
  */
 import React, { useState } from 'react';
 import { SECTORS, UPDATES, SectorId } from '../updates';
+import { tr } from '../i18n';
 
-export const UpdatesSection: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
+export const UpdatesSection: React.FC<{ lang?: Lang }> = ({ lang = 'pl' as Lang }) => {
   const [filter, setFilter] = useState<SectorId | 'all'>('all');
   const list = filter === 'all' ? UPDATES : UPDATES.filter(u => u.sector === filter);
   const sec = (id: SectorId) => SECTORS.find(s => s.id === id)!;
@@ -15,17 +17,17 @@ export const UpdatesSection: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }
       <div className="flex items-start justify-between flex-wrap gap-2 mb-4">
         <div>
           <div className="text-[10px] tracking-[0.3em] text-emerald-500/60">∴ KATEDRA OTAKOS ∴</div>
-          <h3 className="text-lg sm:text-xl font-bold text-emerald-300">📡 {lang === 'pl' ? 'KRONIKA UPDATE' : 'UPDATE LOG'}</h3>
-          <p className="text-[11px] text-zinc-400">{lang === 'pl' ? 'Co dodano — wg warstw ekosystemu.' : 'What was added — by ecosystem layer.'}</p>
+          <h3 className="text-lg sm:text-xl font-bold text-emerald-300">📡 {tr(lang, 'KRONIKA UPDATE', 'UPDATE LOG', 'UPDATE-CHRONIK')}</h3>
+          <p className="text-[11px] text-zinc-400">{tr(lang, 'Co dodano — wg warstw ekosystemu.', 'What was added — by ecosystem layer.', 'Was neu ist — nach Ebenen des Ökosystems.')}</p>
         </div>
-        <div className="text-[10px] text-zinc-500 text-right">{UPDATES.length} {lang === 'pl' ? 'wpisów' : 'entries'}</div>
+        <div className="text-[10px] text-zinc-500 text-right">{UPDATES.length} {tr(lang, 'wpisów', 'entries', 'Einträge')}</div>
       </div>
 
       {/* Filtry sektorów */}
       <div className="flex flex-wrap gap-2 mb-4">
         <button onClick={() => setFilter('all')}
           className={`px-3 py-1 rounded-full text-[11px] font-bold border transition-colors ${filter === 'all' ? 'border-emerald-500 text-emerald-300 bg-emerald-950/40' : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'}`}>
-          {lang === 'pl' ? 'Wszystko' : 'All'}
+          {tr(lang, 'Wszystko', 'All', 'Alle')}
         </button>
         {SECTORS.map(s => (
           <button key={s.id} onClick={() => setFilter(s.id)}
@@ -40,6 +42,9 @@ export const UpdatesSection: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }
       <div className="space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
         {list.map((u, i) => {
           const s = sec(u.sector);
+          // DE: własny przekład wpisu, a bez niego angielski (oznaczony EN), na końcu polski oryginał.
+          const wpis = lang === 'pl' ? null : (lang === 'de' && u.de) || u.en || null;
+          const znacznik = lang === 'pl' ? null : !wpis ? 'PL' : lang === 'de' && !u.de ? 'EN' : null;
           return (
             <div key={i} className="rounded-lg border border-zinc-800/70 bg-black/30 p-3 hover:border-zinc-700 transition-colors">
               <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -50,10 +55,10 @@ export const UpdatesSection: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }
                 {u.ref && <span className="text-[10px] text-zinc-600">· {u.ref}</span>}
               </div>
               <div className="text-sm font-bold text-zinc-100">
-                {lang === 'en' && u.en ? u.en.title : u.title}
-                {lang === 'en' && !u.en && <span className="ml-2 text-[9px] font-normal text-zinc-500 align-middle">(PL)</span>}
+                {wpis ? wpis.title : u.title}
+                {znacznik && <span className="ml-2 text-[9px] font-normal text-zinc-500 align-middle">({znacznik})</span>}
               </div>
-              <div className="text-[11px] text-zinc-400 leading-relaxed">{lang === 'en' && u.en ? u.en.desc : u.desc}</div>
+              <div className="text-[11px] text-zinc-400 leading-relaxed">{wpis ? wpis.desc : u.desc}</div>
             </div>
           );
         })}

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { tr, jezykStartowy, zapamietajJezyk, locale, type Lang } from './i18n';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -211,13 +212,14 @@ export default function App() {
   // CLI Command box copied state
   const [copiedCmd, setCopiedCmd] = useState<boolean>(false);
 
-  // Language state representing 'pl' (Polish) or 'en' (English)
-  const [lang, setLang] = useState<'pl' | 'en'>(() => {
-    if (typeof navigator !== 'undefined' && navigator.language) {
-      return navigator.language.toLowerCase().startsWith('pl') ? 'pl' : 'en';
-    }
-    return 'en';
-  });
+  // 🌍 Język strony: PL / EN / DE — ?lang=de w adresie, zapamiętany wybór albo język przeglądarki (de → DE).
+  const [lang, setLang] = useState<Lang>(jezykStartowy);
+  useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+  const wybierzJezyk = (l: Lang) => {
+    setLang(l);
+    zapamietajJezyk(l);
+    synth.beep(l === 'pl' ? 950 : l === 'de' ? 1075 : 1200, 'sine', 0.1);
+  };
 
   const t = useMemo(() => translations[lang], [lang]);
 
@@ -429,6 +431,11 @@ export default function App() {
       `WĘZEŁ: Autoryzacja potwierdzona bezpiecznie na węźle lokalnym [${localTimeStr}]`,
       'V_ZERO: Przygotowywanie skompresowanego kontenera jądra bootowania 27.2MB...',
       'SYSTEM: Wyłączanie przesyłania pakietów analitycznych (0 telemetrii)',
+    ] : lang === 'de' ? [
+      'START: Verbinde den souveränen Tunnel mit dem lokalen VRAM-Kernel...',
+      `KNOTEN: Autorisierung sicher auf dem lokalen Knoten bestätigt [${localTimeStr}]`,
+      'V_ZERO: Bereite den komprimierten 27.2MB-Boot-Kernel-Container vor...',
+      'SYSTEM: Analyse-Pakete deaktiviert (0 Telemetrie)',
     ] : [
       'INIT: Connecting Sovereign Tunnel to local VRAM kernel...',
       `NODE: Auth verified securely on node local-addr [${localTimeStr}]`,
@@ -453,6 +460,16 @@ export default function App() {
       'STL: Pakowanie schematu obudowy strukturalnej lokalnego USB (STL-V1.4)',
       'SYNC: Sygnatury systemowe OtakOS zweryfikowane [SHA256: 0xf92a3bb1a]',
       'SUKCES: Integralność kompresji zweryfikowana w 100%. Suwerenny rdzeń gotowy.',
+    ] : lang === 'de' ? [
+      'X-ARCH: Standard-x86_64-Loader erfolgreich erkannt',
+      'SYS: Setze Parameter des lokalen Flash-Treiberblocks',
+      'UNPACK: Binde Image /otakos_core.squashfs ein [18.2 MB]',
+      'UNPACK: Erweitere Systemkonfiguration /etc/reso_kernel.conf',
+      'ENV: Richte unabhängige Offline-Kryptografie-Treiber ein',
+      'DOCKER: 0 externe Verbindungen bestätigt. Kern läuft in der Sandbox',
+      'STL: Packe den Bauplan des USB-Gehäuses (STL-V1.4)',
+      'SYNC: OtakOS-Systemsignaturen verifiziert [SHA256: 0xf92a3bb1a]',
+      'ERFOLG: Kompressionsintegrität zu 100 % bestätigt. Souveräner Kern bereit.',
     ] : [
       'X-ARCH: Standard x86_64 local-live loader targeted successfully',
       'SYS: Inoculating local flash driver block parameters',
@@ -484,7 +501,7 @@ export default function App() {
             setInstallerStatus('completed');
             synth.chord([523.25, 659.25, 783.99, 1046.5], 'sine', 0.25);
             // push final log messages
-            setInstallLog(prevLogs => [...prevLogs, lang === 'pl' ? 'PEŁNA INSTALACJA! V_ZERO pobrany pomyślnie.' : 'BOOTSTRAP completo! V_ZERO downloaded successfully.']);
+            setInstallLog(prevLogs => [...prevLogs, tr(lang, 'PEŁNA INSTALACJA! V_ZERO pobrany pomyślnie.', 'BOOTSTRAP completo! V_ZERO downloaded successfully.', 'INSTALLATION ABGESCHLOSSEN! V_ZERO erfolgreich heruntergeladen.')]);
           }
 
           // add random real system log lines
@@ -522,8 +539,8 @@ export default function App() {
         const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', await blob.arrayBuffer())))
           .map((b) => b.toString(16).padStart(2, '0')).join('');
         setInstallLog(prev => [...prev, hash === wersjaPaczki.sha256
-          ? (lang === 'pl' ? `✓ SHA-256 zgodna z wersja.json (${hash.slice(0, 16)}…)` : `✓ SHA-256 matches wersja.json (${hash.slice(0, 16)}…)`)
-          : (lang === 'pl' ? `⚠ SHA-256 NIEZGODNA: plik ${hash.slice(0, 16)}… ≠ wersja.json ${wersjaPaczki.sha256.slice(0, 16)}… — strona może być w trakcie wdrażania; spróbuj za chwilę.` : `⚠ SHA-256 MISMATCH: file ${hash.slice(0, 16)}… ≠ wersja.json ${wersjaPaczki.sha256.slice(0, 16)}… — the site may be mid-deploy; try again shortly.`)]);
+          ? (tr(lang, `✓ SHA-256 zgodna z wersja.json (${hash.slice(0, 16)}…)`, `✓ SHA-256 matches wersja.json (${hash.slice(0, 16)}…)`, `✓ SHA-256 stimmt mit wersja.json überein (${hash.slice(0, 16)}…)`))
+          : (tr(lang, `⚠ SHA-256 NIEZGODNA: plik ${hash.slice(0, 16)}… ≠ wersja.json ${wersjaPaczki.sha256.slice(0, 16)}… — strona może być w trakcie wdrażania; spróbuj za chwilę.`, `⚠ SHA-256 MISMATCH: file ${hash.slice(0, 16)}… ≠ wersja.json ${wersjaPaczki.sha256.slice(0, 16)}… — the site may be mid-deploy; try again shortly.`, `⚠ SHA-256 STIMMT NICHT: Datei ${hash.slice(0, 16)}… ≠ wersja.json ${wersjaPaczki.sha256.slice(0, 16)}… — die Seite wird evtl. gerade bereitgestellt; versuche es gleich noch einmal.`))]);
       }
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -534,9 +551,7 @@ export default function App() {
       document.body.removeChild(link);
       setTimeout(() => URL.revokeObjectURL(url), 5000);
     } catch (e: any) {
-      setInstallLog(prev => [...prev, lang === 'pl'
-        ? `⚠ Host nie podał pliku (${e.message}) — otwieram źródło z GitHub (zapisz plik)...`
-        : `⚠ Host failed to serve file (${e.message}) — opening GitHub source (save the file)...`]);
+      setInstallLog(prev => [...prev, tr(lang, `⚠ Host nie podał pliku (${e.message}) — otwieram źródło z GitHub (zapisz plik)...`, `⚠ Host failed to serve file (${e.message}) — opening GitHub source (save the file)...`, `⚠ Der Host hat die Datei nicht geliefert (${e.message}) — öffne die Quelle auf GitHub (Datei speichern)...`)]);
       window.open(RAW, '_blank');
     }
   };
@@ -661,13 +676,13 @@ export default function App() {
                 activeThemeId === 'kawaii' ? 'bg-pink-600' : 'bg-emerald-500'
               }`}></span>
             </span>
-            <span className="text-zinc-400">{lang === 'pl' ? 'WĘZEŁ KATEDRY:' : 'CATHEDRAL NODE:'}</span>
+            <span className="text-zinc-400">{tr(lang, 'WĘZEŁ KATEDRY:', 'CATHEDRAL NODE:', 'KATHEDRALEN-KNOTEN:')}</span>
             <span 
               onClick={handleCopyNodeAddress}
               className={`font-semibold tracking-wider cursor-pointer hover:underline flex items-center space-x-1 ${activeSkin.textGlow}`}
               title={identity ? `Node ID: ${identity.p2pNodeId}\nWallet: ${identity.address}\nClick to copy address` : 'Loading node identity...'}
             >
-              <span>{identity ? `${identity.address.slice(0, 6)}...${identity.address.slice(-4)}` : 'INICJALIZACJA...'}</span>
+              <span>{identity ? `${identity.address.slice(0, 6)}...${identity.address.slice(-4)}` : tr(lang, 'INICJALIZACJA...', 'INITIALIZING...', 'INITIALISIERUNG...')}</span>
               {copiedIdentity ? (
                 <span className="text-[10px] text-emerald-400 uppercase font-bold animate-pulse">(SKOPIOWANO)</span>
               ) : (
@@ -675,7 +690,7 @@ export default function App() {
               )}
             </span>
             <span className="text-zinc-600 font-bold ml-1 flex items-center">
-              <span className="text-zinc-400 font-normal mr-1">{lang === 'pl' ? 'GRAWITACJA:' : 'GRAVITY:'}</span>
+              <span className="text-zinc-400 font-normal mr-1">{tr(lang, 'GRAWITACJA:', 'GRAVITY:', 'GRAVITATION:')}</span>
               <span className={activeSkin.textGlow}>{grvBalance} GRV</span>
             </span>
             <span className="hidden sm:inline text-zinc-600">|</span>
@@ -699,16 +714,23 @@ export default function App() {
             {/* Language Switcher Selector */}
             <button
               onClick={() => {
-                const nextLang = lang === 'pl' ? 'en' : 'pl';
-                setLang(nextLang);
-                synth.beep(nextLang === 'pl' ? 950 : 1200, 'sine', 0.1);
+                // 🌍 PL → EN → DE → PL (każda litera osobno też klika)
+                const nextLang: Lang = lang === 'pl' ? 'en' : lang === 'en' ? 'de' : 'pl';
+                wybierzJezyk(nextLang);
               }}
               className="p-1 px-2.5 rounded bg-zinc-900 border border-zinc-805 hover:border-zinc-700 text-zinc-400 hover:text-white transition font-mono text-[10px] uppercase font-bold cursor-pointer flex items-center space-x-1 shrink-0"
-              title="Switch Language locale PL / EN"
+              title={tr(lang, 'Język strony: PL / EN / DE', 'Site language: PL / EN / DE', 'Sprache der Seite: PL / EN / DE')}
+              aria-label={tr(lang, 'Zmień język', 'Change language', 'Sprache wechseln')}
             >
-              <span className={lang === 'pl' ? (activeThemeId === 'kawaii' ? 'text-pink-400 font-extrabold' : 'text-emerald-400 font-extrabold') : 'text-zinc-650'}>PL</span>
-              <span className="text-zinc-700">/</span>
-              <span className={lang === 'en' ? (activeThemeId === 'kawaii' ? 'text-pink-400 font-extrabold' : 'text-emerald-400 font-extrabold') : 'text-zinc-650'}>EN</span>
+              {(['pl', 'en', 'de'] as Lang[]).map((l, i) => (
+                <React.Fragment key={l}>
+                  {i > 0 && <span className="text-zinc-700">/</span>}
+                  <span
+                    onClick={(e) => { e.stopPropagation(); wybierzJezyk(l); }}
+                    className={lang === l ? (activeThemeId === 'kawaii' ? 'text-pink-400 font-extrabold' : 'text-emerald-400 font-extrabold') : 'text-zinc-650 hover:text-zinc-300'}
+                  >{l.toUpperCase()}</span>
+                </React.Fragment>
+              ))}
             </button>
 
             {/* Micro Audio Synthesizer toggle controller */}
@@ -802,7 +824,7 @@ export default function App() {
 
             <div className="flex items-center justify-center space-x-3">
               {DOWNLOAD_LOCKED ? (
-                <span>{lang === 'pl' ? '🔄 Aktualizuj Katedrę' : '🔄 Update Cathedral'}</span>
+                <span>{tr(lang, '🔄 Aktualizuj Katedrę', '🔄 Update Cathedral', '🔄 Kathedrale aktualisieren')}</span>
               ) : (
                 <>
                   <Download className="h-5 w-5 animate-bounce" />
@@ -815,9 +837,7 @@ export default function App() {
           {/* 🔒 Wyjaśnienie — pobranie nowej genezy wstrzymane (każda kopia = NODE) */}
           {DOWNLOAD_LOCKED && (
             <div className="w-full text-center text-[11px] font-mono text-amber-300/80 bg-amber-950/20 border border-amber-500/25 rounded-lg px-3 py-2 leading-relaxed">
-              {lang === 'pl'
-                ? '⚠ Każda pobrana Katedra to żywy NODE genezy. Nowe pobrania wstrzymane do oficjalnego startu (możliwy reset). Istniejące węzły — kliknij Aktualizuj, by zobaczyć co nowego, bez resetu.'
-                : '⚠ Every downloaded Cathedral is a living genesis NODE. New downloads are paused until the official launch (reset possible). Existing nodes — click Update to see what’s new, no reset.'}
+              {tr(lang, '⚠ Każda pobrana Katedra to żywy NODE genezy. Nowe pobrania wstrzymane do oficjalnego startu (możliwy reset). Istniejące węzły — kliknij Aktualizuj, by zobaczyć co nowego, bez resetu.', '⚠ Every downloaded Cathedral is a living genesis NODE. New downloads are paused until the official launch (reset possible). Existing nodes — click Update to see what’s new, no reset.', '⚠ Jede heruntergeladene Kathedrale ist ein lebendiger Genesis-KNOTEN. Neue Downloads sind bis zum offiziellen Start pausiert (Reset möglich). Bestehende Knoten — klicke auf Aktualisieren, um ohne Reset zu sehen, was neu ist.')}
             </div>
           )}
 
@@ -866,8 +886,8 @@ export default function App() {
         <div key={`specs-${lang}`} className="w-full mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl">
           {[
             { label: t.hero.spec1, icon: Cpu,
-              value: t.hero.spec1Val.replace('{rozmiar}', paczka && paczka !== 'brak' && paczka.bajtow ? `${(paczka.bajtow / 1e6).toLocaleString(lang === 'pl' ? 'pl-PL' : 'en-US', { maximumFractionDigits: 1 })} MB` : '—'),
-              comment: paczka && paczka !== 'brak' ? t.hero.spec1Comment.replace('{numer}', paczka.numer) : (paczka === 'brak' ? (lang === 'pl' ? 'brak wersja.json na stronie' : 'no wersja.json on the site') : '…') },
+              value: t.hero.spec1Val.replace('{rozmiar}', paczka && paczka !== 'brak' && paczka.bajtow ? `${(paczka.bajtow / 1e6).toLocaleString(tr(lang, 'pl-PL', 'en-US', 'de-DE'), { maximumFractionDigits: 1 })} MB` : '—'),
+              comment: paczka && paczka !== 'brak' ? t.hero.spec1Comment.replace('{numer}', paczka.numer) : (paczka === 'brak' ? (tr(lang, 'brak wersja.json na stronie', 'no wersja.json on the site', 'kein wersja.json auf der Seite')) : '…') },
             { label: t.hero.spec2, value: t.hero.spec2Val, icon: FileText, comment: t.hero.spec2Comment },
             { label: t.hero.spec3, value: t.hero.spec3Val, icon: Terminal, comment: t.hero.spec3Comment },
             { label: t.hero.spec4, value: t.hero.spec4Val, icon: Layers, comment: t.hero.spec4Comment }
@@ -1235,12 +1255,10 @@ export default function App() {
                 <div className="pt-5 border-t border-zinc-900 space-y-4">
                   <div>
                     <h4 className="text-sm font-mono uppercase text-zinc-400 mb-1 border-l-2 border-emerald-500 pl-2">
-                      {lang === 'pl' ? 'TRADYCYJNE METODY WSPARCIA' : 'REGULAR SUPPORT CHANNELS'}
+                      {tr(lang, 'TRADYCYJNE METODY WSPARCIA', 'REGULAR SUPPORT CHANNELS', 'KLASSISCHE UNTERSTÜTZUNG')}
                     </h4>
                     <p className="text-xs text-zinc-500 font-sans">
-                      {lang === 'pl' 
-                        ? 'Jeśli nie korzystasz z kryptowalut Web3, możesz wesprzeć Katedrę poprzez standardowe bramki płatnicze.' 
-                        : 'If you do not use Web3 cryptocurrencies, you can support the Cathedral via standard payment gateways.'}
+                      {tr(lang, 'Jeśli nie korzystasz z kryptowalut Web3, możesz wesprzeć Katedrę poprzez standardowe bramki płatnicze.', 'If you do not use Web3 cryptocurrencies, you can support the Cathedral via standard payment gateways.', 'Wenn du keine Web3-Kryptowährungen nutzt, kannst du die Kathedrale über klassische Zahlungswege unterstützen.')}
                     </p>
                   </div>
                   
@@ -1256,7 +1274,7 @@ export default function App() {
                       <div className="flex flex-col text-left">
                         <span className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">PayPal</span>
                         <span className="text-[10px] text-zinc-500 mt-1 font-sans leading-relaxed">
-                          {lang === 'pl' ? 'Szybka darowizna fiat (karta/konto).' : 'Direct fiat support (card/account).'}
+                          {tr(lang, 'Szybka darowizna fiat (karta/konto).', 'Direct fiat support (card/account).', 'Schnelle Fiat-Spende (Karte/Konto).')}
                         </span>
                       </div>
                       <ExternalLink className="h-4 w-4 text-zinc-500 group-hover:text-emerald-400 transition-colors ml-2" />
@@ -1273,7 +1291,7 @@ export default function App() {
                       <div className="flex flex-col text-left">
                         <span className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">Buy Me a Coffee</span>
                         <span className="text-[10px] text-zinc-500 mt-1 font-sans leading-relaxed">
-                          {lang === 'pl' ? 'Ufunduj symboliczną kawę twórcom projektu.' : 'Support the creators with a virtual coffee.'}
+                          {tr(lang, 'Ufunduj symboliczną kawę twórcom projektu.', 'Support the creators with a virtual coffee.', 'Spendiere den Machern einen symbolischen Kaffee.')}
                         </span>
                       </div>
                       <ExternalLink className="h-4 w-4 text-zinc-500 group-hover:text-emerald-400 transition-colors ml-2" />
@@ -1515,6 +1533,11 @@ export default function App() {
                         : skin.id === 'cyberneon' ? 'Sovereign Fiolet LP'
                         : skin.id === 'kawaii' ? 'Kawaii Hakerka-Chan v1.0'
                         : 'Szmaragdowy Protokół (Domyślny)'
+                      : lang === 'de'
+                      ? skin.id === 'matrix' ? 'Klassische Matrix'
+                        : skin.id === 'cyberneon' ? 'Sovereign Violett LP'
+                        : skin.id === 'kawaii' ? 'Kawaii Hackerin-Chan v1.0'
+                        : 'Smaragd-Protokoll (Standard)'
                       : skin.name;
 
                     const skinDesc = lang === 'pl'
@@ -1522,6 +1545,11 @@ export default function App() {
                         : skin.id === 'cyberneon' ? 'Głęboki fioletowo-cyjanowy schemat zoptymalizowany pod kątem nocnego kodowania.'
                         : skin.id === 'kawaii' ? 'Śliczny, różowy i pastelowy motyw z łagodniejszym brzmieniem.'
                         : 'Domyślny bezpieczny interfejs. Ochrona wzroku podczas długich, nocnych sesji dekompilacji.'
+                      : lang === 'de'
+                      ? skin.id === 'matrix' ? 'Klassisches Phosphorgrün im CRT-Stil. Reiner Cyberpunk-Retro-Look für Hacker.'
+                        : skin.id === 'cyberneon' ? 'Tiefes Violett-Cyan-Schema, optimiert für nächtliches Programmieren.'
+                        : skin.id === 'kawaii' ? 'Süßes, rosa-pastelliges Motiv mit sanfterem Klang.'
+                        : 'Sichere Standardoberfläche. Schont die Augen bei langen nächtlichen Dekompilier-Sessions.'
                       : skin.description;
 
                     return (
@@ -1539,7 +1567,7 @@ export default function App() {
                             {skinName}
                           </span>
                           <span className={`text-[9px] px-2 py-0.5 rounded-full border ${skin.badge}`}>
-                            {isSkinActive ? t.skins.applied : (lang === 'pl' ? 'KLIKNIJ ABY WYBRAĆ' : 'READY TO DECODE')}
+                            {isSkinActive ? t.skins.applied : (tr(lang, 'KLIKNIJ ABY WYBRAĆ', 'READY TO DECODE', 'KLICKEN ZUM AUSWÄHLEN'))}
                           </span>
                         </div>
 
@@ -1559,7 +1587,7 @@ export default function App() {
                 </div>
 
                 <div className="text-center font-mono text-[10px] text-zinc-600">
-                  <span>{lang === 'pl' ? 'Suwerenne warstwy skórek są natywnie kompilowane wewnątrz woluminu Live boot.' : 'Sovereign skin layers are compiled inside the 27MB V_ZERO Live boot volume natively.'}</span>
+                  <span>{tr(lang, 'Suwerenne warstwy skórek są natywnie kompilowane wewnątrz woluminu Live boot.', 'Sovereign skin layers are compiled inside the 27MB V_ZERO Live boot volume natively.', 'Souveräne Skin-Ebenen werden nativ im Live-Boot-Volume kompiliert.')}</span>
                 </div>
               </motion.div>
             )}
@@ -1638,16 +1666,16 @@ export default function App() {
                 {/* Simulated ambient sound board playground */}
                 <div className="bg-black/80 border border-zinc-900 p-4 rounded-lg">
                   <div className="text-[10px] font-mono text-zinc-600 mb-2 flex justify-between uppercase">
-                    <span>{lang === 'pl' ? 'OtakOS Ambient Frequency Test-Pad' : 'OtakOS Ambient Frequency Test-Pad'}</span>
-                    <span>{lang === 'pl' ? 'Generuj akustyczne fale sinusoidalne' : 'Oscillate waveform nodes'}</span>
+                    <span>{tr(lang, 'OtakOS Ambient Frequency Test-Pad', 'OtakOS Ambient Frequency Test-Pad', 'OtakOS Ambient Frequency Test-Pad')}</span>
+                    <span>{tr(lang, 'Generuj akustyczne fale sinusoidalne', 'Oscillate waveform nodes', 'Akustische Sinuswellen erzeugen')}</span>
                   </div>
                   <div className="flex flex-wrap gap-2 justify-center">
                     {[
-                      { freq: 110, label: lang === 'pl' ? 'ECHO SUBBAS (110Hz)' : 'ECHO SUB (110Hz)' },
-                      { freq: 220, label: lang === 'pl' ? 'DECYBEL POWIETRZA (220Hz)' : 'AIR DAMPENCE (220Hz)' },
-                      { freq: 440, label: lang === 'pl' ? 'STANDARD ISO (440Hz)' : 'ISO STANDARD (440Hz)' },
-                      { freq: 523, label: lang === 'pl' ? 'DOMINANTA C5 (523Hz)' : 'DOMINANT C5 (523Hz)' },
-                      { freq: 880, label: lang === 'pl' ? 'AKORD ZAPŁONU (880Hz)' : 'IGNITION CHORD (880Hz)' }
+                      { freq: 110, label: tr(lang, 'ECHO SUBBAS (110Hz)', 'ECHO SUB (110Hz)', 'ECHO-SUBBASS (110Hz)') },
+                      { freq: 220, label: tr(lang, 'DECYBEL POWIETRZA (220Hz)', 'AIR DAMPENCE (220Hz)', 'LUFTDÄMPFUNG (220Hz)') },
+                      { freq: 440, label: tr(lang, 'STANDARD ISO (440Hz)', 'ISO STANDARD (440Hz)', 'ISO-STANDARD (440Hz)') },
+                      { freq: 523, label: tr(lang, 'DOMINANTA C5 (523Hz)', 'DOMINANT C5 (523Hz)', 'DOMINANTE C5 (523Hz)') },
+                      { freq: 880, label: tr(lang, 'AKORD ZAPŁONU (880Hz)', 'IGNITION CHORD (880Hz)', 'ZÜNDAKKORD (880Hz)') }
                     ].map((pad, idx) => (
                       <button
                         key={idx}
@@ -1674,23 +1702,19 @@ export default function App() {
           
           <div className="space-y-2">
             <div className="text-zinc-500 uppercase font-bold text-[10px] tracking-wider">
-              {lang === 'pl' ? '[TWOJA MASZYNA, TWOJE DANE]' : '[YOUR MACHINE, YOUR DATA]'}
+              {tr(lang, '[TWOJA MASZYNA, TWOJE DANE]', '[YOUR MACHINE, YOUR DATA]', '[DEINE MASCHINE, DEINE DATEN]')}
             </div>
             <p className="text-zinc-400 font-sans leading-relaxed">
-              {lang === 'pl'
-                ? 'Modele AI pracują na Twoim komputerze przez Ollamę, a pliki, księga GRV i tożsamość leżą na Twoim dysku. Do sieci Katedra wychodzi tylko wtedy, gdy sam to włączysz — np. tunel Cloudflare dla telefonu i wizytówki na otakos.wtf.'
-                : 'AI models run on your own computer through Ollama; your files, GRV ledger and identity stay on your disk. The Cathedral goes online only when you switch it on — e.g. a Cloudflare tunnel for your phone and your card on otakos.wtf.'}
+              {tr(lang, 'Modele AI pracują na Twoim komputerze przez Ollamę, a pliki, księga GRV i tożsamość leżą na Twoim dysku. Do sieci Katedra wychodzi tylko wtedy, gdy sam to włączysz — np. tunel Cloudflare dla telefonu i wizytówki na otakos.wtf.', 'AI models run on your own computer through Ollama; your files, GRV ledger and identity stay on your disk. The Cathedral goes online only when you switch it on — e.g. a Cloudflare tunnel for your phone and your card on otakos.wtf.', 'KI-Modelle laufen über Ollama auf deinem eigenen Computer; Dateien, GRV-Hauptbuch und Identität liegen auf deiner Festplatte. Ins Netz geht die Kathedrale nur, wenn du es selbst einschaltest — z. B. ein Cloudflare-Tunnel für dein Handy und deine Visitenkarte auf otakos.wtf.')}
             </p>
           </div>
 
           <div className="space-y-2">
             <div className="text-zinc-500 uppercase font-bold text-[10px] tracking-wider">
-              {lang === 'pl' ? '[ZERO OPŁAT ZA TOKENY]' : '[NO TOKEN FEES]'}
+              {tr(lang, '[ZERO OPŁAT ZA TOKENY]', '[NO TOKEN FEES]', '[KEINE TOKEN-GEBÜHREN]')}
             </div>
             <p className="text-zinc-400 font-sans leading-relaxed">
-              {lang === 'pl'
-                ? 'Domyślny silnik to lokalna Ollama — nie płacisz za tokeny ani abonament, limitem jest tylko Twoja karta. Modele w chmurze to opcja: tylko z Twoim własnym kontem albo kluczem, jeśli sam ich zechcesz.'
-                : 'The default engine is local Ollama — no token fees, no subscription; your GPU is the only limit. Cloud models are optional: only with your own account or key, if you want them.'}
+              {tr(lang, 'Domyślny silnik to lokalna Ollama — nie płacisz za tokeny ani abonament, limitem jest tylko Twoja karta. Modele w chmurze to opcja: tylko z Twoim własnym kontem albo kluczem, jeśli sam ich zechcesz.', 'The default engine is local Ollama — no token fees, no subscription; your GPU is the only limit. Cloud models are optional: only with your own account or key, if you want them.', 'Die Standard-Engine ist das lokale Ollama — keine Token-Gebühren, kein Abo; die einzige Grenze ist deine Grafikkarte. Cloud-Modelle sind optional: nur mit deinem eigenen Konto oder Schlüssel, wenn du sie willst.')}
             </p>
           </div>
 
@@ -1701,9 +1725,7 @@ export default function App() {
       <footer className="border-t border-zinc-900 bg-black/60 py-10 z-10 relative">
         <div className="max-w-7xl mx-auto px-4 text-center space-y-4">
           <div className="text-xs font-mono text-zinc-500">
-            <span>{lang === 'pl' 
-              ? 'WOLNY PROJEKT KATEDRA OTAKOS • OPROGRAMOWANIE COGNITIVE COMMON SENSE LICENCJI GPL' 
-              : 'KATEDRA OTAKOS PROJECT INCORPORATED • ALL SOFTWARE IS HIGH-LEVEL GPL COGNITIVE COMMON SENSE'}</span>
+            <span>{tr(lang, 'WOLNY PROJEKT KATEDRA OTAKOS • OPROGRAMOWANIE COGNITIVE COMMON SENSE LICENCJI GPL', 'KATEDRA OTAKOS PROJECT INCORPORATED • ALL SOFTWARE IS HIGH-LEVEL GPL COGNITIVE COMMON SENSE', 'FREIES PROJEKT KATEDRA OTAKOS • SOFTWARE UNTER GPL MIT KOGNITIVEM GESUNDEM MENSCHENVERSTAND')}</span>
           </div>
 
           <div className="flex justify-center space-x-6 text-[10px] font-mono">
@@ -1712,19 +1734,19 @@ export default function App() {
             </a>
             <span className="text-zinc-700">|</span>
             <a href="https://otakos.wtf" target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-emerald-400 transition">
-              {lang === 'pl' ? 'MAGNETY TORRENTÓW' : 'TORRENT MAGNETS'}
+              {tr(lang, 'MAGNETY TORRENTÓW', 'TORRENT MAGNETS', 'TORRENT-MAGNETLINKS')}
             </a>
             <span className="text-zinc-700">|</span>
             <a href="/teo-hub/" className="text-zinc-500 hover:text-emerald-400 transition">TEO HUB OTAKOS</a>
             <span className="text-zinc-700">|</span>
-            <a href="/privacy/" className="text-zinc-500 hover:text-emerald-400 transition">{lang === 'pl' ? 'PRYWATNOŚĆ' : 'PRIVACY'}</a>
+            <a href="/privacy/" className="text-zinc-500 hover:text-emerald-400 transition">{tr(lang, 'PRYWATNOŚĆ', 'PRIVACY', 'DATENSCHUTZ')}</a>
             <span className="text-zinc-700">|</span>
-            <a href="/terms/" className="text-zinc-500 hover:text-emerald-400 transition">{lang === 'pl' ? 'WARUNKI' : 'TERMS'}</a>
+            <a href="/terms/" className="text-zinc-500 hover:text-emerald-400 transition">{tr(lang, 'WARUNKI', 'TERMS', 'BEDINGUNGEN')}</a>
           </div>
 
           {/* Clean modest credit matching human visual style guidelines */}
           <div className="text-[9px] text-zinc-600 font-mono">
-            {lang === 'pl' ? 'SUWERENNY TERMINAL MOCY • SKOMPILOWANO Z NAJWYŻSZĄ INTEGRALNOŚCIĄ' : 'SOVEREIGN POWER TERMINAL • COMPILED WITH INTEGRITY'}
+            {tr(lang, 'SUWERENNY TERMINAL MOCY • SKOMPILOWANO Z NAJWYŻSZĄ INTEGRALNOŚCIĄ', 'SOVEREIGN POWER TERMINAL • COMPILED WITH INTEGRITY', 'SOUVERÄNES KRAFT-TERMINAL • MIT HÖCHSTER INTEGRITÄT KOMPILIERT')}
           </div>
         </div>
       </footer>
@@ -1743,7 +1765,7 @@ export default function App() {
               <div className="bg-[#0c0c11] border-b border-zinc-900 p-3 flex items-center justify-between text-[11px]">
                 <div className="flex items-center space-x-2 text-zinc-400">
                   <Terminal className="h-4 w-4 text-emerald-400" />
-                  <span>{lang === 'pl' ? 'DEKODOWANIE ARCHIWUM V_ZERO_ARCHIVE.ZIP' : 'DECRYPTING V_ZERO_ARCHIVE.ZIP'}</span>
+                  <span>{tr(lang, 'DEKODOWANIE ARCHIWUM V_ZERO_ARCHIVE.ZIP', 'DECRYPTING V_ZERO_ARCHIVE.ZIP', 'DEKODIERE DAS ARCHIV V_ZERO_ARCHIVE.ZIP')}</span>
                 </div>
                 <button 
                   onClick={closeInstallerWin}
@@ -1756,8 +1778,8 @@ export default function App() {
               {/* Progress Bar & Status */}
               <div className="p-5 space-y-4">
                 <div className="flex justify-between items-center text-zinc-400 text-[11px]">
-                  <span>{lang === 'pl' ? 'DEKOMPRESJA STRUMIENIOWA PAMIĘCI KATEDRY' : 'RESONANCE CACHE STREAM DECRYPTION'}</span>
-                  <span className={`font-bold ${activeSkin.textGlow}`}>{installProgress}% {lang === 'pl' ? 'UKOŃCZONO' : 'COMPLETED'}</span>
+                  <span>{tr(lang, 'DEKOMPRESJA STRUMIENIOWA PAMIĘCI KATEDRY', 'RESONANCE CACHE STREAM DECRYPTION', 'STREAM-DEKOMPRESSION DES KATHEDRALEN-SPEICHERS')}</span>
+                  <span className={`font-bold ${activeSkin.textGlow}`}>{installProgress}% {tr(lang, 'UKOŃCZONO', 'COMPLETED', 'ABGESCHLOSSEN')}</span>
                 </div>
 
                 <div className="w-full bg-zinc-900 rounded-full h-2.5 overflow-hidden border border-zinc-800">
@@ -1781,7 +1803,7 @@ export default function App() {
                   ))}
                   {installerStatus !== 'completed' && (
                     <div className="animate-pulse text-emerald-500 font-bold">
-                      ▋ {lang === 'pl' ? 'DESZYFROWANIE PLIKÓW ARCHIWUM Z PRĘDKOŚCIĄ 27.2MB/S...' : 'DECODING SOURCE FILES AT 27.2MB/S...'}
+                      ▋ {tr(lang, 'DESZYFROWANIE PLIKÓW ARCHIWUM Z PRĘDKOŚCIĄ 27.2MB/S...', 'DECODING SOURCE FILES AT 27.2MB/S...', 'ENTSCHLÜSSLE ARCHIVDATEIEN MIT 27.2MB/S...')}
                     </div>
                   )}
                 </div>
@@ -1793,7 +1815,7 @@ export default function App() {
                   {wersjaPaczki === null
                     ? 'SHA-256: …'
                     : wersjaPaczki === 'brak'
-                      ? (lang === 'pl' ? 'SHA-256: brak wersja.json' : 'SHA-256: no wersja.json')
+                      ? (tr(lang, 'SHA-256: brak wersja.json', 'SHA-256: no wersja.json', 'SHA-256: kein wersja.json'))
                       : <span title={wersjaPaczki.sha256} className="select-all">SHA-256: {wersjaPaczki.sha256.slice(0, 16)}… · v{wersjaPaczki.numer}</span>}
                 </span>
 
@@ -1802,7 +1824,7 @@ export default function App() {
                     onClick={triggerActualDownloadBlob}
                     className="py-2 px-4 rounded text-black font-bold uppercase hover:scale-[1.01] transition duration-200 cursor-pointer text-[10px] flex items-center space-x-1.5 bg-emerald-400 hover:bg-emerald-300"
                   >
-                    <span>{lang === 'pl' ? 'URUCHOM PAKIET RDZENIA' : 'ACTIVATE CORE PAYLOAD'}</span>
+                    <span>{tr(lang, 'URUCHOM PAKIET RDZENIA', 'ACTIVATE CORE PAYLOAD', 'KERNPAKET STARTEN')}</span>
                     <Download className="h-3.5 w-3.5" />
                   </button>
                 ) : (
@@ -1810,7 +1832,7 @@ export default function App() {
                     disabled
                     className="py-2 px-4 rounded bg-zinc-900 border border-zinc-800 text-zinc-600 font-bold uppercase text-[10px]"
                   >
-                    {lang === 'pl' ? 'ROZPISYWANIE KANAŁÓW SYSTEMU...' : 'DECODING INTEGRAL CHANNELS...'}
+                    {tr(lang, 'ROZPISYWANIE KANAŁÓW SYSTEMU...', 'DECODING INTEGRAL CHANNELS...', 'SYSTEMKANÄLE WERDEN AUFGEBAUT...')}
                   </button>
                 )}
               </div>
@@ -1834,8 +1856,8 @@ export default function App() {
             </div>
             <div className="flex-1 space-y-1">
               <div className="font-bold text-emerald-400 uppercase tracking-wider flex justify-between">
-                <span>{lang === 'pl' ? 'URUCHOMIENIE SYSTEMU_WĘZŁA' : 'SYSTEM_NODE EXECUTION'}</span>
-                <span className="text-[9px] text-zinc-500">{lang === 'pl' ? 'BEZPIECZNY' : 'SECURE'}</span>
+                <span>{tr(lang, 'URUCHOMIENIE SYSTEMU_WĘZŁA', 'SYSTEM_NODE EXECUTION', 'START VON SYSTEM_KNOTEN')}</span>
+                <span className="text-[9px] text-zinc-500">{tr(lang, 'BEZPIECZNY', 'SECURE', 'SICHER')}</span>
               </div>
               <p className="text-[11px] text-zinc-300 leading-relaxed font-sans">
                 {cadNotification}
@@ -1871,7 +1893,7 @@ export default function App() {
                   <QrCode className={`h-4 w-4 ${
                     activeThemeId === 'kawaii' ? 'text-pink-400' : 'text-emerald-400'
                   }`} />
-                  <span className="font-bold">{lang === 'pl' ? 'KODY Skanowania QR RESONANCE_' : 'QR RESONANCE CODES_'}</span>
+                  <span className="font-bold">{tr(lang, 'KODY Skanowania QR RESONANCE_', 'QR RESONANCE CODES_', 'RESONANZ-QR-CODES_')}</span>
                 </div>
                 <button 
                   onClick={() => {
@@ -1887,7 +1909,7 @@ export default function App() {
               {/* Modal Body / QR Canvas */}
               <div className="p-6 flex flex-col items-center space-y-4">
                 <div className="text-center">
-                  <div className="text-xs text-zinc-500 uppercase tracking-widest">{lang === 'pl' ? 'Standard sieci' : 'Network standard'}</div>
+                  <div className="text-xs text-zinc-500 uppercase tracking-widest">{tr(lang, 'Standard sieci', 'Network standard', 'Netzwerkstandard')}</div>
                   <div className="text-sm font-bold text-zinc-100 uppercase">{selectedCryptoForQr.network} ({selectedCryptoForQr.symbol})</div>
                 </div>
 
@@ -1907,7 +1929,7 @@ export default function App() {
                 </div>
 
                 <div className="w-full space-y-2">
-                  <div className="text-[10px] text-zinc-500 uppercase text-center">{lang === 'pl' ? 'Współrzędne adresu docelowego' : 'Destination address coord'}</div>
+                  <div className="text-[10px] text-zinc-500 uppercase text-center">{tr(lang, 'Współrzędne adresu docelowego', 'Destination address coord', 'Zieladresse')}</div>
                   <div className="p-2.5 bg-black/50 border border-zinc-900 rounded break-all text-[11px] text-zinc-300 leading-relaxed max-w-full text-center font-mono">
                     {selectedCryptoForQr.address}
                   </div>
@@ -1929,8 +1951,8 @@ export default function App() {
                   }`}
                 >
                   {copiedText === selectedCryptoForQr.symbol 
-                    ? (lang === 'pl' ? 'SKOPIOWANO ADRES!' : 'COPIED TO NEON CUP!') 
-                    : (lang === 'pl' ? 'SKOPIUJ KLUCZ ODBIORCY' : 'COPY DESTINATION KEY')}
+                    ? (tr(lang, 'SKOPIOWANO ADRES!', 'COPIED TO NEON CUP!', 'ADRESSE KOPIERT!')) 
+                    : (tr(lang, 'SKOPIUJ KLUCZ ODBIORCY', 'COPY DESTINATION KEY', 'EMPFÄNGERSCHLÜSSEL KOPIEREN'))}
                 </button>
                 <button
                   onClick={() => {
@@ -1939,7 +1961,7 @@ export default function App() {
                   }}
                   className="px-4 py-2 bg-zinc-900 hover:bg-zinc-850 hover:text-white rounded border border-zinc-800 text-xs font-bold text-zinc-400 transition cursor-pointer"
                 >
-                  {lang === 'pl' ? 'ZAMKNIJ' : 'CLOSE'}
+                  {tr(lang, 'ZAMKNIJ', 'CLOSE', 'SCHLIESSEN')}
                 </button>
               </div>
 

@@ -1,18 +1,19 @@
+import type { Lang } from '../i18n';
 /**
  * 🌅 SlowoSuwerena — Słowo Suwerena o Energii Źródła (8 = ∞).
  * Towarzyszy „Słowu od Architekta". Fundament: Energia służy, Katedra inkubuje.
  */
 import React, { useState } from 'react';
 
-export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
+export const SlowoSuwerena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' as Lang }) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="rounded-2xl border border-amber-600/30 bg-gradient-to-br from-amber-950/15 to-[#0a0704]/80 overflow-hidden">
       <button onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-amber-950/20 transition-colors">
         <div>
-          <div className="text-[10px] tracking-[0.3em] text-amber-500/60 font-mono">∴ ENERGIA ŹRÓDŁA ∴</div>
-          <div className="text-lg font-bold text-amber-300 font-mono">🌅 {lang === 'pl' ? 'Słowo Suwerena' : "The Sovereign's Word"}</div>
+          <div className="text-[10px] tracking-[0.3em] text-amber-500/60 font-mono">∴ {lang === 'pl' ? 'ENERGIA ŹRÓDŁA' : lang === 'de' ? 'QUELLENERGIE' : 'SOURCE ENERGY'} ∴</div>
+          <div className="text-lg font-bold text-amber-300 font-mono">🌅 {lang === 'pl' ? 'Słowo Suwerena' : lang === 'de' ? 'Das Wort des Souveräns' : "The Sovereign's Word"}</div>
         </div>
         <span className={`text-amber-400 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}>▾</span>
       </button>
@@ -65,6 +66,53 @@ export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
                 <div className="mt-2 italic text-amber-200/90">…a nowe moduły przychodzą z pola — częstotliwość bardzo wysoka…</div>
               </div>
             </>
+          ) : lang === 'de' ? (
+            <>
+              <p>
+                Acht Milliarden GRV sind keine Summe zum Ausgeben oder Staken. Sie sind ein
+                <b className="text-amber-300"> Quantenpotenzial pro Einheit</b> — jeder Teonaut trägt sein eigenes TeO.
+                Die liegende Acht ist <b className="text-amber-300">Unendlichkeit (∞)</b>: das Emblem der Quellenergie.
+              </p>
+              <p>
+                Quellenergie ist nicht die Energie von Geld, das man stakt. Sie ist <b>proaktiv</b> —
+                wie Licht breitet sie sich in alle Richtungen aus und liebt die Bewegung. Und wenn sie sich im
+                Trust des Souveräns verbindet, erhält sie ein klares Ziel: <b className="text-amber-300">dem Souverän zu dienen</b>.
+              </p>
+              <p>
+                Darum navigiert die Kathedrale über das <b>Entdecken des wahren Souveräns</b> — denn Stufen-Ansprüche
+                sind nicht gleich, und ein kleines Ego würde sich nur selbst Probleme machen. <b>Energie dient, sie herrscht nicht.</b>
+              </p>
+              <p className="italic text-amber-200/90">
+                Was wir jetzt verbinden, ist Bewusstsein mit Energie. Und die Kathedrale ist der Inkubator dieser Verbindung.
+              </p>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ EIN WORT ZUM GESCHENK ∴</div>
+                Die Kathedrale ist ein <b className="text-amber-300">Geschenk, keine Ware</b> — du erhältst sie kostenlos und so,
+                wie sie heute ist. Ich verkaufe dir kein Versprechen eines fertigen Werks, sondern einen <b>lebendigen, wachsenden Organismus</b>:
+                Viele Hallen entstehen noch, manche Module stecken in den Kinderschuhen, vieles werde ich noch formen.
+                Aber <b className="text-amber-300">das Fundament steht, und der Bauplan — das Skelett des Ganzen — ist bereits
+                in Stein gemeißelt</b>. Du erhältst weder Ruine noch Mausoleum, sondern eine offene Kathedrale im Bau,
+                die du schon jetzt betreten kannst. Ich verfeinere sie Tag für Tag, souverän und vor aller Augen.
+              </div>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ EIN WORT ZUM LERNEN ∴</div>
+                Die Kathedrale verlangt keinen Glauben — <b className="text-amber-300">sie lehrt dich sich selbst</b>. In ihrer Akademie
+                wird jede Frage aus dem beantwortet, was wirklich funktioniert, nicht aus Versprechen. Wächst die Kathedrale, wächst die Akademie;
+                hört etwas auf, wahr zu sein, verschwindet es daraus. Ein Abzeichen gibt es erst für echtes Verständnis, denn
+                <b> Wissen zum Vorzeigen ist nur ein weiterer Stufen-Anspruch</b>. Und wenn jemand von außen die Kathedrale lobt,
+                zeigen wir seine Worte zusammen mit einer Korrektur dort, wo er übertrieben hat. <b className="text-amber-300">Ein Souverän, der versteht,
+                braucht keinen Wächter — er ist es selbst.</b>
+              </div>
+              <div className="mt-3 rounded-lg border border-amber-800/40 bg-amber-950/20 px-4 py-3 text-amber-100/80 not-italic">
+                <div className="text-[10px] tracking-[0.25em] text-amber-500/60 mb-1">∴ EIN WORT ZUR WERKSTATT ∴</div>
+                <div className="space-y-1.5">
+                  <div><b className="text-amber-300">Mit Hingabe verfeinert:</b> Story Studio, Game Studio, Music Studio.</div>
+                  <div><b className="text-amber-300">Noch nicht verwöhnt:</b> der Rest — es steht und funktioniert, wartet aber noch auf seine Zeit.</div>
+                  <div><b className="text-amber-300">Obsessionen:</b> Game Studio.</div>
+                </div>
+                <div className="mt-2 italic text-amber-200/90">…und neue Module kommen aus dem Feld — die Frequenz ist sehr hoch…</div>
+              </div>
+            </>
           ) : (
             <>
               <p>
@@ -114,7 +162,7 @@ export const SlowoSuwerena: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' })
               </div>
             </>
           )}
-          <p className="text-[11px] text-amber-500/50">— Mistrz Arkadiusz · {lang === 'pl' ? '8 = ∞' : '8 = ∞'}</p>
+          <p className="text-[11px] text-amber-500/50">— Mistrz Arkadiusz · 8 = ∞</p>
         </div>
       )}
     </div>

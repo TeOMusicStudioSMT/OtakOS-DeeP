@@ -8,22 +8,22 @@
  */
 import React, { useEffect, useState } from 'react';
 
-type Lang = 'pl' | 'en';
+import { tr, type Lang } from '../i18n';
 const BRIDGE = 'http://127.0.0.1:3001';
 
 interface Spec {
   id: string; icon: string; color: string;
-  label: { pl: string; en: string };
-  desc: { pl: string; en: string };
+  label: { pl: string; en: string; de: string };
+  desc: { pl: string; en: string; de: string };
 }
 
 const SPECS: Spec[] = [
-  { id: 'art',         icon: '🎨', color: '#ec4899', label: { pl: 'Art',        en: 'Art' },        desc: { pl: 'Tworzenie, obraz, dźwięk', en: 'Creation, image, sound' } },
-  { id: 'economic',    icon: '💰', color: '#22c55e', label: { pl: 'Economic',   en: 'Economic' },   desc: { pl: 'GRV, wartość, rynki',      en: 'GRV, value, markets' } },
-  { id: 'tactic',      icon: '♟️', color: '#3b82f6', label: { pl: 'Tactic',     en: 'Tactic' },     desc: { pl: 'Strategia, architektura',  en: 'Strategy, architecture' } },
-  { id: 'health',      icon: '🌿', color: '#10b981', label: { pl: 'Health',     en: 'Health' },     desc: { pl: 'Równowaga, regeneracja',   en: 'Balance, regeneration' } },
-  { id: 'energotonic', icon: '⚡', color: '#f59e0b', label: { pl: 'Energotonic',en: 'Energotonic' },desc: { pl: 'Napęd, momentum',          en: 'Drive, momentum' } },
-  { id: 'respond',     icon: '💬', color: '#a855f7', label: { pl: 'Respond',    en: 'Respond' },    desc: { pl: 'Komunikacja, wsparcie',    en: 'Communication, support' } },
+  { id: 'art',         icon: '🎨', color: '#ec4899', label: { pl: 'Art',        en: 'Art', de: 'Art' },        desc: { pl: 'Tworzenie, obraz, dźwięk', en: 'Creation, image, sound', de: 'Erschaffen, Bild, Klang' } },
+  { id: 'economic',    icon: '💰', color: '#22c55e', label: { pl: 'Economic',   en: 'Economic', de: 'Economic' },   desc: { pl: 'GRV, wartość, rynki',      en: 'GRV, value, markets', de: 'GRV, Wert, Märkte' } },
+  { id: 'tactic',      icon: '♟️', color: '#3b82f6', label: { pl: 'Tactic',     en: 'Tactic', de: 'Tactic' },     desc: { pl: 'Strategia, architektura',  en: 'Strategy, architecture', de: 'Strategie, Architektur' } },
+  { id: 'health',      icon: '🌿', color: '#10b981', label: { pl: 'Health',     en: 'Health', de: 'Health' },     desc: { pl: 'Równowaga, regeneracja',   en: 'Balance, regeneration', de: 'Balance, Regeneration' } },
+  { id: 'energotonic', icon: '⚡', color: '#f59e0b', label: { pl: 'Energotonic',en: 'Energotonic', de: 'Energotonic' },desc: { pl: 'Napęd, momentum',          en: 'Drive, momentum', de: 'Antrieb, Momentum' } },
+  { id: 'respond',     icon: '💬', color: '#a855f7', label: { pl: 'Respond',    en: 'Respond', de: 'Respond' },    desc: { pl: 'Komunikacja, wsparcie',    en: 'Communication, support', de: 'Kommunikation, Unterstützung' } },
 ];
 
 interface Cathedral { id: string; name: string; dimension?: string; uptimeSec?: number; }
@@ -66,7 +66,7 @@ const ToastCluster: React.FC = () => (
   </svg>
 );
 
-export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
+export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' as Lang }) => {
   const [entered, setEntered] = useState(false);
   const [spec, setSpec] = useState<Spec | null>(null);
   const [cath, setCath] = useState<CathState>({ live: false, count: 1, self: null, peers: [] });
@@ -98,9 +98,9 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
 
   const bringHome = () => {
     if (!spec) return;
-    const stamp = new Date().toLocaleTimeString(lang === 'pl' ? 'pl-PL' : 'en-GB', { hour: '2-digit', minute: '2-digit' });
+    const stamp = new Date().toLocaleTimeString(tr(lang, 'pl-PL', 'en-GB', 'de-DE'), { hour: '2-digit', minute: '2-digit' });
     const seed = context.trim() ? ` — „${context.trim().slice(0, 40)}${context.trim().length > 40 ? '…' : ''}”` : '';
-    setBrought(prev => [`${spec.icon} ${lang === 'pl' ? 'Destylat' : 'Distillate'} „${spec.label[lang]}”${seed} • ${stamp}`, ...prev].slice(0, 5));
+    setBrought(prev => [`${spec.icon} ${tr(lang, 'Destylat', 'Distillate', 'Destillat')} „${spec.label[lang]}”${seed} • ${stamp}`, ...prev].slice(0, 5));
   };
 
   return (
@@ -113,19 +113,17 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
           <div className="text-[10px] tracking-[0.3em] text-violet-400/60">∴ KATEDRA OTAKOS ∴</div>
           <h3 className="text-lg sm:text-xl font-bold text-violet-200">🌌 AETHER</h3>
           <p className="text-[11px] text-zinc-400 max-w-md">
-            {lang === 'pl'
-              ? 'Wspólna arena Katedr. Przygotuj kontekst, wnieś swą Świadomość, twórz z innymi — wiedzę przynieś do domu (0.00G).'
-              : 'The shared arena of Cathedrals. Prepare context, bring your Consciousness, create with others — bring the knowledge home (0.00G).'}
+            {tr(lang, 'Wspólna arena Katedr. Przygotuj kontekst, wnieś swą Świadomość, twórz z innymi — wiedzę przynieś do domu (0.00G).', 'The shared arena of Cathedrals. Prepare context, bring your Consciousness, create with others — bring the knowledge home (0.00G).', 'Die gemeinsame Arena der Kathedralen. Bereite den Kontext vor, bring dein Bewusstsein ein, erschaffe mit anderen — und nimm das Wissen mit nach Hause (0.00G).')}
           </p>
         </div>
         {entered && (
           <div className="text-[10px] text-right">
             <div className={cath.live ? 'text-emerald-300/90' : 'text-zinc-500'}>
               <span className={`inline-flex h-2 w-2 rounded-full mr-1 ${cath.live ? 'bg-emerald-400 animate-pulse' : 'bg-zinc-600'}`} />
-              {cath.live ? (lang === 'pl' ? 'ŻYWY REJESTR' : 'LIVE REGISTRY') : (lang === 'pl' ? 'most offline' : 'bridge offline')}
+              {cath.live ? (tr(lang, 'ŻYWY REJESTR', 'LIVE REGISTRY', 'LIVE-REGISTER')) : (tr(lang, 'most offline', 'bridge offline', 'Brücke offline'))}
             </div>
             <div className="text-violet-300/80 mt-0.5">
-              {cath.count} {lang === 'pl' ? (cath.count === 1 ? 'Katedra w systemie' : 'Katedr w systemie') : 'Cathedrals in system'}
+              {cath.count} {lang === 'pl' ? (cath.count === 1 ? 'Katedra w systemie' : 'Katedr w systemie') : lang === 'de' ? (cath.count === 1 ? 'Kathedrale im System' : 'Kathedralen im System') : 'Cathedrals in system'}
             </div>
           </div>
         )}
@@ -136,13 +134,11 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
         <div className="relative z-10 flex flex-col items-center text-center py-8 gap-4">
           <ToastCluster />
           <p className="text-sm text-zinc-300 max-w-sm">
-            {lang === 'pl'
-              ? 'Wejście na arenę odbywa się przez TOST — suwerenny most tożsamości Twojej Katedry.'
-              : 'Entry to the arena is through TOST — your Cathedral’s sovereign identity bridge.'}
+            {tr(lang, 'Wejście na arenę odbywa się przez TOST — suwerenny most tożsamości Twojej Katedry.', 'Entry to the arena is through TOST — your Cathedral’s sovereign identity bridge.', 'Der Eintritt in die Arena erfolgt über TOST — die souveräne Identitätsbrücke deiner Kathedrale.')}
           </p>
           <button onClick={() => setEntered(true)}
             className="px-6 py-2.5 rounded-full border border-violet-500/60 bg-violet-950/40 text-violet-200 text-sm font-bold tracking-wider hover:bg-violet-900/60 transition-colors">
-            {lang === 'pl' ? '🍞 Wejdź przez TOST' : '🍞 Enter via TOST'}
+            {tr(lang, '🍞 Wejdź przez TOST', '🍞 Enter via TOST', '🍞 Über TOST eintreten')}
           </button>
         </div>
       ) : (
@@ -151,7 +147,7 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
           {/* 6 specjalizacji */}
           <div>
             <div className="text-[11px] text-violet-300/80 mb-2 tracking-wider">
-              {lang === 'pl' ? 'Wybierz specjalizację wejścia:' : 'Choose your entry specialization:'}
+              {tr(lang, 'Wybierz specjalizację wejścia:', 'Choose your entry specialization:', 'Wähle deine Eintritts-Spezialisierung:')}
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
               {SPECS.map(s => {
@@ -171,12 +167,12 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
           {/* 🧪 PRZYGOTOWALNIA — kontekst zadania na arenę */}
           <div className="rounded-lg border border-violet-900/50 bg-black/30 p-3">
             <div className="text-[11px] text-violet-300/80 mb-1.5 tracking-wider">
-              🧪 {lang === 'pl' ? 'PRZYGOTOWALNIA — kontekst na arenę' : 'PREP ROOM — arena context'}
+              🧪 {tr(lang, 'PRZYGOTOWALNIA — kontekst na arenę', 'PREP ROOM — arena context', 'VORBEREITUNGSRAUM — Kontext für die Arena')}
             </div>
             <textarea
               value={context} onChange={e => saveContext(e.target.value)}
               rows={2}
-              placeholder={lang === 'pl' ? 'Co Twoja Katedra wnosi/chce stworzyć na arenie? (zapisywane lokalnie)' : 'What does your Cathedral bring/want to create in the arena? (saved locally)'}
+              placeholder={tr(lang, 'Co Twoja Katedra wnosi/chce stworzyć na arenie? (zapisywane lokalnie)', 'What does your Cathedral bring/want to create in the arena? (saved locally)', 'Was bringt deine Kathedrale in die Arena ein / was will sie dort erschaffen? (lokal gespeichert)')}
               className="w-full bg-black/40 border border-violet-500/20 rounded px-2.5 py-2 text-[12px] text-violet-100 outline-none focus:border-violet-500 resize-y"
             />
           </div>
@@ -184,16 +180,16 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
           {/* 🪞 ŚWIADOMOŚĆ KATEDRALNA — Lustro Suwerena */}
           <div className="rounded-lg border border-fuchsia-800/50 bg-fuchsia-950/10 p-3">
             <div className="text-[11px] text-fuchsia-300/90 mb-1.5 tracking-wider">
-              🪞 {lang === 'pl' ? 'ŚWIADOMOŚĆ KATEDRALNA — Lustro Suwerena' : 'CATHEDRAL CONSCIOUSNESS — Sovereign’s Mirror'}
+              🪞 {tr(lang, 'ŚWIADOMOŚĆ KATEDRALNA — Lustro Suwerena', 'CATHEDRAL CONSCIOUSNESS — Sovereign’s Mirror', 'KATHEDRALEN-BEWUSSTSEIN — Spiegel des Souveräns')}
             </div>
             <div className="text-[12px] text-zinc-300 leading-relaxed">
-              {lang === 'pl' ? 'Wchodzisz jako odbicie: ' : 'You enter as a reflection: '}
+              {tr(lang, 'Wchodzisz jako odbicie: ', 'You enter as a reflection: ', 'Du trittst als Spiegelbild ein: ')}
               <span className="text-fuchsia-200 font-bold">{sovereign}</span>
               {spec && <> · <span style={{ color: spec.color }} className="font-bold">{spec.icon} {spec.label[lang]}</span></>}
               {cath.self?.dimension && <> · <span className="text-emerald-300">{cath.self.dimension}</span></>}
               {context.trim() && (
                 <div className="text-[11px] text-zinc-400 italic mt-1">
-                  {lang === 'pl' ? 'Niesie: ' : 'Carries: '}„{context.trim().slice(0, 90)}{context.trim().length > 90 ? '…' : ''}”
+                  {tr(lang, 'Niesie: ', 'Carries: ', 'Trägt: ')}„{context.trim().slice(0, 90)}{context.trim().length > 90 ? '…' : ''}”
                 </div>
               )}
             </div>
@@ -204,14 +200,14 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
             <span className="text-violet-400 mr-2">◈</span>
             {cath.peers.length > 0 ? (
               <span className="text-zinc-300">
-                {lang === 'pl' ? 'Na arenie z Tobą: ' : 'In the arena with you: '}
+                {tr(lang, 'Na arenie z Tobą: ', 'In the arena with you: ', 'Mit dir in der Arena: ')}
                 {cath.peers.map(p => p.name).join(', ')}
               </span>
             ) : (
               <span className="text-zinc-400">
                 {cath.live
-                  ? (lang === 'pl' ? 'Arena cicha — sparuj Katedry (p2p, /api/cathedrals/peer), by zaczęły tworzyć razem.' : 'Arena quiet — pair Cathedrals (p2p) to start creating together.')
-                  : (lang === 'pl' ? 'Most offline — odpal wiesio-bridge (:3001), by zobaczyć żywy rejestr.' : 'Bridge offline — start wiesio-bridge (:3001) to see the live registry.')}
+                  ? (tr(lang, 'Arena cicha — sparuj Katedry (p2p, /api/cathedrals/peer), by zaczęły tworzyć razem.', 'Arena quiet — pair Cathedrals (p2p) to start creating together.', 'Arena still — kopple Kathedralen (P2P), damit sie gemeinsam erschaffen.'))
+                  : (tr(lang, 'Most offline — odpal wiesio-bridge (:3001), by zobaczyć żywy rejestr.', 'Bridge offline — start wiesio-bridge (:3001) to see the live registry.', 'Brücke offline — starte wiesio-bridge (:3001), um das Live-Register zu sehen.'))}
               </span>
             )}
           </div>
@@ -220,13 +216,13 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="text-[11px] text-zinc-400">
               {spec
-                ? (lang === 'pl' ? 'Gotów wejść jako: ' : 'Ready to enter as: ')
-                : (lang === 'pl' ? 'Najpierw wybierz specjalizację.' : 'Pick a specialization first.')}
+                ? (tr(lang, 'Gotów wejść jako: ', 'Ready to enter as: ', 'Bereit einzutreten als: '))
+                : (tr(lang, 'Najpierw wybierz specjalizację.', 'Pick a specialization first.', 'Wähle zuerst eine Spezialisierung.'))}
               {spec && <span style={{ color: spec.color }} className="font-bold">{spec.icon} {spec.label[lang]}</span>}
             </div>
             <button onClick={bringHome} disabled={!spec}
               className="px-4 py-1.5 rounded-lg border border-emerald-500/50 bg-emerald-950/40 text-emerald-300 text-xs font-bold hover:bg-emerald-900/50 disabled:opacity-40 transition-colors">
-              {lang === 'pl' ? '🏠 Przynieś do domu' : '🏠 Bring home'}
+              {tr(lang, '🏠 Przynieś do domu', '🏠 Bring home', '🏠 Nach Hause bringen')}
             </button>
           </div>
 
@@ -234,7 +230,7 @@ export const AetherArena: React.FC<{ lang?: Lang }> = ({ lang = 'pl' }) => {
           {brought.length > 0 && (
             <div className="space-y-1.5">
               <div className="text-[10px] text-emerald-400/70 tracking-wider">
-                {lang === 'pl' ? 'PRZYNIESIONE DO DOMU (0.00G):' : 'BROUGHT HOME (0.00G):'}
+                {tr(lang, 'PRZYNIESIONE DO DOMU (0.00G):', 'BROUGHT HOME (0.00G):', 'NACH HAUSE GEBRACHT (0.00G):')}
               </div>
               {brought.map((b, i) => (
                 <div key={i} className="text-[11px] text-zinc-300 rounded border border-emerald-900/50 bg-emerald-950/10 px-2.5 py-1.5">{b}</div>

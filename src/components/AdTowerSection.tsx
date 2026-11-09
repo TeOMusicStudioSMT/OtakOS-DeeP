@@ -1,3 +1,4 @@
+import type { Lang } from '../i18n';
 /**
  * 📢 AdTowerSection — Wieża Partnerów: wykup reklamy na prawym panelu Orbity.
  *
@@ -13,12 +14,12 @@ import React, { useState } from 'react';
 import { Megaphone, Check, ExternalLink, Mail } from 'lucide-react';
 import { FIAT_DONATIONS_CONFIG } from '../config/wallets';
 
-interface Props { lang: 'pl' | 'en'; }
+interface Props { lang: Lang; }
 
 const TIERS = [
-    { id: 'standard', pln: 99,  daysLabel: { pl: '30 dni',  en: '30 days' },  name: { pl: 'Partner',        en: 'Partner' } },
-    { id: 'gold',     pln: 249, daysLabel: { pl: '90 dni',  en: '90 days' },  name: { pl: 'Złoty Partner',  en: 'Gold Partner' } },
-    { id: 'genesis',  pln: 777, daysLabel: { pl: '365 dni', en: '365 days' }, name: { pl: 'Partner Genesis', en: 'Genesis Partner' } },
+    { id: 'standard', pln: 99,  daysLabel: { pl: '30 dni',  en: '30 days', de: '30 Tage' },  name: { pl: 'Partner',        en: 'Partner', de: 'Partner' } },
+    { id: 'gold',     pln: 249, daysLabel: { pl: '90 dni',  en: '90 days', de: '90 Tage' },  name: { pl: 'Złoty Partner',  en: 'Gold Partner', de: 'Gold-Partner' } },
+    { id: 'genesis',  pln: 777, daysLabel: { pl: '365 dni', en: '365 days', de: '365 Tage' }, name: { pl: 'Partner Genesis', en: 'Genesis Partner', de: 'Genesis-Partner' } },
 ] as const;
 
 const T = {
@@ -43,6 +44,17 @@ const T = {
         step2: 'Send order details by e-mail (button below) — we activate the slot once payment clears.',
         idLabel: 'Order ID',
         note: 'Slot activates after payment. The ad renders live on the Partner Tower (right visualizer panel of the Cathedral).',
+    },
+    de: {
+        title: 'PARTNERTURM',
+        sub: 'Dein Unternehmen im rechten Orbit-Panel — in jeder laufenden Kathedrale.',
+        company: 'Firmenname', slogan: 'Slogan (max. 120 Zeichen)', url: 'Website (optional)', email: 'Kontakt-E-Mail',
+        order: 'SLOT BESTELLEN', pay: 'MIT PAYPAL BEZAHLEN', mail: 'BESTELLUNG PER E-MAIL SENDEN',
+        afterOrder: 'Bestellung vorbereitet! Noch 2 Schritte:',
+        step1: 'Bezahle den Slot (die Bestell-ID in den Verwendungszweck einfügen):',
+        step2: 'Sende die Bestelldetails per E-Mail (Button unten) — wir aktivieren den Slot nach Zahlungseingang.',
+        idLabel: 'Bestell-ID',
+        note: 'Der Slot wird nach der Zahlung aktiviert. Die Anzeige erscheint live im Partnerturm (rechtes Visualizer-Panel der Kathedrale).',
     },
 };
 

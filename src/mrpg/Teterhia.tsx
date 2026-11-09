@@ -1,3 +1,4 @@
+import { tr, type Lang } from '../i18n';
 /**
  * 🌍 Teterhia — MRPG, wspólny świat Katedr (2026-10-06).
  *
@@ -23,11 +24,11 @@ function hash(s: string): number {
 
 /** Żywioły z gry TGS (src/gra/postac.ts) — barwa i charakter krainy. */
 const ZYWIOLY = [
-  { id: 'ogien', pl: 'Ogień', en: 'Fire', hue: 12, opis: { pl: 'ostre grzbiety i żar', en: 'sharp ridges and embers' } },
-  { id: 'woda', pl: 'Woda', en: 'Water', hue: 200, opis: { pl: 'strumienie i zatoki', en: 'streams and bays' } },
-  { id: 'ziemia', pl: 'Ziemia', en: 'Earth', hue: 96, opis: { pl: 'gęste gaje i płaskowyże', en: 'dense groves and plateaus' } },
-  { id: 'powietrze', pl: 'Powietrze', en: 'Air', hue: 168, opis: { pl: 'rozległe równiny, dużo nieba', en: 'open plains, wide sky' } },
-  { id: 'eter', pl: 'Eter', en: 'Ether', hue: 280, opis: { pl: 'świat „pomiędzy”, bogaty w sekrety', en: 'the world “between”, rich in secrets' } },
+  { id: 'ogien', pl: 'Ogień', en: 'Fire', de: 'Feuer', hue: 12, opis: { pl: 'ostre grzbiety i żar', en: 'sharp ridges and embers', de: 'scharfe Grate und Glut' } },
+  { id: 'woda', pl: 'Woda', en: 'Water', de: 'Wasser', hue: 200, opis: { pl: 'strumienie i zatoki', en: 'streams and bays', de: 'Bäche und Buchten' } },
+  { id: 'ziemia', pl: 'Ziemia', en: 'Earth', de: 'Erde', hue: 96, opis: { pl: 'gęste gaje i płaskowyże', en: 'dense groves and plateaus', de: 'dichte Haine und Hochebenen' } },
+  { id: 'powietrze', pl: 'Powietrze', en: 'Air', de: 'Luft', hue: 168, opis: { pl: 'rozległe równiny, dużo nieba', en: 'open plains, wide sky', de: 'weite Ebenen, viel Himmel' } },
+  { id: 'eter', pl: 'Eter', en: 'Ether', de: 'Äther', hue: 280, opis: { pl: 'świat „pomiędzy”, bogaty w sekrety', en: 'the world “between”, rich in secrets', de: 'die Welt „dazwischen“, reich an Geheimnissen' } },
 ] as const;
 
 export interface Kraina { k: KatedraOnline; zywiol: (typeof ZYWIOLY)[number]; x: number; y: number; r: number }
@@ -60,7 +61,7 @@ export const gestSwiezy = () => Date.now() - ((window as unknown as { __otakosGe
 const czyTeterhia = () => /^#teterhia(\/|$)/.test(window.location.hash);
 const nickZHasha = () => window.location.hash.match(/^#teterhia\/([a-z0-9-]{3,32})$/)?.[1] ?? null;
 
-export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
+export const Teterhia: React.FC<{ lang?: Lang }> = ({ lang = 'pl' as Lang }) => {
   const pl = lang === 'pl';
   const [otwarte, setOtwarte] = useState(czyTeterhia);
   const [lista, setLista] = useState<KatedraOnline[] | null | 'laduje'>('laduje');
@@ -110,9 +111,9 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
 
   if (!otwarte) {
     return (
-      <button onClick={otworz} title={pl ? 'Teterhia — wspólny świat Katedr (MRPG)' : 'Teterhia — shared world of Cathedrals (MRPG)'}
+      <button onClick={otworz} title={tr(lang, 'Teterhia — wspólny świat Katedr (MRPG)', 'Teterhia — shared world of Cathedrals (MRPG)', 'Teterhia — gemeinsame Welt der Kathedralen (MRPG)')}
         className="fixed left-0 top-1/2 z-[60] -translate-y-1/2 rounded-r-xl border border-l-0 border-emerald-400/40 bg-[#06140f]/90 px-1.5 py-4 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-200 shadow-lg shadow-emerald-900/30 hover:bg-emerald-900/40 [writing-mode:vertical-rl] rotate-180">
-        {pl ? 'Teterhia ›' : 'Teterhia ›'}
+        {tr(lang, 'Teterhia ›', 'Teterhia ›', 'Teterhia ›')}
       </button>
     );
   }
@@ -122,18 +123,18 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
       <div className="flex items-center gap-3 border-b border-white/10 px-4 py-2 font-mono text-[11px]">
         <span className="hidden w-24 sm:block" />
         <div className="mx-auto text-center">
-          <span className="text-emerald-200">🌍 Teterhia</span> <span className="text-slate-500">— {pl ? 'wspólny świat Katedr · MRPG' : 'shared world of Cathedrals · MRPG'}</span>
+          <span className="text-emerald-200">🌍 Teterhia</span> <span className="text-slate-500">— {tr(lang, 'wspólny świat Katedr · MRPG', 'shared world of Cathedrals · MRPG', 'gemeinsame Welt der Kathedralen · MRPG')}</span>
         </div>
         <button onClick={zamknij} className="shrink-0 text-right text-slate-400 hover:text-white sm:w-24">otakos.wtf →</button>
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <div className="relative min-h-[45vh] flex-1">
-          {lista === 'laduje' && <p className="pt-24 text-center text-sm text-slate-500">{pl ? 'Pytam rejestr, które Katedry są online…' : 'Asking the registry which Cathedrals are online…'}</p>}
-          {lista === null && <p className="mx-auto max-w-md px-6 pt-24 text-center text-sm text-slate-400">{pl ? 'Rejestr Katedr jest teraz nieosiągalny — mapy nie zbuduję z niczego. Spróbuj za chwilę.' : 'The Cathedral registry is unreachable — no map without data. Try again shortly.'}</p>}
-          {Array.isArray(lista) && !lista.length && <p className="mx-auto max-w-md px-6 pt-24 text-center text-sm text-slate-400">{pl ? 'Żadna Katedra nie jest teraz online, więc Teterhia jest pusta. Pierwsza kraina może być Twoja.' : 'No Cathedral is online right now, so Teterhia is empty. The first land could be yours.'}</p>}
+          {lista === 'laduje' && <p className="pt-24 text-center text-sm text-slate-500">{tr(lang, 'Pytam rejestr, które Katedry są online…', 'Asking the registry which Cathedrals are online…', 'Ich frage das Register, welche Kathedralen online sind…')}</p>}
+          {lista === null && <p className="mx-auto max-w-md px-6 pt-24 text-center text-sm text-slate-400">{tr(lang, 'Rejestr Katedr jest teraz nieosiągalny — mapy nie zbuduję z niczego. Spróbuj za chwilę.', 'The Cathedral registry is unreachable — no map without data. Try again shortly.', 'Das Kathedralen-Register ist gerade nicht erreichbar — ohne Daten keine Karte. Versuche es gleich noch einmal.')}</p>}
+          {Array.isArray(lista) && !lista.length && <p className="mx-auto max-w-md px-6 pt-24 text-center text-sm text-slate-400">{tr(lang, 'Żadna Katedra nie jest teraz online, więc Teterhia jest pusta. Pierwsza kraina może być Twoja.', 'No Cathedral is online right now, so Teterhia is empty. The first land could be yours.', 'Gerade ist keine Kathedrale online, daher ist Teterhia leer. Das erste Land könnte deines sein.')}</p>}
           {krainy.length > 0 && (
-            <svg viewBox={`${-zasieg} ${-zasieg} ${zasieg * 2} ${zasieg * 2}`} className="absolute inset-0 h-full w-full" role="img" aria-label={pl ? 'Mapa krain Teterhii' : 'Map of Teterhia lands'}>
+            <svg viewBox={`${-zasieg} ${-zasieg} ${zasieg * 2} ${zasieg * 2}`} className="absolute inset-0 h-full w-full" role="img" aria-label={tr(lang, 'Mapa krain Teterhii', 'Map of Teterhia lands', 'Karte der Länder von Teterhia')}>
               <defs>
                 <radialGradient id="morze" cx="50%" cy="50%" r="60%"><stop offset="0%" stopColor="#0b2a2a" /><stop offset="100%" stopColor="#040807" /></radialGradient>
               </defs>
@@ -157,48 +158,46 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
         <aside className="max-h-[50vh] w-full space-y-3 overflow-y-auto border-t border-white/10 p-4 text-sm lg:max-h-none lg:w-[360px] lg:border-l lg:border-t-0">
           {biezaca ? (
             <div className="space-y-2 rounded-xl border border-emerald-400/30 bg-emerald-950/20 p-3">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-emerald-300/70">{pl ? 'kraina' : 'land'}</p>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-emerald-300/70">{tr(lang, 'kraina', 'land', 'Land')}</p>
               <h3 className="font-mono text-2xl font-black text-white">{biezaca.k.nick}</h3>
               {biezaca.k.motto && <p className="text-xs italic text-amber-200/90">„{biezaca.k.motto}”</p>}
-              <p className="text-xs text-slate-300">{pl ? 'Żywioł' : 'Element'}: <b style={{ color: `hsl(${biezaca.zywiol.hue} 80% 70%)` }}>{pl ? biezaca.zywiol.pl : biezaca.zywiol.en}</b> — {pl ? biezaca.zywiol.opis.pl : biezaca.zywiol.opis.en}</p>
-              {postacZ(biezaca.k) && <KartaPostaci p={postacZ(biezaca.k)!} pl={pl} nick={biezaca.k.nick} />}
-              {biezaca.k.moc && <p className="text-xs text-slate-300">⚡ {pl ? 'Kuźnia mocy' : 'Power forge'}: {biezaca.k.moc.vramGB} GB VRAM · {biezaca.k.moc.modele.slice(0, 3).join(', ')}</p>}
+              <p className="text-xs text-slate-300">{tr(lang, 'Żywioł', 'Element', 'Element')}: <b style={{ color: `hsl(${biezaca.zywiol.hue} 80% 70%)` }}>{biezaca.zywiol[lang]}</b> — {biezaca.zywiol.opis[lang]}</p>
+              {postacZ(biezaca.k) && <KartaPostaci p={postacZ(biezaca.k)!} lang={lang} nick={biezaca.k.nick} />}
+              {biezaca.k.moc && <p className="text-xs text-slate-300">⚡ {tr(lang, 'Kuźnia mocy', 'Power forge', 'Kraftschmiede')}: {biezaca.k.moc.vramGB} GB VRAM · {biezaca.k.moc.modele.slice(0, 3).join(', ')}</p>}
               {graDoZagrania(biezaca.k) && (
                 <div className="space-y-1">
                   <a href={graDoZagrania(biezaca.k)!.url} target="_blank" rel="noopener" className="block rounded-lg border border-emerald-300/60 bg-emerald-700/30 px-3 py-2 text-center text-sm font-bold text-emerald-50 hover:bg-emerald-600/40">
-                    🎮 {pl ? 'Zagraj na tej wyspie' : 'Play on this island'}
+                    🎮 {tr(lang, 'Zagraj na tej wyspie', 'Play on this island', 'Auf dieser Insel spielen')}
                   </a>
-                  <p className="text-[10px] text-slate-400">{pl
-                    ? `Jako gość, w przeglądarce (też telefon): gra przychodzi z Katedry „${biezaca.k.nick}” jako pliki, liczy się u Ciebie. Mistrz Gry, Kustosz i rozmowy odpowiadają w Twojej Katedrze — tu dostaniesz zapas. Zapis zostaje w tym urządzeniu. Gdy wyspa pełna — spróbuj za chwilę.`
-                    : `As a guest, in the browser (phones too): the game comes from the “${biezaca.k.nick}” Cathedral as files and runs on your device. Game Master, Curator and conversations answer in your own Cathedral — here you get a fallback. Progress stays on this device. If the island is full, try again shortly.`}</p>
+                  <p className="text-[10px] text-slate-400">{tr(lang, `Jako gość, w przeglądarce (też telefon): gra przychodzi z Katedry „${biezaca.k.nick}” jako pliki, liczy się u Ciebie. Mistrz Gry, Kustosz i rozmowy odpowiadają w Twojej Katedrze — tu dostaniesz zapas. Zapis zostaje w tym urządzeniu. Gdy wyspa pełna — spróbuj za chwilę.`, `As a guest, in the browser (phones too): the game comes from the “${biezaca.k.nick}” Cathedral as files and runs on your device. Game Master, Curator and conversations answer in your own Cathedral — here you get a fallback. Progress stays on this device. If the island is full, try again shortly.`, `Als Gast, im Browser (auch auf dem Handy): Das Spiel kommt als Dateien aus der Kathedrale „${biezaca.k.nick}“ und läuft auf deinem Gerät. Spielleiter, Kustos und Gespräche antworten in deiner eigenen Kathedrale — hier gibt es eine Ersatzlösung. Der Spielstand bleibt auf diesem Gerät. Ist die Insel voll, versuche es gleich noch einmal.`)}</p>
                 </div>
               )}
-              <a href={`#katedry/${biezaca.k.nick}`} className="inline-block rounded-lg border border-fuchsia-400/40 px-3 py-1 text-xs text-fuchsia-200 hover:bg-fuchsia-900/30">{pl ? 'Odwiedź wizytówkę Katedry →' : 'Visit the Cathedral card →'}</a>
+              <a href={`#katedry/${biezaca.k.nick}`} className="inline-block rounded-lg border border-fuchsia-400/40 px-3 py-1 text-xs text-fuchsia-200 hover:bg-fuchsia-900/30">{tr(lang, 'Odwiedź wizytówkę Katedry →', 'Visit the Cathedral card →', 'Visitenkarte der Kathedrale besuchen →')}</a>
             </div>
           ) : (
-            <p className="text-xs text-slate-400">{pl ? 'Kliknij krainę na mapie. Każda kraina to Katedra online w rejestrze otakos.wtf, a jej żywioł wynika z nicka.' : 'Click a land on the map. Each land is a Cathedral online in the otakos.wtf registry; its element comes from the nick.'}</p>
+            <p className="text-xs text-slate-400">{tr(lang, 'Kliknij krainę na mapie. Każda kraina to Katedra online w rejestrze otakos.wtf, a jej żywioł wynika z nicka.', 'Click a land on the map. Each land is a Cathedral online in the otakos.wtf registry; its element comes from the nick.', 'Klicke auf ein Land auf der Karte. Jedes Land ist eine Kathedrale online im Register von otakos.wtf; ihr Element ergibt sich aus dem Nick.')}</p>
           )}
-          {Array.isArray(lista) && <p className="font-mono text-[10px] text-slate-500">{pl ? `krain online: ${lista.length}` : `lands online: ${lista.length}`}</p>}
+          {Array.isArray(lista) && <p className="font-mono text-[10px] text-slate-500">{tr(lang, `krain online: ${lista.length}`, `lands online: ${lista.length}`, `Länder online: ${lista.length}`)}</p>}
 
           <div className="space-y-1 rounded-xl border border-white/10 p-3 text-xs text-slate-300">
-            <p className="font-semibold text-emerald-200">{pl ? 'Teterhia — Wieczna Saga' : 'Teterhia — Eternal Saga'}</p>
-            <p>{pl ? 'Świat, który nie istnieje, dopóki go nie wyśpiewasz. Gracz przechodzi przez Bramę „To Get Sauce”, szuka Sosu rozbitego na Siedem Nut, a autentyczne wybory nasycają świat barwą.' : 'A world that does not exist until you sing it. The player passes the “To Get Sauce” Gate and seeks the Sauce, shattered into Seven Notes; authentic choices fill the world with colour.'}</p>
+            <p className="font-semibold text-emerald-200">{tr(lang, 'Teterhia — Wieczna Saga', 'Teterhia — Eternal Saga', 'Teterhia — Ewige Saga')}</p>
+            <p>{tr(lang, 'Świat, który nie istnieje, dopóki go nie wyśpiewasz. Gracz przechodzi przez Bramę „To Get Sauce”, szuka Sosu rozbitego na Siedem Nut, a autentyczne wybory nasycają świat barwą.', 'A world that does not exist until you sing it. The player passes the “To Get Sauce” Gate and seeks the Sauce, shattered into Seven Notes; authentic choices fill the world with colour.', 'Eine Welt, die nicht existiert, bis du sie besingst. Der Spieler durchschreitet das Tor „To Get Sauce“ und sucht die Soße, zersplittert in Sieben Noten; authentische Entscheidungen erfüllen die Welt mit Farbe.')}</p>
           </div>
           <div className="space-y-1 rounded-xl border border-white/10 p-3 text-xs">
-            <p className="font-semibold text-slate-200">{pl ? 'Gdzie jesteśmy — uczciwie' : 'Where we are — honestly'}</p>
-            <p className="text-emerald-300">✓ {pl ? 'Gra dla jednego gracza rośnie w Katedrze: TeO Games Studio (Reżyser → Dyrygent → Obrazy → 3D → Ruch → Krajobrazy → Kodeks).' : 'The single-player game grows in the Cathedral: TeO Games Studio (Director → Conductor → Images → 3D → Motion → Landscapes → Codex).'}</p>
-            <p className="text-emerald-300">✓ {pl ? 'Wspólna mapa: krainy to prawdziwe Katedry online.' : 'Shared map: lands are real Cathedrals online.'}</p>
-            <p className="text-emerald-300">✓ {pl ? 'Postać Katedry przy jej wyspie (gdy Suweren ją opublikował) — podgląd 3D prosto z tunelu, na kliknięcie.' : 'The Cathedral’s character by its island (when its Sovereign published one) — 3D preview straight from the tunnel, on click.'}</p>
-            <p className="text-emerald-300">✓ {pl ? 'Etap 1 gry ukończony: Księga FLOOM w 3D (starcia, komendy armii, wyzwania), taniec do bitu Katedry, wędrowny Mistrz Gry, koszulka i reklama z wygranego tańca, roślinność i muzyka Katedry na wyspie.' : 'Game stage 1 complete: the FLOOM Book in 3D (battles, army commands, challenges), dance to the Cathedral beat, a wandering Game Master, a T-shirt and ad from a won dance, vegetation and the Cathedral’s music on the island.'}</p>
-            <p className="text-emerald-300">✓ {pl ? 'Bohaterowie startowi (kobiety i mężczyźni) i własna postać Katedry z chodem, biegiem i tańcem z riga.' : 'Starting heroes (women and men) and the Cathedral’s own character with walk, run and dance from the rig.'}</p>
-            <p className="text-emerald-300">✓ {pl ? 'Gra jako podpisana paczka: Katedra online udostępnia grę — zagrasz jako gość na jej wyspie (przycisk „🎮 Zagraj” przy krainie) albo zainstalujesz ją w swojej Katedrze (Marketplace → 🏝️ Gry; podpis i SHA-256 sprawdzane). Płatność: przelew GRV między Katedrami z pokwitowaniami podpisanymi przez obie (każda księga robi swoją połowę).' : 'Game as a signed package: an online Cathedral shares its game — play as a guest on its island (“🎮 Play” by the land) or install it in your own Cathedral (Marketplace → 🏝️ Games; signature and SHA-256 checked). Payment: a GRV transfer between Cathedrals with receipts signed by both (each ledger does its half).'}</p>
-            <p className="text-emerald-300">✓ {pl ? 'Plac obecności: gracze na tej samej wyspie widzą się nawzajem (też gość z telefonu) — Katedra gospodarza tylko przekazuje, kto gdzie stoi.' : 'Presence square: players on the same island see each other (phone guests too) — the host Cathedral only relays who stands where.'}</p>
-            <p className="text-amber-300">… {pl ? 'Dalej: wspólne starcia i wymiana, wędrówka między krainami.' : 'Next: shared battles and trade, travel between lands.'}</p>
+            <p className="font-semibold text-slate-200">{tr(lang, 'Gdzie jesteśmy — uczciwie', 'Where we are — honestly', 'Wo wir stehen — ehrlich')}</p>
+            <p className="text-emerald-300">✓ {tr(lang, 'Gra dla jednego gracza rośnie w Katedrze: TeO Games Studio (Reżyser → Dyrygent → Obrazy → 3D → Ruch → Krajobrazy → Kodeks).', 'The single-player game grows in the Cathedral: TeO Games Studio (Director → Conductor → Images → 3D → Motion → Landscapes → Codex).', 'Das Einzelspieler-Spiel wächst in der Kathedrale: TeO Games Studio (Regisseur → Dirigent → Bilder → 3D → Bewegung → Landschaften → Codex).')}</p>
+            <p className="text-emerald-300">✓ {tr(lang, 'Wspólna mapa: krainy to prawdziwe Katedry online.', 'Shared map: lands are real Cathedrals online.', 'Gemeinsame Karte: Die Länder sind echte Kathedralen online.')}</p>
+            <p className="text-emerald-300">✓ {tr(lang, 'Postać Katedry przy jej wyspie (gdy Suweren ją opublikował) — podgląd 3D prosto z tunelu, na kliknięcie.', 'The Cathedral’s character by its island (when its Sovereign published one) — 3D preview straight from the tunnel, on click.', 'Die Figur der Kathedrale bei ihrer Insel (wenn der Souverän sie veröffentlicht hat) — 3D-Vorschau direkt aus dem Tunnel, per Klick.')}</p>
+            <p className="text-emerald-300">✓ {tr(lang, 'Etap 1 gry ukończony: Księga FLOOM w 3D (starcia, komendy armii, wyzwania), taniec do bitu Katedry, wędrowny Mistrz Gry, koszulka i reklama z wygranego tańca, roślinność i muzyka Katedry na wyspie.', 'Game stage 1 complete: the FLOOM Book in 3D (battles, army commands, challenges), dance to the Cathedral beat, a wandering Game Master, a T-shirt and ad from a won dance, vegetation and the Cathedral’s music on the island.', 'Spielstufe 1 abgeschlossen: das FLOOM-Buch in 3D (Kämpfe, Armeebefehle, Herausforderungen), Tanz zum Beat der Kathedrale, ein wandernder Spielleiter, T-Shirt und Werbung aus einem gewonnenen Tanz, Vegetation und die Musik der Kathedrale auf der Insel.')}</p>
+            <p className="text-emerald-300">✓ {tr(lang, 'Bohaterowie startowi (kobiety i mężczyźni) i własna postać Katedry z chodem, biegiem i tańcem z riga.', 'Starting heroes (women and men) and the Cathedral’s own character with walk, run and dance from the rig.', 'Start-Helden (Frauen und Männer) und die eigene Figur der Kathedrale mit Gehen, Laufen und Tanz aus dem Rig.')}</p>
+            <p className="text-emerald-300">✓ {tr(lang, 'Gra jako podpisana paczka: Katedra online udostępnia grę — zagrasz jako gość na jej wyspie (przycisk „🎮 Zagraj” przy krainie) albo zainstalujesz ją w swojej Katedrze (Marketplace → 🏝️ Gry; podpis i SHA-256 sprawdzane). Płatność: przelew GRV między Katedrami z pokwitowaniami podpisanymi przez obie (każda księga robi swoją połowę).', 'Game as a signed package: an online Cathedral shares its game — play as a guest on its island (“🎮 Play” by the land) or install it in your own Cathedral (Marketplace → 🏝️ Games; signature and SHA-256 checked). Payment: a GRV transfer between Cathedrals with receipts signed by both (each ledger does its half).', 'Spiel als signiertes Paket: Eine Kathedrale online teilt ihr Spiel — spiele als Gast auf ihrer Insel („🎮 Spielen“ beim Land) oder installiere es in deiner Kathedrale (Marketplace → 🏝️ Spiele; Signatur und SHA-256 geprüft). Bezahlung: GRV-Überweisung zwischen Kathedralen mit von beiden signierten Belegen (jedes Hauptbuch erledigt seine Hälfte).')}</p>
+            <p className="text-emerald-300">✓ {tr(lang, 'Plac obecności: gracze na tej samej wyspie widzą się nawzajem (też gość z telefonu) — Katedra gospodarza tylko przekazuje, kto gdzie stoi.', 'Presence square: players on the same island see each other (phone guests too) — the host Cathedral only relays who stands where.', 'Präsenzplatz: Spieler auf derselben Insel sehen einander (auch Gäste vom Handy) — die Gastgeber-Kathedrale gibt nur weiter, wer wo steht.')}</p>
+            <p className="text-amber-300">… {tr(lang, 'Dalej: wspólne starcia i wymiana, wędrówka między krainami.', 'Next: shared battles and trade, travel between lands.', 'Als Nächstes: gemeinsame Kämpfe und Handel, Reisen zwischen den Ländern.')}</p>
           </div>
-          <PlanNaZywo lista={Array.isArray(lista) ? lista : []} pl={pl} />
+          <PlanNaZywo lista={Array.isArray(lista) ? lista : []} lang={lang} />
           <div className="space-y-1 rounded-xl border border-white/10 p-3 text-xs text-slate-400">
-            <p className="font-semibold text-slate-200">{pl ? 'Jak dodać swoją krainę' : 'How to add your land'}</p>
-            <p>{pl ? 'Katedra OtakOS → Kwantowy Tunel → meldunek w karcie Wystawy → zatwierdzenie przez Stół zarządcy rejestru. Twoja Katedra pojawi się wtedy na mapie, gdy będzie online.' : 'OtakOS Cathedral → Quantum Tunnel → check-in in the Wystawa card → approval by the registry steward’s Table. Your Cathedral appears on the map whenever it is online.'}</p>
+            <p className="font-semibold text-slate-200">{tr(lang, 'Jak dodać swoją krainę', 'How to add your land', 'So fügst du dein Land hinzu')}</p>
+            <p>{tr(lang, 'Katedra OtakOS → Kwantowy Tunel → meldunek w karcie Wystawy → zatwierdzenie przez Stół zarządcy rejestru. Twoja Katedra pojawi się wtedy na mapie, gdy będzie online.', 'OtakOS Cathedral → Quantum Tunnel → check-in in the Wystawa card → approval by the registry steward’s Table. Your Cathedral appears on the map whenever it is online.', 'OtakOS-Kathedrale → Quanten-Tunnel → Anmeldung in der Karte Wystawa → Bestätigung durch den Tisch des Register-Verwalters. Deine Kathedrale erscheint dann auf der Karte, sobald sie online ist.')}</p>
           </div>
         </aside>
       </div>
@@ -210,11 +209,12 @@ export const Teterhia: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
  * 📜 Plan na żywo — z pola `gra` wizytówek Katedr online (Katedra publikuje postęp GDD sama, rejestr go niesie).
  * 🤝 Zadania wiszące ≥ 3 dni pokazują się jak oferta: inne Katedry mogą pomóc dokończyć (odezwij się przez TOST).
  */
-function PlanNaZywo({ lista, pl }: { lista: KatedraOnline[]; pl: boolean }) {
+function PlanNaZywo({ lista, lang }: { lista: KatedraOnline[]; lang: Lang }) {
+  const pl = lang === 'pl';
   const z = lista.map((k) => ({ k, g: graZ(k) })).filter((x): x is { k: KatedraOnline; g: NonNullable<ReturnType<typeof graZ>> } => !!x.g);
   if (!z.length) return (
     <div className="rounded-xl border border-white/10 p-3 text-xs text-slate-500">
-      {pl ? '📜 Plan na żywo pojawi się, gdy Katedra online opublikuje postęp swojej gry (aktualna wersja Katedry robi to sama).' : '📜 The live plan appears once an online Cathedral publishes its game progress (the current Cathedral version does it by itself).'}
+      {tr(lang, '📜 Plan na żywo pojawi się, gdy Katedra online opublikuje postęp swojej gry (aktualna wersja Katedry robi to sama).', '📜 The live plan appears once an online Cathedral publishes its game progress (the current Cathedral version does it by itself).', '📜 Der Live-Plan erscheint, sobald eine Kathedrale online den Fortschritt ihres Spiels veröffentlicht (die aktuelle Version der Kathedrale macht das von selbst).')}
     </div>
   );
   return (
@@ -223,8 +223,8 @@ function PlanNaZywo({ lista, pl }: { lista: KatedraOnline[]; pl: boolean }) {
         const gotowe = g.kamienie.reduce((s, x) => s + x.gotowe, 0), razem = g.kamienie.reduce((s, x) => s + x.razem, 0);
         return (
           <div key={k.nick} className="space-y-1.5 rounded-xl border border-emerald-500/20 p-3 text-xs">
-            <p className="font-semibold text-slate-200">📜 {pl ? 'Plan na żywo' : 'Live plan'} · {g.tytul || 'Teterhia'} <span className="text-slate-500">— {k.nick}</span></p>
-            <p className="text-slate-400">{pl ? `${gotowe}/${razem} zadań · ${g.kamienie.filter((x) => x.gotowe === x.razem).length}/${g.kamienie.length} kamieni` : `${gotowe}/${razem} tasks · ${g.kamienie.filter((x) => x.gotowe === x.razem).length}/${g.kamienie.length} milestones`}</p>
+            <p className="font-semibold text-slate-200">📜 {tr(lang, 'Plan na żywo', 'Live plan', 'Live-Plan')} · {g.tytul || 'Teterhia'} <span className="text-slate-500">— {k.nick}</span></p>
+            <p className="text-slate-400">{tr(lang, `${gotowe}/${razem} zadań · ${g.kamienie.filter((x) => x.gotowe === x.razem).length}/${g.kamienie.length} kamieni`, `${gotowe}/${razem} tasks · ${g.kamienie.filter((x) => x.gotowe === x.razem).length}/${g.kamienie.length} milestones`, `${gotowe}/${razem} Aufgaben · ${g.kamienie.filter((x) => x.gotowe === x.razem).length}/${g.kamienie.length} Meilensteine`)}</p>
             {g.kamienie.map((x, i) => (
               <div key={i} className="flex items-center gap-2">
                 <span className={`w-4 text-center ${x.gotowe === x.razem ? 'text-emerald-300' : 'text-amber-300'}`}>{x.gotowe === x.razem ? '✓' : '…'}</span>
@@ -234,11 +234,11 @@ function PlanNaZywo({ lista, pl }: { lista: KatedraOnline[]; pl: boolean }) {
             ))}
             {g.wisi.length > 0 && (
               <div className="mt-2 space-y-1 rounded-lg border border-amber-400/30 bg-amber-500/5 p-2">
-                <p className="font-semibold text-amber-200">🤝 {pl ? 'Do wspólnego dokończenia' : 'Help finish together'}</p>
+                <p className="font-semibold text-amber-200">🤝 {tr(lang, 'Do wspólnego dokończenia', 'Help finish together', 'Gemeinsam fertigstellen')}</p>
                 {g.wisi.map((w, i) => (
-                  <p key={i} className="text-amber-100/90">• {w.zadanie} <span className="text-slate-500">({w.kamien}{w.od ? `, ${pl ? 'od' : 'since'} ${new Date(w.od).toLocaleDateString(pl ? 'pl-PL' : 'en-GB')}` : ''})</span></p>
+                  <p key={i} className="text-amber-100/90">• {w.zadanie} <span className="text-slate-500">({w.kamien}{w.od ? `, ${tr(lang, 'od', 'since', 'seit')} ${new Date(w.od).toLocaleDateString(tr(lang, 'pl-PL', 'en-GB', 'de-DE'))}` : ''})</span></p>
                 ))}
-                <p className="text-slate-500">{pl ? `Pomożesz? Ze swojej Katedry: TOST → Katedry → ${k.nick}.` : `Can you help? From your Cathedral: TOST → Cathedrals → ${k.nick}.`}</p>
+                <p className="text-slate-500">{tr(lang, `Pomożesz? Ze swojej Katedry: TOST → Katedry → ${k.nick}.`, `Can you help? From your Cathedral: TOST → Cathedrals → ${k.nick}.`, `Kannst du helfen? Aus deiner Kathedrale: TOST → Kathedralen → ${k.nick}.`)}</p>
               </div>
             )}
           </div>

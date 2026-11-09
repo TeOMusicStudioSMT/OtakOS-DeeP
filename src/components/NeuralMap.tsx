@@ -1,3 +1,4 @@
+import { tr, type Lang } from '../i18n';
 /**
  * 🧠 NeuralMap — żywa mapa lokalnej sieci neuronowej (AGI 0.00G)
  *
@@ -7,14 +8,14 @@
  */
 
 import React, { useMemo, useState, useEffect } from 'react';
-import AGI_LOCAL, { AgiLayer } from '../agi.local';
+import AGI_LOCAL, { AgiLayer, type AgiNode } from '../agi.local';
 
 const LAYERS: AgiLayer[] = ['SENSE', 'CORE', 'ACT', 'GUARD'];
-const LAYER_LABEL: Record<AgiLayer, { pl: string; en: string }> = {
-  SENSE: { pl: 'ZMYSŁY', en: 'SENSE' },
-  CORE:  { pl: 'RDZEŃ',  en: 'CORE' },
-  ACT:   { pl: 'DZIAŁANIE', en: 'ACT' },
-  GUARD: { pl: 'TARCZA', en: 'GUARD' },
+const LAYER_LABEL: Record<AgiLayer, { pl: string; en: string; de: string }> = {
+  SENSE: { pl: 'ZMYSŁY', en: 'SENSE', de: 'SINNE' },
+  CORE:  { pl: 'RDZEŃ',  en: 'CORE', de: 'KERN' },
+  ACT:   { pl: 'DZIAŁANIE', en: 'ACT', de: 'HANDELN' },
+  GUARD: { pl: 'TARCZA', en: 'GUARD', de: 'SCHILD' },
 };
 const LAYER_COLOR: Record<AgiLayer, string> = {
   SENSE: '#22d3ee', // cyan
@@ -27,13 +28,15 @@ const W = 1000, H = 640, PAD_X = 120, PAD_Y = 70;
 const BRIDGE = 'http://127.0.0.1:3001';
 
 type LiveState = Record<string, { status: string; load: number; powod?: string }>;
-const STATUS_LABEL: Record<string, { pl: string; en: string }> = {
-  online: { pl: 'działa', en: 'running' },
-  idle:   { pl: 'gotowe / śpi', en: 'ready / asleep' },
-  offline:{ pl: 'brak', en: 'missing' },
+const STATUS_LABEL: Record<string, { pl: string; en: string; de: string }> = {
+  online: { pl: 'działa', en: 'running', de: 'läuft' },
+  idle:   { pl: 'gotowe / śpi', en: 'ready / asleep', de: 'bereit / schläft' },
+  offline:{ pl: 'brak', en: 'missing', de: 'fehlt' },
 };
 
-export const NeuralMap: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => {
+export const NeuralMap: React.FC<{ lang?: Lang }> = ({ lang = 'pl' as Lang }) => {
+  const nazwa = (n: AgiNode) => tr(lang, n.label, n.labelEn, n.labelDe ?? n.labelEn);
+  const opis = (n: AgiNode) => tr(lang, n.desc, n.descEn, n.descDe ?? n.descEn);
   const [hovered, setHovered] = useState<string | null>(null);
   const [pulse, setPulse] = useState(0);
   const [live, setLive] = useState<LiveState | null>(null);
@@ -102,22 +105,22 @@ export const NeuralMap: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => 
         <div>
           <div className="text-[10px] tracking-[0.3em] text-emerald-500/60 font-mono">∴ KATEDRA OTAKOS ∴</div>
           <h3 className="text-lg sm:text-xl font-bold text-emerald-300 font-mono">
-            {lang === 'pl' ? '🧠 SIEĆ NEURONOWA 0.00G' : '🧠 NEURAL NETWORK 0.00G'}
+            {tr(lang, '🧠 SIEĆ NEURONOWA 0.00G', '🧠 NEURAL NETWORK 0.00G', '🧠 NEURONALES NETZ 0.00G')}
           </h3>
           <p className="text-[11px] text-zinc-400 max-w-md">
-            {lang === 'pl'
-              ? 'Moduły i TeOgochi Katedry na Twoim sprzęcie. Z mostem uruchomionym na tej maszynie każdy węzeł pokazuje prawdziwy stan i powód; bez mostu — sam manifest.'
-              : 'The Cathedral’s modules and TeOgochi on your hardware. With the bridge running on this machine every node shows its real state and reason; without it — the manifest only.'}
+            {tr(lang, 'Moduły i TeOgochi Katedry na Twoim sprzęcie. Z mostem uruchomionym na tej maszynie każdy węzeł pokazuje prawdziwy stan i powód; bez mostu — sam manifest.',
+              'The Cathedral’s modules and TeOgochi on your hardware. With the bridge running on this machine every node shows its real state and reason; without it — the manifest only.',
+              'Die Module und TeOgochi der Kathedrale auf deiner Hardware. Läuft die Brücke auf diesem Rechner, zeigt jeder Knoten seinen echten Zustand und Grund; ohne Brücke — nur das Manifest.')}
           </p>
         </div>
         <div className="text-right font-mono">
           <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border mb-1 ${
             mode === 'LIVE' ? 'border-emerald-500/50 text-emerald-300 bg-emerald-950/40' : 'border-zinc-700 text-zinc-500 bg-black/30'}`}>
             <span className={`inline-block w-1.5 h-1.5 rounded-full ${mode === 'LIVE' ? 'bg-emerald-400 animate-ping' : 'bg-zinc-600'}`} />
-            {mode === 'LIVE' ? (lang === 'pl' ? 'ŻYWY MOST' : 'LIVE BRIDGE') : (lang === 'pl' ? 'MANIFEST' : 'STATIC')}
+            {mode === 'LIVE' ? tr(lang, 'ŻYWY MOST', 'LIVE BRIDGE', 'LIVE-BRÜCKE') : tr(lang, 'MANIFEST', 'STATIC', 'MANIFEST')}
           </div>
           <div className="text-[10px] text-zinc-500">agi.local · {AGI_LOCAL.origin}</div>
-          <div className="text-xs text-emerald-400">{AGI_LOCAL.nodes.length} {lang === 'pl' ? 'neuronów' : 'neurons'}</div>
+          <div className="text-xs text-emerald-400">{AGI_LOCAL.nodes.length} {tr(lang, 'neuronów', 'neurons', 'Neuronen')}</div>
           <div className="text-[10px] text-zinc-500">{AGI_LOCAL.version} · {AGI_LOCAL.dimension}</div>
         </div>
       </div>
@@ -174,7 +177,7 @@ export const NeuralMap: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => 
               <text textAnchor="middle" dy="6" fontSize="20">{n.emoji}</text>
               <text textAnchor="middle" y={42} fontFamily="monospace" fontSize="11"
                 fill={lit ? c : '#a1a1aa'} fontWeight={lit ? 'bold' : 'normal'}>
-                {(lang === 'pl' ? n.label : n.labelEn).slice(0, 18)}
+                {nazwa(n).slice(0, 18)}
               </text>
             </g>
           );
@@ -188,13 +191,13 @@ export const NeuralMap: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => 
             <span className="text-lg">{hoveredNode.emoji}</span>
             <div>
               <div className="text-sm font-bold" style={{ color: LAYER_COLOR[hoveredNode.layer] }}>
-                {lang === 'pl' ? hoveredNode.label : hoveredNode.labelEn}
+                {nazwa(hoveredNode)}
                 <span className="ml-2 text-[10px] text-zinc-500">{LAYER_LABEL[hoveredNode.layer][lang]}</span>
               </div>
-              <div className="text-[11px] text-zinc-400">{lang === 'pl' ? hoveredNode.desc : hoveredNode.descEn}</div>
+              <div className="text-[11px] text-zinc-400">{opis(hoveredNode)}</div>
               {live?.[hoveredNode.id] && (
                 <div className="text-[11px] mt-0.5" style={{ color: live[hoveredNode.id].status === 'online' ? '#34d399' : live[hoveredNode.id].status === 'offline' ? '#f87171' : '#a1a1aa' }}>
-                  ● {STATUS_LABEL[live[hoveredNode.id].status]?.[lang === 'pl' ? 'pl' : 'en'] ?? live[hoveredNode.id].status}
+                  ● {STATUS_LABEL[live[hoveredNode.id].status]?.[lang] ?? live[hoveredNode.id].status}
                   {live[hoveredNode.id].powod ? ` — ${live[hoveredNode.id].powod}` : ''}
                 </div>
               )}
@@ -202,9 +205,9 @@ export const NeuralMap: React.FC<{ lang?: 'pl' | 'en' }> = ({ lang = 'pl' }) => 
           </div>
         ) : (
           <div className="text-[11px] text-zinc-500 flex items-center h-full">
-            {lang === 'pl'
-              ? '↑ Najedź na neuron, by odczytać jego funkcję i stan. Linia przerywana = gotowe, ale śpi; przygaszony = brak.'
-              : '↑ Hover a neuron to read its function and state. Dashed = ready but asleep; dimmed = missing.'}
+            {tr(lang, '↑ Najedź na neuron, by odczytać jego funkcję i stan. Linia przerywana = gotowe, ale śpi; przygaszony = brak.',
+              '↑ Hover a neuron to read its function and state. Dashed = ready but asleep; dimmed = missing.',
+              '↑ Fahre über ein Neuron, um seine Funktion und seinen Zustand zu lesen. Gestrichelt = bereit, aber schläft; abgedunkelt = fehlt.')}
           </div>
         )}
       </div>
